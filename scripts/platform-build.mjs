@@ -4,7 +4,7 @@
  * fails on any contract violation), writes deterministic artifacts with
  * SHA-256 digests and publishes the four pillar experiences.
  */
-import {cp,mkdir,writeFile} from "node:fs/promises";
+import {cp,mkdir,readFile,writeFile} from "node:fs/promises";
 import {loadVerifiedPlatform} from "./platform-verify.mjs";
 import {buildPlatformExports,canonicalJson,compareMeasures,consistencyAudit,sha256,PLATFORM_FILES} from "../research-tools/prosperity-platform.mjs";
 import {assessCandidate,weightSensitivity} from "../research-tools/opportunity-assessment.mjs";
@@ -32,7 +32,10 @@ export async function buildPlatform({publish,shell,root="dist",env=process.env})
   sensitivity:weightSensitivity(kb.parsed.opportunity.candidates,kb.parsed.opportunity),rankingPublished:false};
  const facts=[...kb.facts.values()],pairs=[];
  for(let i=0;i<facts.length;i++)for(let j=i+1;j<facts.length;j++)pairs.push(compareMeasures(facts[i],facts[j]));
- const aiStatus=buildAiStatus(readAiConfig(env));
+ const optionalJson=async p=>{try{return JSON.parse(await readFile(p,"utf8"))}catch(e){if(e.code==="ENOENT")return null;throw e}};
+ const aiExtras={snapshot:await optionalJson("research/ai/openrouter-free-models-snapshot.json"),policy:await optionalJson("research/ai/model-selection-policy.json"),
+  evaluation:await optionalJson("research/ai/evaluation-results-v1.json")};
+ const aiStatus=buildAiStatus(readAiConfig(env),aiExtras);
  const lab=kb.parsed.systemsLab;
  const labResults=systemsLabResults(lab);
  const funnel=syntheticFunnelAnalysis(kb.parsed.solutions.syntheticFunnelDemonstration);
@@ -46,6 +49,8 @@ export async function buildPlatform({publish,shell,root="dist",env=process.env})
   ["/platform-consistency-audit.json",canonicalJson({schemaVersion:"1.0",kind:"hpi_platform_consistency_audit",method:"deterministic_rule_based_not_ai",findings:audit}),"Deterministic consistency audit findings"],
   ["/platform-opportunity-assessment.json",canonicalJson({schemaVersion:"1.0",kind:"hpi_opportunity_assessment",...assessment}),"Opportunity assessment status (no scores, no ranking)"],
   ["/platform-ai-status.json",canonicalJson(aiStatus),"AI research-assistance runtime status"],
+  ...(aiExtras.snapshot?[["/platform-ai-models.json",canonicalJson({policy:aiExtras.policy,catalogueSnapshot:aiExtras.snapshot}),"Verified free model catalogue snapshot and HPI selection policy (metadata only)"]]:[]),
+  ...(aiExtras.evaluation?[["/platform-ai-evaluation.json",canonicalJson(aiExtras.evaluation),"Aggregate AI evaluation metrics (no model output)"]]:[]),
   ["/systems-lab-data.json",canonicalJson({schemaVersion:"1.0",label:"SYNTHETIC INPUTS",model:lab.models[0],parameterBounds:lab.parameterBounds,archetypes:lab.archetypes,scenarios:lab.scenarios}),"Systems Lab model inputs (synthetic)"],
   ["/systems-lab-results.json",canonicalJson(labResults),"Systems Lab scenario and sensitivity results (illustrative)"],
   ["/downloads/benefit-access-evaluation-package.json",canonicalJson(benefitAccessPackage(kb)),"Benefit-access evaluation package"],
@@ -64,7 +69,7 @@ export async function buildPlatform({publish,shell,root="dist",env=process.env})
   {path:"/downloads/adaptation-readiness-checklist.md",label:"Readiness checklist (Markdown)",description:"Nine readiness dimensions with specialist review requirements."}
  ];
  const routes=[
-  ...await publishIntelligence({publish,shell,kb,audit,assessment,exportsInfo,aiStatus}),
+  ...await publishIntelligence({publish,shell,kb,audit,assessment,exportsInfo,aiStatus,aiExtras}),
   ...await publishSolutionsAndAdoption({publish,shell,kb,funnel,downloads,governanceGates:kb.governanceGates}),
   ...await publishSystemsLabAndHub({publish,shell,kb,labResults,pillarStatus:[
    "Implemented · automated tests pass · not independently reviewed · "+kb.claims.size+" claims, "+kb.facts.size+" figures, "+kb.gaps.size+" declared gaps",

@@ -1,0 +1,370 @@
+{
+  "schema": "hpi_ai_openrouter_catalog/1.0+snapshot",
+  "source": "openrouter_api_v1",
+  "fetchedAt": "2026-11-16T11:26:22.740Z",
+  "zdrListChecked": true,
+  "counts": {
+    "total": 433,
+    "verifiedFree": 14,
+    "eligibleFreeText": 14,
+    "zeroPricedNotFreeVariant": 2,
+    "routerFree": 1,
+    "ambiguous": 75,
+    "paid": 341
+  },
+  "freeTextModels": [
+    {
+      "id": "baidu/ernie-5.5-flash-preview:free",
+      "name": "Baidu: ERNIE-5.5-Flash-Preview (free)",
+      "author": "baidu",
+      "contextLength": 1024000,
+      "maxCompletionTokens": 921600,
+      "inputModalities": [
+        "text"
+      ],
+      "supportsResponseFormat": true,
+      "supportsStructuredOutputs": true,
+      "reasoning": {
+        "supported": true,
+        "mandatory": true,
+        "defaultEnabled": true,
+        "supportedEfforts": [
+          "high"
+        ]
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "cohere/north-mini-code:free",
+      "name": "Cohere: North Mini Code (free)",
+      "author": "cohere",
+      "contextLength": 256000,
+      "maxCompletionTokens": 64000,
+      "inputModalities": [
+        "text"
+      ],
+      "supportsResponseFormat": false,
+      "supportsStructuredOutputs": false,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": false,
+        "supportedEfforts": null
+      },
+      "zdrListed": false,
+      "moderated": true,
+      "expirationDate": null
+    },
+    {
+      "id": "dots-studio/dots-3-note-preview:free",
+      "name": "Dots Studio: Dots3-Note Preview (free)",
+      "author": "dots-studio",
+      "contextLength": 512000,
+      "maxCompletionTokens": 460800,
+      "inputModalities": [
+        "text",
+        "image"
+      ],
+      "supportsResponseFormat": true,
+      "supportsStructuredOutputs": true,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": false,
+        "supportedEfforts": null
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": "2026-12-31"
+    },
+    {
+      "id": "google/gemma-4-26b-a4b-it:free",
+      "name": "Google: Gemma 4 26B A4B  (free)",
+      "author": "google",
+      "contextLength": 262144,
+      "maxCompletionTokens": 32768,
+      "inputModalities": [
+        "image",
+        "text",
+        "video"
+      ],
+      "supportsResponseFormat": true,
+      "supportsStructuredOutputs": false,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": false,
+        "supportedEfforts": null
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "google/gemma-4-31b-it:free",
+      "name": "Google: Gemma 4 31B (free)",
+      "author": "google",
+      "contextLength": 262144,
+      "maxCompletionTokens": 32768,
+      "inputModalities": [
+        "image",
+        "text",
+        "video"
+      ],
+      "supportsResponseFormat": true,
+      "supportsStructuredOutputs": false,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": false,
+        "supportedEfforts": null
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "inclusionai/ling-3.2-flash:free",
+      "name": "inclusionAI: Ling 3.2 Flash (free)",
+      "author": "inclusionai",
+      "contextLength": 1048576,
+      "maxCompletionTokens": 262144,
+      "inputModalities": [
+        "text",
+        "image"
+      ],
+      "supportsResponseFormat": true,
+      "supportsStructuredOutputs": true,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": true,
+        "supportedEfforts": null
+      },
+      "zdrListed": true,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "liquid/lfm-3-1.7b:free",
+      "name": "LiquidAI: LFM3-1.7B (free)",
+      "author": "liquid",
+      "contextLength": 262144,
+      "maxCompletionTokens": 8192,
+      "inputModalities": [
+        "text"
+      ],
+      "supportsResponseFormat": true,
+      "supportsStructuredOutputs": true,
+      "reasoning": {
+        "supported": true,
+        "mandatory": true,
+        "defaultEnabled": false,
+        "supportedEfforts": null
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+      "name": "NVIDIA: Nemotron 3 Nano Omni (free)",
+      "author": "nvidia",
+      "contextLength": 256000,
+      "maxCompletionTokens": 65536,
+      "inputModalities": [
+        "text",
+        "audio",
+        "image",
+        "video"
+      ],
+      "supportsResponseFormat": false,
+      "supportsStructuredOutputs": false,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": true,
+        "supportedEfforts": null
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "nvidia/nemotron-3-ultra-550b-a55b:free",
+      "name": "NVIDIA: Nemotron 3 Ultra (free)",
+      "author": "nvidia",
+      "contextLength": 1000000,
+      "maxCompletionTokens": 65536,
+      "inputModalities": [
+        "text"
+      ],
+      "supportsResponseFormat": false,
+      "supportsStructuredOutputs": false,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": true,
+        "supportedEfforts": [
+          "high",
+          "medium",
+          "none"
+        ]
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "nvidia/nemotron-3.5-lightning:free",
+      "name": "NVIDIA: Nemotron 3.5 Lightning (free)",
+      "author": "nvidia",
+      "contextLength": 1000000,
+      "maxCompletionTokens": 65536,
+      "inputModalities": [
+        "text"
+      ],
+      "supportsResponseFormat": false,
+      "supportsStructuredOutputs": false,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": false,
+        "supportedEfforts": null
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "nvidia/nemotron-3.5-super-vl:free",
+      "name": "NVIDIA: Nemotron 3.5 Super VL (free)",
+      "author": "nvidia",
+      "contextLength": 1000000,
+      "maxCompletionTokens": 131072,
+      "inputModalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "supportsResponseFormat": true,
+      "supportsStructuredOutputs": true,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": false,
+        "supportedEfforts": null
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "particle-ai/particle-1:free",
+      "name": "Particle AI: Particle-1 (free)",
+      "author": "particle-ai",
+      "contextLength": 1048576,
+      "maxCompletionTokens": 131072,
+      "inputModalities": [
+        "text",
+        "image"
+      ],
+      "supportsResponseFormat": true,
+      "supportsStructuredOutputs": true,
+      "reasoning": {
+        "supported": true,
+        "mandatory": false,
+        "defaultEnabled": true,
+        "supportedEfforts": [
+          "max",
+          "xhigh",
+          "high",
+          "medium",
+          "low",
+          "minimal",
+          "none"
+        ]
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "recursive/flint-v1.0:free",
+      "name": "Recursive: Flint (free)",
+      "author": "recursive",
+      "contextLength": 262144,
+      "maxCompletionTokens": 235929,
+      "inputModalities": [
+        "text"
+      ],
+      "supportsResponseFormat": true,
+      "supportsStructuredOutputs": false,
+      "reasoning": {
+        "supported": true,
+        "mandatory": true,
+        "defaultEnabled": false,
+        "supportedEfforts": null
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    },
+    {
+      "id": "thinkingmachines/inkling-2-small:free",
+      "name": "Thinking Machines: Inkling 2 Small (free)",
+      "author": "thinkingmachines",
+      "contextLength": 1048576,
+      "maxCompletionTokens": 131072,
+      "inputModalities": [
+        "text",
+        "image"
+      ],
+      "supportsResponseFormat": false,
+      "supportsStructuredOutputs": false,
+      "reasoning": {
+        "supported": true,
+        "mandatory": true,
+        "defaultEnabled": true,
+        "supportedEfforts": [
+          "max",
+          "high",
+          "medium",
+          "low",
+          "minimal"
+        ]
+      },
+      "zdrListed": false,
+      "moderated": false,
+      "expirationDate": null
+    }
+  ],
+  "excludedZeroPriced": [
+    {
+      "id": "google/lyria-3-clip-preview",
+      "costClass": "zero_priced_not_free_variant",
+      "reasons": [
+        "zero-priced but not a ':free' variant (may be billed otherwise or need a funded account)",
+        "output modalities are not text-only"
+      ]
+    },
+    {
+      "id": "google/lyria-3-pro-preview",
+      "costClass": "zero_priced_not_free_variant",
+      "reasons": [
+        "zero-priced but not a ':free' variant (may be billed otherwise or need a funded account)",
+        "output modalities are not text-only"
+      ]
+    },
+    {
+      "id": "openrouter/free",
+      "costClass": "router_free",
+      "reasons": [
+        "zero-priced but not a ':free' variant (may be billed otherwise or need a funded account)",
+        "router: underlying model is selected at random (not reproducible)"
+      ]
+    }
+  ]
+}

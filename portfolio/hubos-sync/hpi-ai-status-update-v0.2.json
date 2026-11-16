@@ -1,0 +1,194 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "hubos_pending_status_update",
+  "status": "pending_operator_execution",
+  "executed": false,
+  "statement": "Pending, unexecuted HPI-AI status update for records registered by the executed v0.1 manifest (HubOS #152). Not evidence that HubOS production has changed.",
+  "basedOnExecutedManifest": {
+    "path": "portfolio/hubos-sync/hpi-scale-registration-v0.1.json",
+    "sha256": "3aa5abe26e9a6b75a5952df7d3b0a729e9e885ceabd2f673934901b378d781bf",
+    "storeVersionAfterExecution": 236
+  },
+  "targetCompanyId": "human-prosperity-initiative",
+  "createsCompanyRecord": false,
+  "scope": "HPI-AI workstream only",
+  "operatorProcedure": [
+    "Read public.hub_os_store id='default'; record the version (expected ≥ 236).",
+    "Confirm every 'updates' id exists and no 'appends' id exists; abstain on any mismatch.",
+    "Back up the full row under a new unique key; never overwrite a backup.",
+    "In one version-conditioned transaction apply only the listed field updates and appends; increment the version.",
+    "Read back and record version, backup key and audit in HPI #101 and HubOS; only then mark this delta executed."
+  ],
+  "counts": {
+    "updates": 2,
+    "appendProjects": 0,
+    "appendEpics": 2,
+    "appendTasks": 4,
+    "appendTaskResources": 6,
+    "collisions": 0
+  },
+  "updates": [
+    {
+      "collection": "projects",
+      "id": "hpi-ai",
+      "set": {
+        "description": "A tested AI research-assistance layer with local and verified-free cloud providers, grounding, citation and numeric verification, injection defence, data-routing policy and mandatory human review; no paid inference and no AI on the public website. Canonical issue https://github.com/svtmzt/human-prosperity-initiative/issues/101. Gate: Internal research mode is operational with verified free OpenRouter models and a published held-out evaluation (automated agreement with HPI's own curated reference, not independent review). Local-model live testing is blocked: no local runtime was reachable from the build environment. Hosted public inference is not deployed: it needs a durable quota store, authentication and privacy/legal approval (#103). No AI output is published as evidence.",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      }
+    },
+    {
+      "collection": "tasks",
+      "id": "hpi-ai-3-t01",
+      "set": {
+        "description": "Canonical source: https://github.com/svtmzt/human-prosperity-initiative/issues/101. Technical PR evidence: https://github.com/svtmzt/human-prosperity-initiative/pull/105.",
+        "category": "engineering",
+        "status": "doing",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      }
+    }
+  ],
+  "appends": {
+    "projects": [],
+    "epics": [
+      {
+        "id": "hpi-ai-4",
+        "companyId": "human-prosperity-initiative",
+        "projectId": "hpi-ai",
+        "title": "HPI-AI.4 — Verified free cloud provider, model discovery and free-only routing",
+        "description": "Canonical issue https://github.com/svtmzt/human-prosperity-initiative/issues/101. Engineering status only; not scientific, ethical or legal approval.",
+        "status": "done",
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-ai-5",
+        "companyId": "human-prosperity-initiative",
+        "projectId": "hpi-ai",
+        "title": "HPI-AI.5 — Hosted public research gateway",
+        "description": "Canonical issue https://github.com/svtmzt/human-prosperity-initiative/issues/101. Engineering status only; not scientific, ethical or legal approval.",
+        "status": "open",
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      }
+    ],
+    "tasks": [
+      {
+        "id": "hpi-ai-3-t02",
+        "companyId": "human-prosperity-initiative",
+        "projectId": "hpi-ai",
+        "epicId": "hpi-ai-3",
+        "title": "HPI-AI.3-T02 — Live local-model evaluation (Ollama/LM Studio/llama.cpp/LiteLLM on a researcher machine)",
+        "description": "HUMAN/EXTERNAL GATE — remains open until genuine evidence exists. Canonical source: https://github.com/svtmzt/human-prosperity-initiative/issues/101.",
+        "priority": "p1",
+        "category": "governance",
+        "status": "backlog",
+        "sprint": "next",
+        "rank": 30,
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-ai-3-t03",
+        "companyId": "human-prosperity-initiative",
+        "projectId": "hpi-ai",
+        "epicId": "hpi-ai-3",
+        "title": "HPI-AI.3-T03 — Human expert review of a sample of AI review-queue items before any reliance",
+        "description": "HUMAN/EXTERNAL GATE — remains open until genuine evidence exists. Canonical source: https://github.com/svtmzt/human-prosperity-initiative/issues/101.",
+        "priority": "p1",
+        "category": "governance",
+        "status": "backlog",
+        "sprint": "next",
+        "rank": 31,
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-ai-4-t01",
+        "companyId": "human-prosperity-initiative",
+        "projectId": "hpi-ai",
+        "epicId": "hpi-ai-4",
+        "title": "HPI-AI.4-T01 — Implement OpenRouter free-only provider, catalogue verification, selection policy, quotas and circuit breaker",
+        "description": "Canonical source: https://github.com/svtmzt/human-prosperity-initiative/issues/101. Technical PR evidence: https://github.com/svtmzt/human-prosperity-initiative/pull/105.",
+        "priority": "p1",
+        "category": "engineering",
+        "status": "done",
+        "sprint": "next",
+        "rank": 32,
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-ai-5-t01",
+        "companyId": "human-prosperity-initiative",
+        "projectId": "hpi-ai",
+        "epicId": "hpi-ai-5",
+        "title": "HPI-AI.5-T01 — Activate gateway only after durable quota store, authentication and privacy/legal approval",
+        "description": "HUMAN/EXTERNAL GATE — remains open until genuine evidence exists. Canonical source: https://github.com/svtmzt/human-prosperity-initiative/issues/103.",
+        "priority": "p1",
+        "category": "governance",
+        "status": "backlog",
+        "sprint": "next",
+        "rank": 33,
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      }
+    ],
+    "taskResources": [
+      {
+        "id": "hpi-link-hpi-ai-3-t01-pr",
+        "taskId": "hpi-ai-3-t01",
+        "label": "HPI-AI.3-T01 technical PR evidence",
+        "url": "https://github.com/svtmzt/human-prosperity-initiative/pull/105",
+        "kind": "link",
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-link-hpi-ai-3-t02-issue",
+        "taskId": "hpi-ai-3-t02",
+        "label": "HPI-AI.3-T02 canonical HPI issue",
+        "url": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+        "kind": "link",
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-link-hpi-ai-3-t03-issue",
+        "taskId": "hpi-ai-3-t03",
+        "label": "HPI-AI.3-T03 canonical HPI issue",
+        "url": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+        "kind": "link",
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-link-hpi-ai-4-t01-issue",
+        "taskId": "hpi-ai-4-t01",
+        "label": "HPI-AI.4-T01 canonical HPI issue",
+        "url": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+        "kind": "link",
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-link-hpi-ai-4-t01-pr",
+        "taskId": "hpi-ai-4-t01",
+        "label": "HPI-AI.4-T01 technical PR evidence",
+        "url": "https://github.com/svtmzt/human-prosperity-initiative/pull/105",
+        "kind": "link",
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-link-hpi-ai-5-t01-issue",
+        "taskId": "hpi-ai-5-t01",
+        "label": "HPI-AI.5-T01 canonical HPI issue",
+        "url": "https://github.com/svtmzt/human-prosperity-initiative/issues/103",
+        "kind": "link",
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      }
+    ]
+  },
+  "collisions": []
+}

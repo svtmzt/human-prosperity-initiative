@@ -581,9 +581,19 @@
           "id": "HPI-AI.3",
           "name": "Live provider evaluation",
           "issue": 101
+        },
+        {
+          "id": "HPI-AI.4",
+          "name": "Verified free cloud provider, model discovery and free-only routing",
+          "issue": 101
+        },
+        {
+          "id": "HPI-AI.5",
+          "name": "Hosted public research gateway",
+          "issue": 101
         }
       ],
-      "plannedTasks": 3
+      "plannedTasks": 7
     },
     {
       "id": "HPI-QA",

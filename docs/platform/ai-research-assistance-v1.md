@@ -1,6 +1,6 @@
 # AI research assistance V1 — architecture and safeguards
 
-**Status:** adapter and safeguards implemented and tested against simulated transports, 16 November 2026. **No inference provider is connected in production. No AI-generated content is published.**
+**Status:** historical V1 record (16 November 2026, morning). **Superseded for providers, routing and evaluation by [V2](ai-research-assistance-v2.md)**, which adds local and verified-free OpenRouter inference and a live evaluation. The safeguards below remain in force. The public website still performs no inference and publishes no AI-generated content.
 
 ## Design principle
 

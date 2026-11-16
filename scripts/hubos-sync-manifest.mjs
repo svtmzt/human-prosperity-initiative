@@ -8,13 +8,21 @@
  * operator following the CAS-guarded procedure in docs/portfolio-sources/hpi.md
  * of the HubOS repository.
  *
- *   node scripts/hubos-sync-manifest.mjs            write the manifest
- *   node scripts/hubos-sync-manifest.mjs --check    fail if the committed manifest is stale
+ * The v0.1 registration manifest was EXECUTED in HubOS production on
+ * 16 November 2026 (store 235 → 236, HubOS #152). It is now an immutable
+ * historical record pinned by SHA-256 and is never regenerated. Later status
+ * changes are emitted as separate pending update deltas that touch only
+ * existing IDs or append new, non-colliding records.
+ *
+ *   node scripts/hubos-sync-manifest.mjs            write the pending HPI-AI status delta
+ *   node scripts/hubos-sync-manifest.mjs --check    verify the executed manifest is unchanged and the delta is current
  */
 import {readFile,writeFile,mkdir} from "node:fs/promises";
 import {pathToFileURL} from "node:url";
 
 export const MANIFEST_PATH="portfolio/hubos-sync/hpi-scale-registration-v0.1.json";
+export const EXECUTED_MANIFEST_SHA256="3aa5abe26e9a6b75a5952df7d3b0a729e9e885ceabd2f673934901b378d781bf";
+export const HPI_AI_DELTA_PATH="portfolio/hubos-sync/hpi-ai-status-update-v0.2.json";
 export const WORKSTREAMS=Object.freeze(["HPI-SCALE","GPI","SEE","GAN","ESL","HPI-AI","HPI-QA"]);
 const COMPANY="human-prosperity-initiative";
 const CREATED="2026-11-16T09:30:00.000Z";
@@ -69,17 +77,55 @@ export function buildHubosManifest(project,roadmap){
   records:{projects,epics,tasks,taskResources}
  };
 }
+/**
+ * Pending in-place status update for the HPI-AI workstream: compares the
+ * current roadmap with the executed registration and lists (a) field updates
+ * to records that already exist in HubOS and (b) new records to append.
+ */
+export function buildHpiAiStatusDelta(project,roadmap,executed,{updatedAt="2026-11-16T18:00:00.000Z"}={}){
+ const current=buildHubosManifest(project,roadmap).records;
+ const old=executed.records;
+ const isAi=r=>r.id==="hpi-ai"||String(r.id).startsWith("hpi-ai-")||String(r.taskId||"").startsWith("hpi-ai-")||String(r.id).startsWith("hpi-link-hpi-ai-");
+ const updates=[],appends={projects:[],epics:[],tasks:[],taskResources:[]};
+ for(const kind of Object.keys(appends)){
+  const before=new Map(old[kind].map(r=>[r.id,r]));
+  for(const r of current[kind].filter(isAi)){
+   const prev=before.get(r.id);
+   if(!prev){appends[kind].push({...r,createdAt:updatedAt,updatedAt});continue}
+   const fields={};
+   for(const k of Object.keys(r))if(!["createdAt","updatedAt","rank"].includes(k)&&JSON.stringify(r[k])!==JSON.stringify(prev[k]))fields[k]=r[k];
+   if(Object.keys(fields).length)updates.push({collection:kind,id:r.id,set:{...fields,updatedAt}});
+  }
+ }
+ const allIds=new Set(Object.values(old).flat().map(r=>r.id));
+ const collisions=Object.values(appends).flat().filter(r=>allIds.has(r.id)).map(r=>r.id);
+ return {schemaVersion:"1.0",kind:"hubos_pending_status_update",status:"pending_operator_execution",executed:false,
+  statement:"Pending, unexecuted HPI-AI status update for records registered by the executed v0.1 manifest (HubOS #152). Not evidence that HubOS production has changed.",
+  basedOnExecutedManifest:{path:MANIFEST_PATH,sha256:EXECUTED_MANIFEST_SHA256,storeVersionAfterExecution:236},
+  targetCompanyId:COMPANY,createsCompanyRecord:false,scope:"HPI-AI workstream only",
+  operatorProcedure:["Read public.hub_os_store id='default'; record the version (expected ≥ 236).",
+   "Confirm every 'updates' id exists and no 'appends' id exists; abstain on any mismatch.",
+   "Back up the full row under a new unique key; never overwrite a backup.",
+   "In one version-conditioned transaction apply only the listed field updates and appends; increment the version.",
+   "Read back and record version, backup key and audit in HPI #101 and HubOS; only then mark this delta executed."],
+  counts:{updates:updates.length,appendProjects:appends.projects.length,appendEpics:appends.epics.length,appendTasks:appends.tasks.length,appendTaskResources:appends.taskResources.length,collisions:collisions.length},
+  updates,appends,collisions};
+}
+
 async function main(){
  const project=JSON.parse(await readFile("portfolio/project.json","utf8"));
  const roadmap=JSON.parse(await readFile("portfolio/public-roadmap.json","utf8"));
- const text=JSON.stringify(buildHubosManifest(project,roadmap),null,2)+"\n";
+ const executedText=await readFile(MANIFEST_PATH,"utf8");
+ const {createHash}=await import("node:crypto");
+ if(createHash("sha256").update(executedText).digest("hex")!==EXECUTED_MANIFEST_SHA256){console.error("The executed HubOS registration manifest was modified; it is an immutable historical record.");process.exitCode=1;return}
+ const text=JSON.stringify(buildHpiAiStatusDelta(project,roadmap,JSON.parse(executedText)),null,2)+"\n";
  if(process.argv.includes("--check")){
-  const current=await readFile(MANIFEST_PATH,"utf8").catch(()=>"");
-  if(current!==text){console.error("HubOS manifest is stale; run node scripts/hubos-sync-manifest.mjs");process.exitCode=1;return}
-  console.log("HubOS pending manifest is current (not executed).");return;
+  const current=await readFile(HPI_AI_DELTA_PATH,"utf8").catch(()=>"");
+  if(current!==text){console.error("HPI-AI HubOS delta is stale; run node scripts/hubos-sync-manifest.mjs");process.exitCode=1;return}
+  console.log("Executed manifest unchanged; HPI-AI pending delta current (not executed).");return;
  }
  await mkdir("portfolio/hubos-sync",{recursive:true});
- await writeFile(MANIFEST_PATH,text);
- console.log("Wrote",MANIFEST_PATH);
+ await writeFile(HPI_AI_DELTA_PATH,text);
+ console.log("Wrote",HPI_AI_DELTA_PATH);
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)await main();

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "hpi_ai_model_selection_policy",
+  "updatedAt": "2026-11-16",
+  "status": "candidates_pending_evaluation",
+  "statement": "Ordered free OpenRouter models HPI may use per research task. Defaults are set from HPI's held-out evaluation, never from model size or marketing descriptions. Only ':free' variants verified as zero-priced in a fresh catalogue are ever sent requests; there is no paid fallback.",
+  "dataPolicy": "deny_collection",
+  "tasks": {
+    "claim-extraction": {"defaults": ["baidu/ernie-5.5-flash-preview:free", "google/gemma-4-26b-a4b-it:free"], "permittedFallbacks": ["dots-studio/dots-3-note-preview:free"]},
+    "source-classification": {"defaults": ["baidu/ernie-5.5-flash-preview:free", "google/gemma-4-26b-a4b-it:free"], "permittedFallbacks": ["dots-studio/dots-3-note-preview:free"]},
+    "mechanism-tagging": {"defaults": ["baidu/ernie-5.5-flash-preview:free", "google/gemma-4-26b-a4b-it:free"], "permittedFallbacks": ["dots-studio/dots-3-note-preview:free"]},
+    "evidence-gap-detection": {"defaults": ["baidu/ernie-5.5-flash-preview:free", "google/gemma-4-26b-a4b-it:free"], "permittedFallbacks": ["dots-studio/dots-3-note-preview:free"]},
+    "contradiction-detection": {"defaults": ["baidu/ernie-5.5-flash-preview:free", "google/gemma-4-26b-a4b-it:free"], "permittedFallbacks": ["dots-studio/dots-3-note-preview:free"]}
+  },
+  "excluded": [
+    {"id": "nvidia/nemotron-3.5-lightning:free", "reason": "No endpoint satisfies provider.data_collection=deny (OpenRouter: 'No endpoints found matching your data policy'); prompts may be used for training.", "observedAt": "2026-11-16"},
+    {"id": "nvidia/nemotron-3.5-super-vl:free", "reason": "No endpoint satisfies provider.data_collection=deny; prompts may be used for training.", "observedAt": "2026-11-16"},
+    {"id": "nvidia/nemotron-3-ultra-550b-a55b:free", "reason": "No endpoint satisfies provider.data_collection=deny; prompts may be used for training.", "observedAt": "2026-11-16"},
+    {"id": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free", "reason": "Same provider family as the NVIDIA free endpoints that fail the data-collection filter; not tested and excluded until verified.", "observedAt": "2026-11-16"},
+    {"id": "liquid/lfm-3-1.7b:free", "reason": "No endpoint satisfies provider.data_collection=deny; prompts may be used for training.", "observedAt": "2026-11-16"},
+    {"id": "particle-ai/particle-1:free", "reason": "No endpoint satisfies provider.data_collection=deny; prompts may be used for training.", "observedAt": "2026-11-16"},
+    {"id": "thinkingmachines/inkling-2-small:free", "reason": "Free endpoint gated to agentic coding harnesses (HTTP 403); not a research client.", "observedAt": "2026-11-16"},
+    {"id": "cohere/north-mini-code:free", "reason": "Coding-specialised model; not suitable for scientific text tasks without evaluation.", "observedAt": "2026-11-16"}
+  ],
+  "router": {
+    "id": "openrouter/free",
+    "status": "excluded",
+    "reason": "Selects a free model at random per request: results are not reproducible, the model cannot be evaluated in advance, and data-policy compatibility of the chosen model cannot be checked before sending. The served model is recorded when a router is used, but HPI research runs do not use it."
+  }
+}
