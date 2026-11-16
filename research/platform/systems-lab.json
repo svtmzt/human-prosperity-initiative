@@ -1,0 +1,353 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "systems-lab",
+  "reviewedAt": "2026-11-16",
+  "reviewStatus": "internal_draft_not_independently_reviewed",
+  "note": "The Economic Systems Lab is an open research programme for testing competing explanations. Its first model is ILLUSTRATIVE and uses SYNTHETIC household archetypes in currency-neutral units. Outputs are not forecasts, not calibrated to any country and not evidence about any policy.",
+  "researchQuestions": [
+    {
+      "id": "RQ-ESL-01",
+      "question": "Why does economic growth not always translate into proportionate improvements in household security?",
+      "status": "open",
+      "evidenceNeeds": [
+        "Distributional national accounts",
+        "Household budget surveys with essential-cost detail"
+      ],
+      "modelSupport": "MODEL-HHR-01 illustrates the arithmetic channel; it does not test which explanation holds."
+    },
+    {
+      "id": "RQ-ESL-02",
+      "question": "How do wages, productivity, employment, housing costs and essential living costs interact for different household types?",
+      "status": "open",
+      "evidenceNeeds": [
+        "Wage and hours distributions",
+        "Housing-cost burden by tenure",
+        "Price indices for essential goods by income group"
+      ],
+      "modelSupport": "MODEL-HHR-01 makes these interactions explicit for synthetic archetypes."
+    },
+    {
+      "id": "RQ-ESL-03",
+      "question": "How do economic institutions and policies affect the distribution of opportunity?",
+      "status": "open",
+      "evidenceNeeds": [
+        "Comparative institutional data",
+        "Intergenerational mobility estimates"
+      ],
+      "modelSupport": "None yet."
+    },
+    {
+      "id": "RQ-ESL-04",
+      "question": "Which mechanisms contribute to persistent economic insecurity?",
+      "status": "open",
+      "evidenceNeeds": [
+        "Panel data on income volatility and buffers"
+      ],
+      "modelSupport": "MODEL-HHR-01 reports buffer months under deficits."
+    },
+    {
+      "id": "RQ-ESL-05",
+      "question": "How might AI-driven productivity change labour demand, income and wealth distribution?",
+      "status": "open",
+      "evidenceNeeds": [
+        "Task-exposure measures",
+        "Firm-level adoption and wage data",
+        "Evidence on hours and employment effects"
+      ],
+      "modelSupport": "MODEL-HHR-01 includes exposure-weighted hours scenarios as assumptions, not predictions."
+    },
+    {
+      "id": "RQ-ESL-06",
+      "question": "What are the trade-offs, uncertainties and distributional consequences of alternative policy scenarios?",
+      "status": "open",
+      "evidenceNeeds": [
+        "Microsimulation inputs from official surveys"
+      ],
+      "modelSupport": "Scenario comparison with one-at-a-time sensitivity in MODEL-HHR-01."
+    }
+  ],
+  "competingExplanations": [
+    {
+      "id": "EXP-01",
+      "questionId": "RQ-ESL-01",
+      "explanation": "Productivity gains are passed to pay only partially (institutions, bargaining power, market concentration).",
+      "testableImplication": "Pay growth below productivity growth after consistent deflation and compensation definitions.",
+      "measurementCaveat": "Measured gaps depend on deflators, compensation versus wages, and averages versus medians."
+    },
+    {
+      "id": "EXP-02",
+      "questionId": "RQ-ESL-01",
+      "explanation": "Essential costs, especially housing and energy, rise faster than general prices for some households.",
+      "testableImplication": "Residual income after essentials falls for affected groups even when average real income rises.",
+      "measurementCaveat": "Requires group-specific price indices and housing-cost data."
+    },
+    {
+      "id": "EXP-03",
+      "questionId": "RQ-ESL-01",
+      "explanation": "Growth is concentrated in sectors or regions where low-income households are not employed.",
+      "testableImplication": "Regional or sectoral divergence in earnings growth.",
+      "measurementCaveat": "Composition effects and migration can mislead."
+    },
+    {
+      "id": "EXP-04",
+      "questionId": "RQ-ESL-01",
+      "explanation": "Hours and employment instability, not hourly pay, drive insecurity.",
+      "testableImplication": "Volatility of hours explains more variation in shortfalls than wage rates.",
+      "measurementCaveat": "Requires panel data on hours."
+    },
+    {
+      "id": "EXP-05",
+      "questionId": "RQ-ESL-01",
+      "explanation": "Transfers are not indexed to the costs households face.",
+      "testableImplication": "Real value of transfers falls when essential costs rise.",
+      "measurementCaveat": "Indexation rules vary by programme and country."
+    }
+  ],
+  "models": [
+    {
+      "id": "MODEL-HHR-01",
+      "title": "Household residual-income resilience model",
+      "version": "1.0.0",
+      "status": "illustrative_synthetic_inputs",
+      "module": "/systems-lab-model.js",
+      "purpose": "Make explicit how changes in wages, hours, employment, transfers and essential costs combine to change residual income for different household types.",
+      "formulas": [
+        "gross earnings = Σ over earners (hourly wage × (1 + wage change) × monthly hours × (1 + hours change + automation hours change × automation exposure) × employment share)",
+        "wage change = nominal wage change + productivity growth × pass-through share",
+        "disposable income = gross earnings × (1 − effective tax and contribution rate) + transfers × (1 + transfer change)",
+        "essential costs = housing × (1 + housing change) + energy × (1 + energy change) + food × (1 + food change) + transport and other essentials × (1 + other change)",
+        "residual income = disposable income − essential costs",
+        "essentials share = essential costs ÷ disposable income (undefined when disposable income ≤ 0)",
+        "buffer months = savings ÷ (−residual income) when residual income is below zero; not depleting otherwise",
+        "status = deficit if residual is below zero; fragile if residual is below fragility threshold × disposable income; margin otherwise"
+      ],
+      "assumptions": [
+        "All archetype inputs are synthetic and currency-neutral; they are not calibrated to any country, survey or person.",
+        "Price changes pass fully into expenses; households do not ration or substitute (behavioural responses are excluded).",
+        "The effective tax and contribution rate is constant; transfers do not respond automatically to income changes.",
+        "Productivity growth affects pay only through the stated pass-through share; employment effects enter only through stated hours and employment changes.",
+        "Automation exposure is an illustrative multiplier applied only to the automation hours change, not an empirical exposure estimate.",
+        "The fragility threshold (default 10% of disposable income) is an analytical convention, not an official poverty line."
+      ],
+      "limitations": [
+        "No general-equilibrium effects, prices or labour-market feedback.",
+        "No uncertainty quantification beyond deterministic one-at-a-time sensitivity.",
+        "Archetypes are not representative of any population; results cannot be aggregated into population statistics.",
+        "Cannot establish causal effects of any policy."
+      ],
+      "pathwayToAdvancedModels": "Calibration to official household survey microdata, microsimulation of tax-benefit rules, and independent review are required before any empirical use."
+    }
+  ],
+  "parameterBounds": {
+    "nominalWageChangePct": [
+      -50,
+      100
+    ],
+    "productivityGrowthPct": [
+      -30,
+      100
+    ],
+    "passThroughShare": [
+      0,
+      1
+    ],
+    "hoursChangePct": [
+      -100,
+      100
+    ],
+    "automationHoursChangePct": [
+      -100,
+      100
+    ],
+    "employmentShareChange": [
+      -1,
+      1
+    ],
+    "transferChangePct": [
+      -100,
+      200
+    ],
+    "housingChangePct": [
+      -50,
+      300
+    ],
+    "energyChangePct": [
+      -50,
+      300
+    ],
+    "foodChangePct": [
+      -50,
+      300
+    ],
+    "otherChangePct": [
+      -50,
+      300
+    ],
+    "fragilityThreshold": [
+      0,
+      0.5
+    ]
+  },
+  "archetypes": [
+    {
+      "id": "A1-LOW-WAGE-RENTER",
+      "label": "Single-earner renter, low hourly wage",
+      "synthetic": true,
+      "earners": [
+        {
+          "hourlyWage": 10,
+          "monthlyHours": 140,
+          "employmentShare": 1,
+          "automationExposure": 0.6
+        }
+      ],
+      "transfers": 150,
+      "effectiveTaxRate": 0.12,
+      "housing": 650,
+      "energy": 120,
+      "food": 300,
+      "otherEssentials": 220,
+      "savings": 300
+    },
+    {
+      "id": "A2-DUAL-EARNER-OWNER",
+      "label": "Two-earner owner-occupier, middle wages",
+      "synthetic": true,
+      "earners": [
+        {
+          "hourlyWage": 18,
+          "monthlyHours": 160,
+          "employmentShare": 1,
+          "automationExposure": 0.3
+        },
+        {
+          "hourlyWage": 14,
+          "monthlyHours": 100,
+          "employmentShare": 1,
+          "automationExposure": 0.4
+        }
+      ],
+      "transfers": 0,
+      "effectiveTaxRate": 0.24,
+      "housing": 950,
+      "energy": 170,
+      "food": 520,
+      "otherEssentials": 480,
+      "savings": 4000
+    },
+    {
+      "id": "A3-PENSION-AGE-SINGLE",
+      "label": "Pension-age single person, fixed income",
+      "synthetic": true,
+      "earners": [],
+      "transfers": 950,
+      "effectiveTaxRate": 0,
+      "housing": 420,
+      "energy": 110,
+      "food": 230,
+      "otherEssentials": 130,
+      "savings": 600
+    },
+    {
+      "id": "A4-VARIABLE-EARNER-FAMILY",
+      "label": "Variable-hours earner with children",
+      "synthetic": true,
+      "earners": [
+        {
+          "hourlyWage": 9,
+          "monthlyHours": 120,
+          "employmentShare": 0.8,
+          "automationExposure": 0.5
+        }
+      ],
+      "transfers": 320,
+      "effectiveTaxRate": 0.05,
+      "housing": 520,
+      "energy": 140,
+      "food": 420,
+      "otherEssentials": 180,
+      "savings": 80
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "S0-BASELINE",
+      "title": "Baseline",
+      "description": "Synthetic starting values with no changes.",
+      "parameters": {}
+    },
+    {
+      "id": "S1-GROWTH-LOW-PASS-THROUGH",
+      "title": "Growth with low pass-through",
+      "description": "Productivity rises 10% but only 30% reaches pay; housing +8%, energy +5%, food +4%.",
+      "parameters": {
+        "productivityGrowthPct": 10,
+        "passThroughShare": 0.3,
+        "housingChangePct": 8,
+        "energyChangePct": 5,
+        "foodChangePct": 4,
+        "otherChangePct": 3
+      }
+    },
+    {
+      "id": "S2-ESSENTIAL-COST-SHOCK",
+      "title": "Essential-cost shock",
+      "description": "Energy +40% and food +10% with no change in pay or transfers.",
+      "parameters": {
+        "energyChangePct": 40,
+        "foodChangePct": 10
+      }
+    },
+    {
+      "id": "S3-AI-PRODUCTIVITY-HOURS",
+      "title": "AI productivity with hours displacement",
+      "description": "Productivity +15% with 50% pass-through; hours fall 10% scaled by each earner's illustrative automation exposure.",
+      "parameters": {
+        "productivityGrowthPct": 15,
+        "passThroughShare": 0.5,
+        "automationHoursChangePct": -10
+      }
+    },
+    {
+      "id": "S4-BROAD-BASED-GAINS",
+      "title": "Broad-based gains",
+      "description": "Productivity +10% with 90% pass-through; transfers indexed +3%; modest cost increases.",
+      "parameters": {
+        "productivityGrowthPct": 10,
+        "passThroughShare": 0.9,
+        "transferChangePct": 3,
+        "housingChangePct": 3,
+        "energyChangePct": 2,
+        "foodChangePct": 2,
+        "otherChangePct": 2
+      }
+    }
+  ],
+  "establishedDatasets": [
+    {
+      "name": "World Bank Poverty and Inequality Platform",
+      "url": "https://datacatalog.worldbank.org/search/dataset/0038020/poverty-and-equity-database-poverty-and-inequality-platform",
+      "status": "linked_not_ingested"
+    },
+    {
+      "name": "OECD How's Life? well-being framework",
+      "url": "https://www.oecd.org/en/publications/how-s-life_23089679.html",
+      "status": "linked_not_ingested"
+    },
+    {
+      "name": "UNDP/OPHI Global Multidimensional Poverty Index 2026",
+      "url": "https://hdr.undp.org/content/2026-global-multidimensional-poverty-index",
+      "status": "linked_not_ingested"
+    },
+    {
+      "name": "ONS statistics licensing",
+      "url": "https://www.ons.gov.uk/methodology/geography/licences/",
+      "status": "linked_not_ingested"
+    }
+  ],
+  "evidenceGaps": [
+    "No distributional or household budget dataset has been ingested; RT-02.6 NO-GO for dataset ingestion remains in force.",
+    "No evidence claims are yet attached to the systems mechanisms M-ESSENTIAL-COSTS-OUTPACING-INCOME and M-PRODUCTIVITY-PAY-PASS-THROUGH.",
+    "Model MODEL-HHR-01 has not been independently reviewed."
+  ]
+}

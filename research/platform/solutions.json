@@ -1,0 +1,521 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "solutions",
+  "reviewedAt": "2026-11-16",
+  "reviewStatus": "internal_draft_not_independently_reviewed",
+  "note": "Solution packages are reusable research and evaluation designs, not policy recommendations or delivered services. Maturity levels are gated by recorded evidence, never by developer judgment alone.",
+  "outcomeStages": [
+    {
+      "id": "potentially_eligible",
+      "title": "Potentially eligible",
+      "guard": "Modelled or estimated eligibility is not verified individual entitlement."
+    },
+    {
+      "id": "applied",
+      "title": "Applied",
+      "guard": "An application is not an approval."
+    },
+    {
+      "id": "approved",
+      "title": "Approved",
+      "guard": "An approval is not a payment received."
+    },
+    {
+      "id": "received",
+      "title": "Benefit received",
+      "guard": "Receipt is not sustained economic improvement."
+    },
+    {
+      "id": "sustained_improvement",
+      "title": "Sustained economic improvement",
+      "guard": "Requires a credible comparison and follow-up; never inferred from earlier stages."
+    }
+  ],
+  "items": [
+    {
+      "id": "SOL-BENEFIT-ACCESS-EVALUATION",
+      "title": "Verified-receipt evaluation package for administrative barriers to benefit access",
+      "familyId": "PF-BENEFIT-ACCESS",
+      "problemId": "P-BENEFIT-NONTAKEUP",
+      "mechanisms": [
+        "M-COMPLIANCE-BURDEN",
+        "M-INFORMATION-FRICTIONS",
+        "M-ELIGIBILITY-UNCERTAINTY",
+        "M-PROCEDURAL-DENIAL"
+      ],
+      "candidateInterventions": [
+        "I-ASSISTED-APPLICATION",
+        "I-INFORMATION-OUTREACH",
+        "I-PROCEDURAL-SIMPLIFICATION"
+      ],
+      "description": "A reusable method for designing, adapting and evaluating assistance or process changes that aim to raise verified benefit receipt. It defines the outcome stages, comparison requirements, harms and local adaptation checks that any qualified, authorised institution would need before testing an intervention.",
+      "scientificRationale": "Linked abstract-level evidence suggests hands-on compliance assistance can raise verified receipt in some settings, while information-only outreach often moves applications more than receipt. The package therefore makes verified receipt the primary outcome and treats applications as an intermediate stage.",
+      "existingEvidenceClaims": [
+        "C-E04-1",
+        "C-E04-2",
+        "C-E08-1",
+        "C-E11-1",
+        "C-E12-1",
+        "C-E12-2",
+        "C-E13-1",
+        "C-E14-1",
+        "C-E03-1"
+      ],
+      "evidenceLimitations": [
+        "Linked studies are predominantly from the United States and Western Europe.",
+        "Extraction is abstract-level; no formal risk-of-bias assessment.",
+        "Reviews E03 and E04 overlap with each other and with primary trials; study counts must not be added."
+      ],
+      "contextDependencies": [
+        "Eligibility rules and whether access is claim-based or registration-based.",
+        "Existing advice services and their capacity.",
+        "Administrative data availability for verified receipt."
+      ],
+      "resourcePrerequisites": [
+        "Trained advisers or agency process owners",
+        "Budget for delivery and independent evaluation",
+        "Accessible non-digital channels"
+      ],
+      "institutionalPrerequisites": [
+        "Legally accountable operator or sponsor",
+        "Lawful access to verified receipt records",
+        "Agreement with the administering agency where process changes are tested"
+      ],
+      "potentialBenefits": [
+        "Higher verified receipt of lawful entitlements",
+        "Reduced time and cost for claimants"
+      ],
+      "potentialHarms": [
+        "Incorrect eligibility advice",
+        "Applications encouraged that predictably fail",
+        "Privacy harms from document handling",
+        "Displacement of existing local services",
+        "Stigma"
+      ],
+      "measurementPlan": {
+        "primaryOutcome": {
+          "indicatorId": "HPI-B-01",
+          "stage": "received",
+          "definition": "Proportion of independently verified eligible participants confirmed as receiving the specified benefit within a prespecified follow-up window."
+        },
+        "secondaryOutcomes": [
+          {
+            "indicatorId": "HPI-B-02",
+            "definition": "Time and out-of-pocket cost of benefit navigation."
+          },
+          {
+            "indicatorId": "HPI-E-02",
+            "definition": "Equity gaps in the primary outcome across prespecified, lawful and adequately powered groups."
+          },
+          {
+            "indicatorId": "HPI-E-03",
+            "definition": "Implementation and participant costs reported separately from incremental effects."
+          }
+        ],
+        "intermediateStages": [
+          "applied",
+          "approved"
+        ],
+        "harmMeasures": [
+          "Rate of incorrect advice",
+          "Complaints",
+          "Failed applications caused by the intervention"
+        ],
+        "comparisonRequirement": "A prespecified comparison with usual services available to everyone; no legally owed benefit may be withheld from any group.",
+        "missingData": "Report attrition and missing receipt verification by arm; present worst/best-case bounds alongside any primary estimate.",
+        "causalInference": "Causal claims only from a prespecified, independently reviewed design. Observational comparisons are described as associations.",
+        "sampleSize": "Not calculated for any HPI context: requires a verified baseline receipt rate, a justified minimum meaningful difference and an approved design. The planning calculator on the solutions page is an aid, not a protocol."
+      },
+      "localAdaptations": [
+        {
+          "contextId": "UK-NEWHAM",
+          "programmeId": "PROG-UK-PENSION-CREDIT",
+          "availableMeasures": [
+            "F-NEWHAM-PC-ELIGIBLE-2023-24",
+            "F-NEWHAM-PC-NOT-RECEIVING-2023-24",
+            "F-NEWHAM-PC-RECEIVING-2023-24",
+            "F-NEWHAM-PC-CASELOAD-RATE-2023-24"
+          ],
+          "missingMeasures": [
+            "G-NEWHAM-APPLICATIONS",
+            "G-NEWHAM-APPROVALS",
+            "G-NEWHAM-SUSTAINED"
+          ],
+          "adaptationNotes": [
+            "Claim-based national benefit; council advice service already exists.",
+            "Additionality over Our Newham Money must be shown before any study.",
+            "Non-digital access is mandatory for pension-age residents."
+          ],
+          "transferabilityLimits": [
+            "UK-specific eligibility and claim process.",
+            "The 2023/24 local model is not current 2026 receipt."
+          ],
+          "legalAndDataGates": [
+            "G-02",
+            "G-04",
+            "G-05",
+            "G-01"
+          ],
+          "language": "English, with community languages to be assessed"
+        },
+        {
+          "contextId": "BR-RECIFE",
+          "programmeId": "PROG-BR-CADUNICO-BOLSA-FAMILIA",
+          "availableMeasures": [
+            "F-BR-BOLSA-FAMILIA-INCOME-THRESHOLD",
+            "F-RECIFE-POPULATION-2022"
+          ],
+          "missingMeasures": [
+            "G-RECIFE-ELIGIBLE-NOT-RECEIVING",
+            "G-RECIFE-REGISTRATION",
+            "G-RECIFE-SELECTION",
+            "G-RECIFE-PAYMENT-RECEIPT",
+            "G-RECIFE-SUSTAINED"
+          ],
+          "adaptationNotes": [
+            "Registration (CadÚnico) and federal selection are separate stages; non-award may reflect assessment or budget, not access failure.",
+            "Identified research data are restricted to qualifying research institutions under LGPD.",
+            "Cross-border transfer of personal data is not permitted for HPI."
+          ],
+          "transferabilityLimits": [
+            "Registration-then-selection model differs from UK claim-based access.",
+            "Assistance that raises registrations may not raise payments if selection is constrained."
+          ],
+          "legalAndDataGates": [
+            "G-07",
+            "G-02",
+            "G-04",
+            "G-01"
+          ],
+          "language": "Portuguese; professional local safeguarding required"
+        },
+        {
+          "contextId": "IT-NAPLES",
+          "programmeId": "PROG-IT-ADI",
+          "availableMeasures": [
+            "F-IT-ADI-HOUSEHOLDS-2026-06",
+            "F-IT-ADI-AVERAGE-AMOUNT-2026-06",
+            "F-CAMPANIA-RELATIVE-POVERTY-2025"
+          ],
+          "missingMeasures": [
+            "G-NAPLES-ELIGIBLE",
+            "G-NAPLES-APPLICATIONS",
+            "G-NAPLES-APPROVALS",
+            "G-NAPLES-RECEIPT",
+            "G-NAPLES-SUSTAINED"
+          ],
+          "adaptationNotes": [
+            "Application-based, means-tested programme with patronato intermediaries.",
+            "Only national caseload and regional poverty figures are recorded."
+          ],
+          "transferabilityLimits": [
+            "Household composition rules differ from UK and Brazil.",
+            "No local denominator; reserve comparator only."
+          ],
+          "legalAndDataGates": [
+            "G-07",
+            "G-02",
+            "G-04",
+            "G-01"
+          ],
+          "language": "Italian"
+        }
+      ],
+      "ethicalLegalGates": [
+        "G-01",
+        "G-02",
+        "G-03",
+        "G-04",
+        "G-05",
+        "G-06",
+        "G-07",
+        "G-08"
+      ],
+      "governanceIssues": [
+        19,
+        26,
+        51,
+        67,
+        82
+      ],
+      "maturity": {
+        "level": 3,
+        "evidence": [
+          {
+            "level": 1,
+            "url": "/research/f0-02-opportunity-assessment",
+            "note": "Research question defined in F0-02."
+          },
+          {
+            "level": 2,
+            "url": "/research/f0-02-critical-synthesis-2026-11-06",
+            "note": "Internal rapid evidence synthesis; not systematic and not independent."
+          },
+          {
+            "level": 3,
+            "url": "/solutions/benefit-access",
+            "note": "Methodology prototype: outcome stages, measurement plan, adaptation records and reproducible synthetic artifacts."
+          }
+        ],
+        "blockedNextLevel": {
+          "level": 4,
+          "missing": [
+            "Approved protocol with comparator, estimand and power",
+            "Lawful outcome data access",
+            "Independent methods review (G-05)",
+            "Ethics and safeguarding approval (G-04)"
+          ]
+        }
+      },
+      "artifacts": [
+        "/downloads/benefit-access-evaluation-package.json",
+        "/downloads/evaluation-protocol-template.md",
+        "/downloads/adaptation-readiness-checklist.md"
+      ],
+      "relatedResearch": [
+        "/research/f0-05-newham-pension-credit-first-study-concept-v0-1",
+        "/research/f0-03-prosperity-measurement-framework-v0-1",
+        "/research/outcome-lab"
+      ]
+    },
+    {
+      "id": "SOL-ENERGY-AFFORDABILITY-TEMPLATE",
+      "title": "Energy affordability research template",
+      "familyId": "PF-ESSENTIAL-COSTS",
+      "problemId": "P-ENERGY-AFFORDABILITY",
+      "mechanisms": [
+        "M-PRICE-TARIFF-BURDEN",
+        "M-BUILDING-INEFFICIENCY",
+        "M-UNDERCONSUMPTION"
+      ],
+      "candidateInterventions": [
+        "I-SOCIAL-TARIFF",
+        "I-INSULATION-RETROFIT",
+        "I-ENERGY-ADVICE",
+        "I-FUEL-FINANCIAL-SUPPORT"
+      ],
+      "description": "A scoped research definition for energy affordability that separates bills, adequate energy services, warmth, health and distributional effects.",
+      "scientificRationale": "Linked evidence shows lower bills can coincide with underconsumption, and realised savings can fall below predictions; outcomes must capture adequate energy services, not spending alone.",
+      "existingEvidenceClaims": [
+        "C-E09-1",
+        "C-E19-1",
+        "C-E24-1",
+        "C-E25-1",
+        "C-E27-1",
+        "C-E23-1"
+      ],
+      "evidenceLimitations": [
+        "Mixed designs; several observational studies.",
+        "No context fact recorded for any HPI context."
+      ],
+      "contextDependencies": [
+        "Climate",
+        "Housing tenure",
+        "Tariff design"
+      ],
+      "resourcePrerequisites": [
+        "Metered or billing data with consent",
+        "Capital budget for structural measures"
+      ],
+      "institutionalPrerequisites": [
+        "Utility or housing partner",
+        "Lawful access to billing data"
+      ],
+      "potentialBenefits": [
+        "Adequate warmth at lower burden"
+      ],
+      "potentialHarms": [
+        "Masking underconsumption",
+        "Rent increases after upgrades"
+      ],
+      "measurementPlan": {
+        "primaryOutcome": {
+          "indicatorId": "HPI-B-03",
+          "stage": null,
+          "definition": "Verified household energy expense divided by measured household resources in comparable periods."
+        },
+        "secondaryOutcomes": [
+          {
+            "indicatorId": "HPI-B-04",
+            "definition": "Validated measure of inability to afford adequate energy."
+          }
+        ],
+        "intermediateStages": [],
+        "harmMeasures": [
+          "Indicators of underconsumption"
+        ],
+        "comparisonRequirement": "Prespecified comparison; weather and tariff changes accounted for.",
+        "missingData": "Report missing billing periods by group.",
+        "causalInference": "Causal claims only from approved designs.",
+        "sampleSize": "Not calculated."
+      },
+      "localAdaptations": [],
+      "ethicalLegalGates": [
+        "G-01",
+        "G-02",
+        "G-04",
+        "G-05"
+      ],
+      "governanceIssues": [
+        19,
+        67
+      ],
+      "maturity": {
+        "level": 2,
+        "evidence": [
+          {
+            "level": 1,
+            "url": "/research/f0-02-opportunity-assessment",
+            "note": "Research question defined in F0-02."
+          },
+          {
+            "level": 2,
+            "url": "/research/f0-02-critical-synthesis-2026-11-06",
+            "note": "Internal rapid evidence synthesis; not systematic and not independent."
+          }
+        ],
+        "blockedNextLevel": {
+          "level": 3,
+          "missing": [
+            "Context selection with recorded energy-burden facts",
+            "Measurement prototype"
+          ]
+        }
+      },
+      "artifacts": [],
+      "relatedResearch": [
+        "/research/f0-02-critical-synthesis-2026-11-06"
+      ]
+    },
+    {
+      "id": "SOL-LIVELIHOODS-TEMPLATE",
+      "title": "Livelihoods and job-quality research template",
+      "familyId": "PF-ECONOMIC-OPPORTUNITY",
+      "problemId": "P-LOW-EARNINGS-JOB-QUALITY",
+      "mechanisms": [
+        "M-CAPITAL-CONSTRAINTS",
+        "M-SKILLS-GAPS",
+        "M-JOB-QUALITY-RISK",
+        "M-LABOUR-DEMAND-CONSTRAINTS"
+      ],
+      "candidateInterventions": [
+        "I-GRADUATION-PACKAGE",
+        "I-CAPITAL-GRANTS",
+        "I-VOCATIONAL-TRAINING"
+      ],
+      "description": "A scoped research definition requiring sustained net earnings, job quality and displacement measures rather than enrolment counts.",
+      "scientificRationale": "Linked evidence includes fading gains, harmful jobs and small average training effects; durable outcomes and nonparticipant effects must be measured.",
+      "existingEvidenceClaims": [
+        "C-E10-1",
+        "C-E29-1",
+        "C-E30-1",
+        "C-E34-1",
+        "C-E38-1",
+        "C-E39-1"
+      ],
+      "evidenceLimitations": [
+        "Linked trials are mostly in Sub-Saharan Africa and South Asia.",
+        "No HPI context has linked livelihoods evidence."
+      ],
+      "contextDependencies": [
+        "Local labour demand",
+        "Provider quality"
+      ],
+      "resourcePrerequisites": [
+        "Long follow-up budget"
+      ],
+      "institutionalPrerequisites": [
+        "Implementing partner with verified earnings measurement"
+      ],
+      "potentialBenefits": [
+        "Durable earnings and job quality"
+      ],
+      "potentialHarms": [
+        "Displacement of nonparticipants",
+        "Occupational health harm"
+      ],
+      "measurementPlan": {
+        "primaryOutcome": {
+          "indicatorId": "HPI-D-01",
+          "stage": null,
+          "definition": "Sustained net earnings adjusted to local prices."
+        },
+        "secondaryOutcomes": [
+          {
+            "indicatorId": "HPI-D-02",
+            "definition": "Job quality and security."
+          },
+          {
+            "indicatorId": "HPI-D-03",
+            "definition": "Displacement among nonparticipants."
+          }
+        ],
+        "intermediateStages": [],
+        "harmMeasures": [
+          "Health and safety incidents"
+        ],
+        "comparisonRequirement": "Prespecified comparison with long follow-up.",
+        "missingData": "Report long-run attrition.",
+        "causalInference": "Causal claims only from approved designs.",
+        "sampleSize": "Not calculated."
+      },
+      "localAdaptations": [],
+      "ethicalLegalGates": [
+        "G-01",
+        "G-02",
+        "G-04",
+        "G-05"
+      ],
+      "governanceIssues": [
+        19,
+        67
+      ],
+      "maturity": {
+        "level": 2,
+        "evidence": [
+          {
+            "level": 1,
+            "url": "/research/f0-02-opportunity-assessment",
+            "note": "Research question defined in F0-02."
+          },
+          {
+            "level": 2,
+            "url": "/research/f0-02-critical-synthesis-2026-11-06",
+            "note": "Internal rapid evidence synthesis; not systematic and not independent."
+          }
+        ],
+        "blockedNextLevel": {
+          "level": 3,
+          "missing": [
+            "Context selection",
+            "Measurement prototype"
+          ]
+        }
+      },
+      "artifacts": [],
+      "relatedResearch": [
+        "/research/f0-02-critical-synthesis-2026-11-06"
+      ]
+    }
+  ],
+  "syntheticFunnelDemonstration": {
+    "label": "SYNTHETIC ONLY",
+    "statement": "Fictional counts illustrating why application increases must not be reported as receipt increases. Not data from any context, study or person.",
+    "groups": {
+      "usualServices": {
+        "eligible": 400,
+        "applied": 60,
+        "approved": 40,
+        "received": 36,
+        "missingFollowup": 20
+      },
+      "informationOutreach": {
+        "eligible": 400,
+        "applied": 110,
+        "approved": 52,
+        "received": 44,
+        "missingFollowup": 22
+      }
+    }
+  }
+}

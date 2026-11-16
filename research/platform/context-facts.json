@@ -1,0 +1,1175 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "context-facts",
+  "reviewedAt": "2026-11-16",
+  "reviewStatus": "internal_draft_not_independently_reviewed",
+  "note": "Every value below is a published figure transcribed or extracted by HPI desk research. None is an HPI study outcome, an individual eligibility assessment or evidence of impact. Missing provenance fields are declared explicitly in missingProvenance; HPI never fills them with guesses.",
+  "facts": [
+    {
+      "id": "F-NEWHAM-PC-ELIGIBLE-2023-24",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": "potentially_eligible",
+      "label": "Households modelled as eligible for Pension Credit (all eligible)",
+      "value": 11300,
+      "unit": "households",
+      "measureType": "count",
+      "measureDefinitionId": "DWP-PC-LA-MODEL:all_eligible_households",
+      "populationUnit": "households",
+      "populationDefinition": "Pension-age households modelled by DWP as eligible for Pension Credit, whether or not in receipt",
+      "geographyLevel": "local_authority",
+      "referencePeriod": {
+        "label": "Financial year 2023/24",
+        "start": "2023-04-01",
+        "end": "2024-03-31"
+      },
+      "method": "administrative_model",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "Department for Work and Pensions",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6900969fa6048928d3fc2ae5/households-potentially-eligible-for-pension-credit-2023-to-2024.ods",
+      "sourcePage": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024",
+      "publicationDate": "2025-10-30",
+      "retrievedAt": "2026-11-09",
+      "sourceVersion": "ODS workbook, worksheet 3a, physical row 109, column C",
+      "licence": "OGL-3.0 subject to exceptions for third-party content",
+      "licenceEvidenceUrl": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024/analysis-of-households-potentially-eligible-for-pension-credit-and-eligible-households-in-receipt-of-pension-credit-2023-to-2024",
+      "redistributionStatus": "permitted_with_attribution_publisher_statement",
+      "licenceReviewStatus": "publisher_statement_recorded_no_qualified_review",
+      "transformation": "Value read from the official ODS binary with scripts/verify_newham_dwp_ods.py (Python standard library); recorded exactly as published (rounded).",
+      "verificationLevel": "byte_hashed_extraction",
+      "sourceSha256": "89f5a5fa831f21c4661d6e73ccb76878959e6ea721fb459b43aa3d9bcd96765c",
+      "sourceBytes": 135855,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Rounded modelled estimate. No confidence interval is published in the extracted table; DWP notes row totals may differ from underlying estimates.",
+      "missingness": "The table does not publish applications or approvals, so the application and approval stages cannot be described for Newham from this source.",
+      "limitations": "Ecological model of potential eligibility, not verified individual entitlement or a count of HPI participants.",
+      "interpretationGuard": "Not comparable with the Great Britain FYE2025 survey-based take-up estimate.",
+      "reviewStatus": "internal_automated_reproducibility_check_only",
+      "provenanceRecord": "/research-newham-dwp-official-facts.json",
+      "missingProvenance": []
+    },
+    {
+      "id": "F-NEWHAM-PC-RECEIVING-2023-24",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": "received",
+      "label": "Eligible households modelled as in receipt of Pension Credit",
+      "value": 8800,
+      "unit": "households",
+      "measureType": "count",
+      "measureDefinitionId": "DWP-PC-LA-MODEL:eligible_households_in_receipt",
+      "populationUnit": "households",
+      "populationDefinition": "Pension-age households modelled as eligible and in receipt of Pension Credit",
+      "geographyLevel": "local_authority",
+      "referencePeriod": {
+        "label": "Financial year 2023/24",
+        "start": "2023-04-01",
+        "end": "2024-03-31"
+      },
+      "method": "administrative_model",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "Department for Work and Pensions",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6900969fa6048928d3fc2ae5/households-potentially-eligible-for-pension-credit-2023-to-2024.ods",
+      "sourcePage": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024",
+      "publicationDate": "2025-10-30",
+      "retrievedAt": "2026-11-09",
+      "sourceVersion": "ODS workbook, worksheet 3a, physical row 109, column E",
+      "licence": "OGL-3.0 subject to exceptions for third-party content",
+      "licenceEvidenceUrl": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024/analysis-of-households-potentially-eligible-for-pension-credit-and-eligible-households-in-receipt-of-pension-credit-2023-to-2024",
+      "redistributionStatus": "permitted_with_attribution_publisher_statement",
+      "licenceReviewStatus": "publisher_statement_recorded_no_qualified_review",
+      "transformation": "Value read from the official ODS binary with scripts/verify_newham_dwp_ods.py; recorded exactly as published (rounded).",
+      "verificationLevel": "byte_hashed_extraction",
+      "sourceSha256": "89f5a5fa831f21c4661d6e73ccb76878959e6ea721fb459b43aa3d9bcd96765c",
+      "sourceBytes": 135855,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Rounded modelled estimate; no published interval in the extracted table.",
+      "missingness": "Receipt is modelled for 2023/24 only; no current 2026 local figure.",
+      "limitations": "Administrative model at household level; does not show whether receipt improved household security.",
+      "interpretationGuard": "Receipt is not sustained economic improvement.",
+      "reviewStatus": "internal_automated_reproducibility_check_only",
+      "provenanceRecord": "/research-newham-dwp-official-facts.json",
+      "missingProvenance": []
+    },
+    {
+      "id": "F-NEWHAM-PC-NOT-RECEIVING-2023-24",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": "potentially_eligible",
+      "label": "Households modelled as potentially eligible but not in receipt",
+      "value": 2500,
+      "unit": "households",
+      "measureType": "count",
+      "measureDefinitionId": "DWP-PC-LA-MODEL:potentially_eligible_not_receiving",
+      "populationUnit": "households",
+      "populationDefinition": "Pension-age households modelled as potentially eligible for Pension Credit and not receiving it",
+      "geographyLevel": "local_authority",
+      "referencePeriod": {
+        "label": "Financial year 2023/24",
+        "start": "2023-04-01",
+        "end": "2024-03-31"
+      },
+      "method": "administrative_model",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "Department for Work and Pensions",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6900969fa6048928d3fc2ae5/households-potentially-eligible-for-pension-credit-2023-to-2024.ods",
+      "sourcePage": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024",
+      "publicationDate": "2025-10-30",
+      "retrievedAt": "2026-11-09",
+      "sourceVersion": "ODS workbook, worksheet 3a, physical row 109, column D",
+      "licence": "OGL-3.0 subject to exceptions for third-party content",
+      "licenceEvidenceUrl": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024/analysis-of-households-potentially-eligible-for-pension-credit-and-eligible-households-in-receipt-of-pension-credit-2023-to-2024",
+      "redistributionStatus": "permitted_with_attribution_publisher_statement",
+      "licenceReviewStatus": "publisher_statement_recorded_no_qualified_review",
+      "transformation": "Value read from the official ODS binary with scripts/verify_newham_dwp_ods.py; recorded exactly as published (rounded).",
+      "verificationLevel": "byte_hashed_extraction",
+      "sourceSha256": "89f5a5fa831f21c4661d6e73ccb76878959e6ea721fb459b43aa3d9bcd96765c",
+      "sourceBytes": 135855,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Rounded modelled estimate; no published interval in the extracted table.",
+      "missingness": "Reasons for non-receipt (ineligibility error, unawareness, burden, choice) are not published.",
+      "limitations": "A modelled gap is not a list of people and must never be used to contact individuals.",
+      "interpretationGuard": "Not a count of people HPI could or should approach.",
+      "reviewStatus": "internal_automated_reproducibility_check_only",
+      "provenanceRecord": "/research-newham-dwp-official-facts.json",
+      "missingProvenance": []
+    },
+    {
+      "id": "F-NEWHAM-PC-CASELOAD-RATE-2023-24",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": "received",
+      "label": "Modelled caseload receipt rate",
+      "value": 78,
+      "unit": "percent",
+      "measureType": "rate",
+      "measureDefinitionId": "DWP-PC-LA-MODEL:caseload_receipt_rate",
+      "populationUnit": "households",
+      "populationDefinition": "Eligible households in receipt divided by all eligible households (DWP local model)",
+      "geographyLevel": "local_authority",
+      "referencePeriod": {
+        "label": "Financial year 2023/24",
+        "start": "2023-04-01",
+        "end": "2024-03-31"
+      },
+      "method": "administrative_model",
+      "numerator": {
+        "factId": "F-NEWHAM-PC-RECEIVING-2023-24",
+        "value": 8800
+      },
+      "denominator": {
+        "factId": "F-NEWHAM-PC-ELIGIBLE-2023-24",
+        "value": 11300
+      },
+      "statedBySource": true,
+      "sourceOrganization": "Department for Work and Pensions",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6900969fa6048928d3fc2ae5/households-potentially-eligible-for-pension-credit-2023-to-2024.ods",
+      "sourcePage": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024",
+      "publicationDate": "2025-10-30",
+      "retrievedAt": "2026-11-09",
+      "sourceVersion": "ODS workbook, worksheet 3a, physical row 109, column F",
+      "licence": "OGL-3.0 subject to exceptions for third-party content",
+      "licenceEvidenceUrl": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024/analysis-of-households-potentially-eligible-for-pension-credit-and-eligible-households-in-receipt-of-pension-credit-2023-to-2024",
+      "redistributionStatus": "permitted_with_attribution_publisher_statement",
+      "licenceReviewStatus": "publisher_statement_recorded_no_qualified_review",
+      "transformation": "Rate recorded as published. HPI checks consistency with the published rounded numerator and denominator (8,800 / 11,300 = 77.9%, consistent with 78% after rounding).",
+      "verificationLevel": "byte_hashed_extraction",
+      "sourceSha256": "89f5a5fa831f21c4661d6e73ccb76878959e6ea721fb459b43aa3d9bcd96765c",
+      "sourceBytes": 135855,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Rounded modelled rate; no published interval in the extracted table.",
+      "missingness": "No time series in this extract.",
+      "limitations": "Local administrative model rate, not survey-based take-up and not verified individual receipt.",
+      "interpretationGuard": "Never compare directly with the Great Britain 62% FYE2025 survey estimate.",
+      "reviewStatus": "internal_automated_reproducibility_check_only",
+      "provenanceRecord": "/research-newham-dwp-official-facts.json",
+      "missingProvenance": []
+    },
+    {
+      "id": "F-NEWHAM-PC-EXPENDITURE-RATE-2023-24",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": "received",
+      "label": "Modelled expenditure receipt rate",
+      "value": 86,
+      "unit": "percent",
+      "measureType": "rate",
+      "measureDefinitionId": "DWP-PC-LA-MODEL:expenditure_receipt_rate",
+      "populationUnit": "expenditure",
+      "populationDefinition": "Estimated amount claimed by eligible households in receipt relative to estimated total entitlement (DWP local model)",
+      "geographyLevel": "local_authority",
+      "referencePeriod": {
+        "label": "Financial year 2023/24",
+        "start": "2023-04-01",
+        "end": "2024-03-31"
+      },
+      "method": "administrative_model",
+      "numerator": null,
+      "denominator": null,
+      "statedBySource": true,
+      "sourceOrganization": "Department for Work and Pensions",
+      "sourceUrl": "https://assets.publishing.service.gov.uk/media/6900969fa6048928d3fc2ae5/households-potentially-eligible-for-pension-credit-2023-to-2024.ods",
+      "sourcePage": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024",
+      "publicationDate": "2025-10-30",
+      "retrievedAt": "2026-11-09",
+      "sourceVersion": "ODS workbook, worksheet 3b, physical row 110, column E",
+      "licence": "OGL-3.0 subject to exceptions for third-party content",
+      "licenceEvidenceUrl": "https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024/analysis-of-households-potentially-eligible-for-pension-credit-and-eligible-households-in-receipt-of-pension-credit-2023-to-2024",
+      "redistributionStatus": "permitted_with_attribution_publisher_statement",
+      "licenceReviewStatus": "publisher_statement_recorded_no_qualified_review",
+      "transformation": "Rate recorded as published. Amount columns are not used because the worksheet header unit (£m) conflicts with the displayed raw values.",
+      "verificationLevel": "byte_hashed_extraction",
+      "sourceSha256": "89f5a5fa831f21c4661d6e73ccb76878959e6ea721fb459b43aa3d9bcd96765c",
+      "sourceBytes": 135855,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Rounded modelled rate; no published interval in the extracted table.",
+      "missingness": "Numerator and denominator amounts are withheld because their units are not independently reconciled.",
+      "limitations": "An expenditure rate is a different measure from the caseload rate and cannot be used as an HPI cost or impact figure.",
+      "interpretationGuard": "Do not present 86% and 78% as the same statistic.",
+      "reviewStatus": "internal_automated_reproducibility_check_only",
+      "provenanceRecord": "/research-newham-dwp-official-facts.json",
+      "missingProvenance": [
+        {
+          "field": "numerator",
+          "reason": "Amount units in worksheet 3b are inconsistent with its header; HPI does not rescale them silently."
+        },
+        {
+          "field": "denominator",
+          "reason": "Amount units in worksheet 3b are inconsistent with its header; HPI does not rescale them silently."
+        }
+      ]
+    },
+    {
+      "id": "F-GB-PC-TAKEUP-FYE2025",
+      "contextId": "GB",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": "received",
+      "label": "National Pension Credit caseload take-up estimate",
+      "value": 62,
+      "unit": "percent",
+      "measureType": "rate",
+      "measureDefinitionId": "DWP-IRB-TAKEUP:pension_credit_caseload_takeup",
+      "populationUnit": "benefit_units",
+      "populationDefinition": "Pensioner benefit units (families) estimated to be eligible for Pension Credit in Great Britain",
+      "geographyLevel": "nation",
+      "referencePeriod": {
+        "label": "Financial year ending 2025",
+        "start": "2024-04-01",
+        "end": "2025-03-31"
+      },
+      "method": "survey_estimate",
+      "numerator": null,
+      "denominator": null,
+      "statedBySource": true,
+      "sourceOrganization": "Department for Work and Pensions",
+      "sourceUrl": "https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2025/income-related-benefits-estimates-of-take-up-financial-year-ending-2025",
+      "sourcePage": "https://www.gov.uk/government/statistics/income-related-benefits-estimates-of-take-up-financial-year-ending-2025/income-related-benefits-estimates-of-take-up-financial-year-ending-2025",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-07",
+      "sourceVersion": "Published statistical release page (no file hash recorded)",
+      "licence": "OGL v3.0 (publisher statement)",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Central estimate transcribed from the publisher's release page during desk audit.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "DWP publishes ranges for take-up estimates; the range was not transcribed by HPI.",
+      "missingness": "Interval bounds not recorded.",
+      "limitations": "National survey-based benefit-unit estimate; not Newham and not a local claimant denominator.",
+      "interpretationGuard": "Not comparable with the Newham 2023/24 household administrative model.",
+      "reviewStatus": "internal_desk_audit",
+      "provenanceRecord": "/research-newham-source-audit.json",
+      "missingProvenance": [
+        {
+          "field": "publicationDate",
+          "reason": "Release date not recorded in the 2026-11-07 desk audit."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Licence statement noted from the publisher site; no specific licence page recorded."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "Figure transcribed from an HTML release page; no source file was hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No source file was downloaded."
+        }
+      ]
+    },
+    {
+      "id": "F-NEWHAM-IOD25-INCOME-ALL-AGES",
+      "contextId": "UK-NEWHAM",
+      "programmeId": null,
+      "stage": null,
+      "label": "Income deprivation, all ages (English Indices of Deprivation 2025)",
+      "value": 39.0,
+      "unit": "percent",
+      "measureType": "rate",
+      "measureDefinitionId": "MHCLG-IOD2025:income_deprivation_all_ages",
+      "populationUnit": "persons",
+      "populationDefinition": "All people living in income-deprived households, all ages",
+      "geographyLevel": "local_authority",
+      "referencePeriod": {
+        "label": "English Indices of Deprivation 2025 (underlying data years vary)",
+        "start": null,
+        "end": null
+      },
+      "method": "official_area_index",
+      "numerator": null,
+      "denominator": null,
+      "statedBySource": true,
+      "sourceOrganization": "Ministry of Housing, Communities and Local Government",
+      "sourceUrl": "https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025/english-indices-of-deprivation-2025-statistical-release",
+      "sourcePage": "https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025/english-indices-of-deprivation-2025-statistical-release",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-07",
+      "sourceVersion": "Statistical release, Table 7",
+      "licence": "OGL v3.0; reuse of specific figures subject to original publication notices",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Transcribed from the published statistical release.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Index-derived proportion; uncertainty not published in the transcribed table.",
+      "missingness": "Underlying reference years not recorded by HPI.",
+      "limitations": "Area income deprivation does not identify Pension Credit eligibility, claimant households or individual poverty.",
+      "interpretationGuard": "Not a pension-age measure and not a benefit denominator.",
+      "reviewStatus": "internal_desk_audit",
+      "provenanceRecord": "/research-newham-source-audit.json",
+      "missingProvenance": [
+        {
+          "field": "referencePeriod.start",
+          "reason": "Index combines administrative data from several years; not recorded by HPI."
+        },
+        {
+          "field": "referencePeriod.end",
+          "reason": "As above."
+        },
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded in the desk audit."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "No specific licence page recorded."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "Transcribed from an HTML release; no file hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No source file downloaded."
+        }
+      ]
+    },
+    {
+      "id": "F-NEWHAM-IOD25-INCOME-60-PLUS",
+      "contextId": "UK-NEWHAM",
+      "programmeId": null,
+      "stage": null,
+      "label": "Income deprivation, residents aged 60+ (English Indices of Deprivation 2025)",
+      "value": 46.7,
+      "unit": "percent",
+      "measureType": "rate",
+      "measureDefinitionId": "MHCLG-IOD2025:income_deprivation_older_people_60_plus",
+      "populationUnit": "persons",
+      "populationDefinition": "Residents aged 60 and over living in income-deprived households",
+      "geographyLevel": "local_authority",
+      "referencePeriod": {
+        "label": "English Indices of Deprivation 2025 (underlying data years vary)",
+        "start": null,
+        "end": null
+      },
+      "method": "official_area_index",
+      "numerator": null,
+      "denominator": null,
+      "statedBySource": true,
+      "sourceOrganization": "Ministry of Housing, Communities and Local Government",
+      "sourceUrl": "https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025/english-indices-of-deprivation-2025-statistical-release",
+      "sourcePage": "https://www.gov.uk/government/statistics/english-indices-of-deprivation-2025/english-indices-of-deprivation-2025-statistical-release",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-07",
+      "sourceVersion": "Statistical release, Table 8",
+      "licence": "OGL v3.0; reuse of specific figures subject to original publication notices",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Transcribed from the published statistical release.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Index-derived proportion; uncertainty not published in the transcribed table.",
+      "missingness": "Underlying reference years not recorded by HPI.",
+      "limitations": "Older-age income deprivation is need context, not Pension Credit eligibility.",
+      "interpretationGuard": "Must not be used as an eligibility denominator.",
+      "reviewStatus": "internal_desk_audit",
+      "provenanceRecord": "/research-newham-prepilot-decision.json",
+      "missingProvenance": [
+        {
+          "field": "referencePeriod.start",
+          "reason": "Index combines administrative data from several years; not recorded by HPI."
+        },
+        {
+          "field": "referencePeriod.end",
+          "reason": "As above."
+        },
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded in the desk audit."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "No specific licence page recorded."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "Transcribed from an HTML release; no file hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No source file downloaded."
+        }
+      ]
+    },
+    {
+      "id": "F-NEWHAM-COUNCIL-SUPPORTED-2024-25",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": null,
+      "label": "Residents supported to claim Pension Credit by the council service (self-reported)",
+      "value": 220,
+      "unit": "residents",
+      "measureType": "count",
+      "measureDefinitionId": "NEWHAM-COUNCIL:residents_supported_to_claim_pension_credit",
+      "populationUnit": "persons",
+      "populationDefinition": "Residents supported by the Our Newham Money service to claim Pension Credit",
+      "geographyLevel": "local_authority",
+      "referencePeriod": {
+        "label": "2024/25 council programme report",
+        "start": "2024-04-01",
+        "end": "2025-03-31"
+      },
+      "method": "service_report",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "Newham Council",
+      "sourceUrl": "https://www.newham.gov.uk/downloads/file/9654/2024-25-you-said-together-we-did-5-",
+      "sourcePage": "https://www.newham.gov.uk/downloads/file/9654/2024-25-you-said-together-we-did-5-",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-07",
+      "sourceVersion": "Council progress report 2024/25",
+      "licence": "Not reviewed",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Transcribed from the council report.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Self-reported service output; no verification of awards.",
+      "missingness": "Unique confirmed awards and eligible denominator not supplied.",
+      "limitations": "Support to claim is a service output, not proof of award, eligibility or causal additionality; sub-cohorts may overlap other council publications.",
+      "interpretationGuard": "Not an application, approval or receipt stage measure, and not HPI activity.",
+      "reviewStatus": "internal_desk_audit",
+      "provenanceRecord": "/research-newham-source-audit.json",
+      "missingProvenance": [
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Rights not reviewed."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "No file hash recorded."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No file hash recorded."
+        }
+      ]
+    },
+    {
+      "id": "F-NEWHAM-COUNCIL-REPORTED-INCOME-2024-25",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": null,
+      "label": "Additional income attributed by the council to supported Pension Credit claims (self-reported)",
+      "value": 748590,
+      "unit": "GBP",
+      "measureType": "amount",
+      "measureDefinitionId": "NEWHAM-COUNCIL:reported_additional_income_pension_credit",
+      "populationUnit": "persons",
+      "populationDefinition": "Same council programme report as the 220 claim-support output",
+      "geographyLevel": "local_authority",
+      "referencePeriod": {
+        "label": "2024/25 council programme report",
+        "start": "2024-04-01",
+        "end": "2025-03-31"
+      },
+      "method": "service_report",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "Newham Council",
+      "sourceUrl": "https://www.newham.gov.uk/downloads/file/9654/2024-25-you-said-together-we-did-5-",
+      "sourcePage": "https://www.newham.gov.uk/downloads/file/9654/2024-25-you-said-together-we-did-5-",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-07",
+      "sourceVersion": "Council progress report 2024/25",
+      "licence": "Not reviewed",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Transcribed from the council report.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": "GBP",
+      "priceBasis": "nominal_as_reported",
+      "uncertainty": "Self-reported total; temporal basis (annualised or not) not confirmed.",
+      "missingness": "Counterfactual, audit and cost information not supplied.",
+      "limitations": "Neither HPI impact nor audited incremental welfare. Do not divide by 220 as a validated average.",
+      "interpretationGuard": "Not evidence of programme effectiveness.",
+      "reviewStatus": "internal_desk_audit",
+      "provenanceRecord": "/research-newham-source-audit.json",
+      "missingProvenance": [
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Rights not reviewed."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "No file hash recorded."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No file hash recorded."
+        }
+      ]
+    },
+    {
+      "id": "F-RECIFE-POPULATION-2022",
+      "contextId": "BR-RECIFE",
+      "programmeId": null,
+      "stage": null,
+      "label": "Resident population (2022 census)",
+      "value": 1488920,
+      "unit": "persons",
+      "measureType": "count",
+      "measureDefinitionId": "IBGE-CENSUS-2022:resident_population",
+      "populationUnit": "persons",
+      "populationDefinition": "Resident population of the municipality of Recife",
+      "geographyLevel": "municipality",
+      "referencePeriod": {
+        "label": "Census 2022",
+        "start": "2022-01-01",
+        "end": "2022-12-31"
+      },
+      "method": "census",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "Instituto Brasileiro de Geografia e Estatística (IBGE)",
+      "sourceUrl": "https://www.ibge.gov.br/cidades-e-estados/pe/recife.html",
+      "sourcePage": "https://www.ibge.gov.br/cidades-e-estados/pe/recife.html",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-06",
+      "sourceVersion": "IBGE Cidades municipal page",
+      "licence": "Not reviewed",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Transcribed from the IBGE municipal page during F0-02.3 desk research.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Census count; no uncertainty recorded by HPI.",
+      "missingness": "Not a poverty or eligibility count.",
+      "limitations": "Context only; says nothing about CadÚnico registration barriers or Bolsa Família receipt.",
+      "interpretationGuard": "Must not be used as a denominator for benefit receipt.",
+      "reviewStatus": "internal_desk_research",
+      "provenanceRecord": "/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06",
+      "missingProvenance": [
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Rights not reviewed."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "Transcribed from an HTML page; no file hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No file downloaded."
+        }
+      ]
+    },
+    {
+      "id": "F-BR-BOLSA-FAMILIA-INCOME-THRESHOLD",
+      "contextId": "BR",
+      "programmeId": "PROG-BR-CADUNICO-BOLSA-FAMILIA",
+      "stage": "potentially_eligible",
+      "label": "Monthly household per-capita income threshold to be considered for Bolsa Família",
+      "value": 218,
+      "unit": "BRL_per_person_per_month",
+      "measureType": "threshold",
+      "measureDefinitionId": "BR-MDS:bolsa_familia_per_capita_income_threshold",
+      "populationUnit": "households",
+      "populationDefinition": "Programme rule applied to household monthly income per person",
+      "geographyLevel": "nation",
+      "referencePeriod": {
+        "label": "Rule as published when retrieved (2026-11-06)",
+        "start": null,
+        "end": null
+      },
+      "method": "programme_rule",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "Government of Brazil",
+      "sourceUrl": "https://www.gov.br/pt-br/servicos/receber-o-bolsa-familia",
+      "sourcePage": "https://www.gov.br/pt-br/servicos/receber-o-bolsa-familia",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-06",
+      "sourceVersion": "Federal service page",
+      "licence": "Not reviewed",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Transcribed from the federal service page.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": "BRL",
+      "priceBasis": "nominal_as_published",
+      "uncertainty": "Rule value may change; re-verify before any use.",
+      "missingness": "Effective date of the rule not recorded.",
+      "limitations": "Meeting the threshold makes a family eligible to be considered; entry is not automatic and depends on federal assessment and budget.",
+      "interpretationGuard": "A threshold, not a poverty rate; not comparable with UK or Italian measures.",
+      "reviewStatus": "internal_desk_research",
+      "provenanceRecord": "/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06",
+      "missingProvenance": [
+        {
+          "field": "referencePeriod.start",
+          "reason": "Effective date of the rule not recorded."
+        },
+        {
+          "field": "referencePeriod.end",
+          "reason": "Rule current at retrieval; end not applicable."
+        },
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Rights not reviewed."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "Transcribed from an HTML page; no file hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No file downloaded."
+        }
+      ]
+    },
+    {
+      "id": "F-CAMPANIA-RELATIVE-POVERTY-2025",
+      "contextId": "IT-CAMPANIA",
+      "programmeId": null,
+      "stage": null,
+      "label": "Household relative poverty incidence, Campania (2025)",
+      "value": 20.6,
+      "unit": "percent",
+      "measureType": "rate",
+      "measureDefinitionId": "ISTAT:household_relative_poverty_incidence",
+      "populationUnit": "households",
+      "populationDefinition": "Households below the ISTAT relative poverty line, Campania region",
+      "geographyLevel": "region",
+      "referencePeriod": {
+        "label": "2025",
+        "start": "2025-01-01",
+        "end": "2025-12-31"
+      },
+      "method": "survey_estimate",
+      "numerator": null,
+      "denominator": null,
+      "statedBySource": true,
+      "sourceOrganization": "ISTAT (as reported by the Regione Puglia statistical office)",
+      "sourceUrl": "https://www.regione.puglia.it/web/ufficio-statistico/-/istat.-le-statistiche-sulla-poverta.-anno-2025",
+      "sourcePage": "https://www.istat.it/comunicato-stampa/la-poverta-in-italia-anno-2025/",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-06",
+      "sourceVersion": "Secondary regional publication of ISTAT poverty statistics, 2025",
+      "licence": "Not reviewed",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Transcribed from a secondary official publication; the primary ISTAT table was not extracted or hashed.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Survey estimate; sampling error not transcribed.",
+      "missingness": "City-level figure for Naples not published in this source.",
+      "limitations": "Region-level relative poverty, not a Naples figure or an ADI non-take-up estimate.",
+      "interpretationGuard": "Not comparable with Newham or Recife measures.",
+      "reviewStatus": "internal_desk_research",
+      "provenanceRecord": "/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06",
+      "missingProvenance": [
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Rights not reviewed."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "Secondary HTML page; no file hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No file downloaded."
+        }
+      ]
+    },
+    {
+      "id": "F-IT-ADI-HOUSEHOLDS-2026-06",
+      "contextId": "IT",
+      "programmeId": "PROG-IT-ADI",
+      "stage": "received",
+      "label": "Households receiving Assegno di Inclusione nationally (June 2026)",
+      "value": 690000,
+      "unit": "households",
+      "measureType": "count",
+      "measureDefinitionId": "INPS-OSSERVATORIO-ADI:households_with_payment",
+      "populationUnit": "households",
+      "populationDefinition": "Households with ADI in the INPS observatory update to June 2026, Italy",
+      "geographyLevel": "nation",
+      "referencePeriod": {
+        "label": "Observatory data to June 2026",
+        "start": null,
+        "end": "2026-06-30"
+      },
+      "method": "administrative_caseload",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "INPS",
+      "sourceUrl": "https://www.inps.it/it/it/inps-comunica/notizie/dettaglio-news-page.news.2026.08.osservatorio-adi-e-sfl-i-dati-aggiornati-a-giugno-2026.html",
+      "sourcePage": "https://www.inps.it/it/it/inps-comunica/notizie/dettaglio-news-page.news.2026.08.osservatorio-adi-e-sfl-i-dati-aggiornati-a-giugno-2026.html",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-06",
+      "sourceVersion": "INPS news release, August 2026",
+      "licence": "Not reviewed",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Rounded headline transcribed from the INPS release.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Rounded headline; cumulative versus point-in-time basis not confirmed by HPI.",
+      "missingness": "No eligible denominator, no city breakdown extracted.",
+      "limitations": "National caseload, not Naples and not a take-up rate.",
+      "interpretationGuard": "Cannot estimate Naples non-take-up.",
+      "reviewStatus": "internal_desk_research",
+      "provenanceRecord": "/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06",
+      "missingProvenance": [
+        {
+          "field": "referencePeriod.start",
+          "reason": "Observatory window start not recorded."
+        },
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded beyond the release month."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Rights not reviewed."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "HTML release; no file hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No file downloaded."
+        }
+      ]
+    },
+    {
+      "id": "F-IT-ADI-AVERAGE-AMOUNT-2026-06",
+      "contextId": "IT",
+      "programmeId": "PROG-IT-ADI",
+      "stage": "received",
+      "label": "Average monthly ADI amount nationally (June 2026)",
+      "value": 672,
+      "unit": "EUR_per_household_per_month",
+      "measureType": "amount",
+      "measureDefinitionId": "INPS-OSSERVATORIO-ADI:average_monthly_amount",
+      "populationUnit": "households",
+      "populationDefinition": "Households with ADI, Italy",
+      "geographyLevel": "nation",
+      "referencePeriod": {
+        "label": "Observatory data to June 2026",
+        "start": null,
+        "end": "2026-06-30"
+      },
+      "method": "administrative_caseload",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "INPS",
+      "sourceUrl": "https://www.inps.it/it/it/inps-comunica/notizie/dettaglio-news-page.news.2026.08.osservatorio-adi-e-sfl-i-dati-aggiornati-a-giugno-2026.html",
+      "sourcePage": "https://www.inps.it/it/it/inps-comunica/notizie/dettaglio-news-page.news.2026.08.osservatorio-adi-e-sfl-i-dati-aggiornati-a-giugno-2026.html",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-06",
+      "sourceVersion": "INPS news release, August 2026",
+      "licence": "Not reviewed",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Rounded headline transcribed from the INPS release.",
+      "verificationLevel": "publisher_page_transcribed_unhashed",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": "EUR",
+      "priceBasis": "nominal_as_published",
+      "uncertainty": "Average only; distribution not recorded.",
+      "missingness": "No distribution by household type or city.",
+      "limitations": "An average transfer is not household disposable income or improved security.",
+      "interpretationGuard": "Not convertible to GBP or BRL comparisons without a documented price and purchasing-power method.",
+      "reviewStatus": "internal_desk_research",
+      "provenanceRecord": "/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06",
+      "missingProvenance": [
+        {
+          "field": "referencePeriod.start",
+          "reason": "Observatory window start not recorded."
+        },
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded beyond the release month."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Rights not reviewed."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "HTML release; no file hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No file downloaded."
+        }
+      ]
+    },
+    {
+      "id": "F-GLOBAL-EXTREME-POVERTY-2026",
+      "contextId": "GLOBAL",
+      "programmeId": null,
+      "stage": null,
+      "label": "People estimated to live in extreme poverty (2026 nowcast)",
+      "value": 811000000,
+      "unit": "persons",
+      "measureType": "count",
+      "measureDefinitionId": "WB-PIP:extreme_poverty_headcount_international_line",
+      "populationUnit": "persons",
+      "populationDefinition": "People below the World Bank international extreme-poverty line",
+      "geographyLevel": "global",
+      "referencePeriod": {
+        "label": "2026 (nowcast)",
+        "start": "2026-01-01",
+        "end": "2026-12-31"
+      },
+      "method": "nowcast",
+      "numerator": null,
+      "denominator": null,
+      "sourceOrganization": "World Bank",
+      "sourceUrl": "https://www.worldbank.org/en/publication/poverty-prosperity-and-planet",
+      "sourcePage": "https://www.worldbank.org/en/publication/poverty-prosperity-and-planet",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-05",
+      "sourceVersion": "Poverty, Prosperity, and Planet 2026 report (evidence ledger E01)",
+      "licence": "Not reviewed",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "reference_only_rights_not_reviewed",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Headline transcribed into the HPI evidence ledger (E01).",
+      "verificationLevel": "citation_level_from_ledger",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": null,
+      "priceBasis": "international_poverty_line_ppp_as_defined_by_source",
+      "uncertainty": "2025-26 figures are nowcasts.",
+      "missingness": "Global population denominator not recorded; HPI does not compute a rate.",
+      "limitations": "Macro-level estimate, not an intervention evaluation; PPP vintage must be stated before any comparison.",
+      "interpretationGuard": "Do not splice with estimates using a different PPP vintage or poverty line.",
+      "reviewStatus": "citation_level_not_full_text_verified",
+      "provenanceRecord": "/research/evidence-ledger",
+      "missingProvenance": [
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded in the ledger."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Rights not reviewed."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "Citation-level entry; no file hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No file downloaded."
+        }
+      ]
+    },
+    {
+      "id": "F-GLOBAL-MPI-2026",
+      "contextId": "GLOBAL",
+      "programmeId": null,
+      "stage": null,
+      "label": "People experiencing multidimensional poverty in covered countries (Global MPI 2026)",
+      "value": 1200000000,
+      "unit": "persons",
+      "measureType": "count",
+      "measureDefinitionId": "UNDP-OPHI-MPI-2026:multidimensionally_poor_headcount",
+      "populationUnit": "persons",
+      "populationDefinition": "People classified as multidimensionally poor in the 108 countries covered by the 2026 Global MPI",
+      "geographyLevel": "multi_country",
+      "referencePeriod": {
+        "label": "Global MPI 2026 edition (survey years vary by country)",
+        "start": null,
+        "end": null
+      },
+      "method": "composite_index",
+      "numerator": null,
+      "denominator": {
+        "value": 6300000000,
+        "description": "Population of the 108 covered countries, as stated by the source",
+        "statedBySource": true
+      },
+      "sourceOrganization": "United Nations Development Programme and OPHI",
+      "sourceUrl": "https://hdr.undp.org/content/2026-global-multidimensional-poverty-index",
+      "sourcePage": "https://hdr.undp.org/content/2026-global-multidimensional-poverty-index",
+      "publicationDate": null,
+      "retrievedAt": "2026-11-05",
+      "sourceVersion": "Global MPI 2026 statistical report (evidence ledger E02)",
+      "licence": "Unknown",
+      "licenceEvidenceUrl": null,
+      "redistributionStatus": "unknown",
+      "licenceReviewStatus": "not_reviewed",
+      "transformation": "Headline transcribed into the HPI evidence ledger (E02).",
+      "verificationLevel": "citation_level_from_ledger",
+      "sourceSha256": null,
+      "sourceBytes": null,
+      "currency": null,
+      "priceBasis": null,
+      "uncertainty": "Survey years and sampling error vary by country; not recorded by HPI.",
+      "missingness": "Countries outside the 108 covered are excluded.",
+      "limitations": "Dimension definitions differ from monetary poverty measures; not interchangeable with HPI's five draft dimensions.",
+      "interpretationGuard": "Not additive with the World Bank extreme-poverty headcount.",
+      "reviewStatus": "citation_level_not_full_text_verified",
+      "provenanceRecord": "/research/evidence-ledger",
+      "missingProvenance": [
+        {
+          "field": "referencePeriod.start",
+          "reason": "Survey years vary by country."
+        },
+        {
+          "field": "referencePeriod.end",
+          "reason": "Survey years vary by country."
+        },
+        {
+          "field": "publicationDate",
+          "reason": "Not recorded in the ledger."
+        },
+        {
+          "field": "licenceEvidenceUrl",
+          "reason": "Licence unknown."
+        },
+        {
+          "field": "sourceSha256",
+          "reason": "Citation-level entry; no file hashed."
+        },
+        {
+          "field": "sourceBytes",
+          "reason": "No file downloaded."
+        }
+      ]
+    }
+  ],
+  "measurementGaps": [
+    {
+      "id": "G-NEWHAM-APPLICATIONS",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": "applied",
+      "status": "not_published",
+      "reason": "The DWP local model does not publish applications for Newham.",
+      "potentialSource": null,
+      "accessGate": "Lawful administrative data access through an accountable partner; not available to HPI."
+    },
+    {
+      "id": "G-NEWHAM-APPROVALS",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": "approved",
+      "status": "not_published",
+      "reason": "Approvals for Newham are not published in the extracted source.",
+      "potentialSource": null,
+      "accessGate": "Lawful administrative data access through an accountable partner."
+    },
+    {
+      "id": "G-NEWHAM-SUSTAINED",
+      "contextId": "UK-NEWHAM",
+      "programmeId": "PROG-UK-PENSION-CREDIT",
+      "stage": "sustained_improvement",
+      "status": "not_measured",
+      "reason": "No source measures whether receipt improved household security over time.",
+      "potentialSource": null,
+      "accessGate": "Approved study with consent, ethics review and follow-up."
+    },
+    {
+      "id": "G-RECIFE-ELIGIBLE-NOT-RECEIVING",
+      "contextId": "BR-RECIFE",
+      "programmeId": "PROG-BR-CADUNICO-BOLSA-FAMILIA",
+      "stage": "potentially_eligible",
+      "status": "not_measured",
+      "reason": "No local eligible-but-not-receiving estimate has been identified or measured.",
+      "potentialSource": "https://www.gov.br/mds/pt-br/orgaos/SAGICAD/dados-e-ferramentas-informacionais/dados-e-ferramentas-do-cadastro-unico/",
+      "accessGate": "Aggregated MDS dashboards first; identified data only for qualifying research institutions under LGPD."
+    },
+    {
+      "id": "G-RECIFE-REGISTRATION",
+      "contextId": "BR-RECIFE",
+      "programmeId": "PROG-BR-CADUNICO-BOLSA-FAMILIA",
+      "stage": "applied",
+      "status": "source_exists_not_extracted",
+      "reason": "A 2023 anonymised CadÚnico open-data vintage is catalogued but was not downloaded or inspected.",
+      "potentialSource": "https://dados.recife.pe.gov.br/dataset/cadastro-unico-para-programas-sociais",
+      "accessGate": "Independent privacy and re-identification appraisal before any download."
+    },
+    {
+      "id": "G-RECIFE-SELECTION",
+      "contextId": "BR-RECIFE",
+      "programmeId": "PROG-BR-CADUNICO-BOLSA-FAMILIA",
+      "stage": "approved",
+      "status": "source_exists_not_extracted",
+      "reason": "Federal selection counts for Recife were not extracted.",
+      "potentialSource": "https://www.gov.br/mds/pt-br/orgaos/SAGICAD/dados-e-ferramentas-informacionais/dados-e-ferramentas-do-cadastro-unico/",
+      "accessGate": "Source rights review and extraction method."
+    },
+    {
+      "id": "G-RECIFE-PAYMENT-RECEIPT",
+      "contextId": "BR-RECIFE",
+      "programmeId": "PROG-BR-CADUNICO-BOLSA-FAMILIA",
+      "stage": "received",
+      "status": "source_exists_not_extracted",
+      "reason": "Bolsa Família payment counts for Recife were not extracted.",
+      "potentialSource": "https://www.gov.br/mds/pt-br/orgaos/SAGICAD/dados-e-ferramentas-informacionais/dados-e-ferramentas-do-cadastro-unico/",
+      "accessGate": "Source rights review and extraction method."
+    },
+    {
+      "id": "G-RECIFE-SUSTAINED",
+      "contextId": "BR-RECIFE",
+      "programmeId": "PROG-BR-CADUNICO-BOLSA-FAMILIA",
+      "stage": "sustained_improvement",
+      "status": "not_measured",
+      "reason": "No source measures durable change in household security.",
+      "potentialSource": null,
+      "accessGate": "Approved study with a lawful local research partner."
+    },
+    {
+      "id": "G-NAPLES-ELIGIBLE",
+      "contextId": "IT-NAPLES",
+      "programmeId": "PROG-IT-ADI",
+      "stage": "potentially_eligible",
+      "status": "not_measured",
+      "reason": "No local eligible denominator is available.",
+      "potentialSource": null,
+      "accessGate": "City-level verification with INPS or territorial services."
+    },
+    {
+      "id": "G-NAPLES-APPLICATIONS",
+      "contextId": "IT-NAPLES",
+      "programmeId": "PROG-IT-ADI",
+      "stage": "applied",
+      "status": "not_measured",
+      "reason": "City-level applications not extracted.",
+      "potentialSource": null,
+      "accessGate": "Source identification and rights review."
+    },
+    {
+      "id": "G-NAPLES-APPROVALS",
+      "contextId": "IT-NAPLES",
+      "programmeId": "PROG-IT-ADI",
+      "stage": "approved",
+      "status": "not_measured",
+      "reason": "City-level approvals not extracted.",
+      "potentialSource": null,
+      "accessGate": "Source identification and rights review."
+    },
+    {
+      "id": "G-NAPLES-RECEIPT",
+      "contextId": "IT-NAPLES",
+      "programmeId": "PROG-IT-ADI",
+      "stage": "received",
+      "status": "not_measured",
+      "reason": "City take-up unknown; only national caseload extracted.",
+      "potentialSource": "https://www.inps.it/it/it/inps-comunica/notizie/dettaglio-news-page.news.2026.08.osservatorio-adi-e-sfl-i-dati-aggiornati-a-giugno-2026.html",
+      "accessGate": "Identification of a published local breakdown."
+    },
+    {
+      "id": "G-NAPLES-SUSTAINED",
+      "contextId": "IT-NAPLES",
+      "programmeId": "PROG-IT-ADI",
+      "stage": "sustained_improvement",
+      "status": "not_measured",
+      "reason": "No source measures durable change in household security.",
+      "potentialSource": null,
+      "accessGate": "Approved study with an accountable local partner."
+    }
+  ]
+}

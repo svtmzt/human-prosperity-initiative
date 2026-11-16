@@ -1,0 +1,113 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "opportunity-assessment",
+  "reviewedAt": "2026-11-16",
+  "reviewStatus": "method_draft_not_independently_reviewed",
+  "note": "Decision support, not a decision. A weighted score is computed only when every baseline criterion has a recorded independent or community score. Hard vetoes are evaluated separately and cannot be offset by high scores. Extended considerations are recorded qualitatively and are never weighted.",
+  "baselineRubric": {
+    "source": "/research/f0-02-5-newham-prioritisation-desk-gate-v0-1",
+    "scale": {"min": 0, "max": 5},
+    "criteria": [
+      {"id": "NEED", "title": "Need severity", "weightPercent": 20, "evidenceRequirement": "Population-specific need from a source whose population and geography match the candidate."},
+      {"id": "EVIDENCE", "title": "Existing impact evidence", "weightPercent": 20, "evidenceRequirement": "Independent review of relevant studies and their transferability."},
+      {"id": "FEASIBILITY", "title": "Feasibility and cost", "weightPercent": 20, "evidenceRequirement": "Lawful data access, accountable delivery partner and costed plan."},
+      {"id": "ETHICS", "title": "Ethics", "weightPercent": 15, "evidenceRequirement": "Independent ethics and safeguarding assessment."},
+      {"id": "ADDITIONALITY", "title": "Additionality", "weightPercent": 15, "evidenceRequirement": "Evidence that research or service adds value beyond what already exists."},
+      {"id": "MEASURABLE_LEARNING", "title": "Measurable learning", "weightPercent": 10, "evidenceRequirement": "A measurable, prespecified primary outcome with a credible comparison."}
+    ]
+  },
+  "acceptedScorerTypes": ["independent_review", "community_review"],
+  "extendedConsiderations": [
+    {"id": "MECHANISM_RECURRENCE", "title": "Recurrence of the underlying mechanism", "evidenceRequirement": "Documented presence of the mechanism in other contexts, not assumed."},
+    {"id": "METHOD_REUSABILITY", "title": "Reusability of methods", "evidenceRequirement": "Whether the evaluation package can be adapted without rebuilding."},
+    {"id": "ADOPTION_POTENTIAL", "title": "Potential adoption by other institutions", "evidenceRequirement": "Verified interest from accountable institutions; never assumed."},
+    {"id": "SCALABILITY_CONSTRAINTS", "title": "Scalability constraints", "evidenceRequirement": "Known constraints on delivery capacity, cost and legal transfer."},
+    {"id": "BENEFIT_PER_RESOURCE", "title": "Expected benefit per unit of resource", "evidenceRequirement": "Costed estimates with uncertainty; undefined when effects are zero or uncertain."},
+    {"id": "DISTRIBUTIONAL_CONSEQUENCES", "title": "Distributional consequences", "evidenceRequirement": "Who gains, who may be excluded, and spillovers on nonparticipants."},
+    {"id": "NEGLECTED_POPULATIONS", "title": "Neglected populations", "evidenceRequirement": "Evidence that a population is underserved. Small, highly deprived populations must not be dismissed for being less scalable."},
+    {"id": "SUSTAINABILITY", "title": "Long-term sustainability", "evidenceRequirement": "Funding and institutional continuity beyond any study."},
+    {"id": "EVIDENCE_UNCERTAINTY", "title": "Evidence uncertainty", "evidenceRequirement": "Explicit statement of what is unknown and how it could change the decision."}
+  ],
+  "vetoes": [
+    {"id": "V-NO-ACCOUNTABLE-OPERATOR", "title": "No legally accountable operator or sponsor", "appliesTo": "fieldwork"},
+    {"id": "V-NO-LAWFUL-DATA", "title": "No lawful access to outcome data", "appliesTo": "fieldwork"},
+    {"id": "V-NO-ETHICS-REVIEW", "title": "No independent ethics and safeguarding approval", "appliesTo": "fieldwork"},
+    {"id": "V-WITHHOLDS-ENTITLEMENT", "title": "Design would withhold a legally owed entitlement", "appliesTo": "fieldwork"},
+    {"id": "V-NO-COMMUNITY-PARTICIPATION", "title": "No ethically conducted affected-community participation", "appliesTo": "fieldwork"},
+    {"id": "V-UNMEASURABLE-PRIMARY-OUTCOME", "title": "Primary outcome cannot be measured lawfully", "appliesTo": "fieldwork"}
+  ],
+  "candidates": [
+    {
+      "id": "OPP-NEWHAM-PENSION-CREDIT",
+      "title": "Newham: verified Pension Credit receipt",
+      "contextIds": ["UK-NEWHAM"],
+      "problemId": "P-BENEFIT-NONTAKEUP",
+      "deskResearchStatus": "GO",
+      "criterionScores": [
+        {"criterionId": "NEED", "score": null, "scorerType": null, "deskNote": "Older-age income deprivation documented (46.7%); eligibility unmeasured."},
+        {"criterionId": "EVIDENCE", "score": null, "scorerType": null, "deskNote": "Heterogeneous international evidence; no Newham-specific effect."},
+        {"criterionId": "FEASIBILITY", "score": null, "scorerType": null, "deskNote": "Desk feasibility only; no data access or partner."},
+        {"criterionId": "ETHICS", "score": null, "scorerType": null, "deskNote": "Unreviewed risks recorded."},
+        {"criterionId": "ADDITIONALITY", "score": null, "scorerType": null, "deskNote": "Existing council service already supports claims."},
+        {"criterionId": "MEASURABLE_LEARNING", "score": null, "scorerType": null, "deskNote": "Method feasibility only."}
+      ],
+      "vetoStatus": [
+        {"vetoId": "V-NO-ACCOUNTABLE-OPERATOR", "triggered": true},
+        {"vetoId": "V-NO-LAWFUL-DATA", "triggered": true},
+        {"vetoId": "V-NO-ETHICS-REVIEW", "triggered": true},
+        {"vetoId": "V-WITHHOLDS-ENTITLEMENT", "triggered": false},
+        {"vetoId": "V-NO-COMMUNITY-PARTICIPATION", "triggered": true},
+        {"vetoId": "V-UNMEASURABLE-PRIMARY-OUTCOME", "triggered": true}
+      ],
+      "source": "/research-newham-prepilot-decision.json"
+    },
+    {
+      "id": "OPP-RECIFE-CADUNICO",
+      "title": "Recife: CadÚnico registration and Bolsa Família receipt",
+      "contextIds": ["BR-RECIFE"],
+      "problemId": "P-BENEFIT-NONTAKEUP",
+      "deskResearchStatus": "GO",
+      "criterionScores": [
+        {"criterionId": "NEED", "score": null, "scorerType": null, "deskNote": "No local eligible-but-not-receiving measure."},
+        {"criterionId": "EVIDENCE", "score": null, "scorerType": null, "deskNote": "No linked Brazilian benefit take-up trial."},
+        {"criterionId": "FEASIBILITY", "score": null, "scorerType": null, "deskNote": "Identified data restricted to qualifying research institutions."},
+        {"criterionId": "ETHICS", "score": null, "scorerType": null, "deskNote": "Family and child data sensitivity; re-identification risk."},
+        {"criterionId": "ADDITIONALITY", "score": null, "scorerType": null, "deskNote": "Existing CRAS services; additionality unknown."},
+        {"criterionId": "MEASURABLE_LEARNING", "score": null, "scorerType": null, "deskNote": "Receipt measurement pathway not established."}
+      ],
+      "vetoStatus": [
+        {"vetoId": "V-NO-ACCOUNTABLE-OPERATOR", "triggered": true},
+        {"vetoId": "V-NO-LAWFUL-DATA", "triggered": true},
+        {"vetoId": "V-NO-ETHICS-REVIEW", "triggered": true},
+        {"vetoId": "V-WITHHOLDS-ENTITLEMENT", "triggered": false},
+        {"vetoId": "V-NO-COMMUNITY-PARTICIPATION", "triggered": true},
+        {"vetoId": "V-UNMEASURABLE-PRIMARY-OUTCOME", "triggered": true}
+      ],
+      "source": "/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06"
+    },
+    {
+      "id": "OPP-NAPLES-ADI",
+      "title": "Naples: Assegno di Inclusione approval and payment",
+      "contextIds": ["IT-NAPLES"],
+      "problemId": "P-BENEFIT-NONTAKEUP",
+      "deskResearchStatus": "RESERVE",
+      "criterionScores": [
+        {"criterionId": "NEED", "score": null, "scorerType": null, "deskNote": "Region-level relative poverty only (Campania 20.6%)."},
+        {"criterionId": "EVIDENCE", "score": null, "scorerType": null, "deskNote": "No linked Italian take-up trial."},
+        {"criterionId": "FEASIBILITY", "score": null, "scorerType": null, "deskNote": "No local denominator or partner."},
+        {"criterionId": "ETHICS", "score": null, "scorerType": null, "deskNote": "Not assessed."},
+        {"criterionId": "ADDITIONALITY", "score": null, "scorerType": null, "deskNote": "Existing patronato and territorial services."},
+        {"criterionId": "MEASURABLE_LEARNING", "score": null, "scorerType": null, "deskNote": "Not assessed."}
+      ],
+      "vetoStatus": [
+        {"vetoId": "V-NO-ACCOUNTABLE-OPERATOR", "triggered": true},
+        {"vetoId": "V-NO-LAWFUL-DATA", "triggered": true},
+        {"vetoId": "V-NO-ETHICS-REVIEW", "triggered": true},
+        {"vetoId": "V-WITHHOLDS-ENTITLEMENT", "triggered": false},
+        {"vetoId": "V-NO-COMMUNITY-PARTICIPATION", "triggered": true},
+        {"vetoId": "V-UNMEASURABLE-PRIMARY-OUTCOME", "triggered": true}
+      ],
+      "source": "/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06"
+    }
+  ]
+}
