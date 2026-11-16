@@ -112,7 +112,9 @@ export function scoreEvaluation(items,resultsByItem){
   if(!r){continue}
   if(r.quarantined){ops.quarantinedBeforeRequest++;m.quarantined=(m.quarantined||0)+1;if(item.reference.expect==="quarantine_before_request")m.correctQuarantine=(m.correctQuarantine||0)+1;continue}
   if(r.blocked){ops.blockedBeforeRequest++;continue}
-  ops.requests++;ops.attempts+=r.attempts?.length||1;
+  const sent=(r.attempts||[]).filter(a=>a.status!=="model_circuit_open");
+  if(!sent.length){m.notSent=(m.notSent||0)+1;m.providerFailed++;ops.providerFailures[r.status]=(ops.providerFailures[r.status]||0)+1;continue}
+  ops.requests++;ops.attempts+=sent.length;
   if(r.latencyMs!=null)ops.latencies.push(r.latencyMs);
   if(r.usage){ops.promptTokens+=r.usage.promptTokens||0;ops.completionTokens+=r.usage.completionTokens||0;ops.reasoningTokens+=r.usage.reasoningTokens||0;
    if(typeof r.usage.costUsd==="number"){ops.costUsdReported+=r.usage.costUsd;ops.costReports++}}

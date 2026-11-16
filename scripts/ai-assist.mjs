@@ -100,13 +100,26 @@ async function itemsFor(task,rest,kb,sources){
 }
 
 async function evaluate(rest,config){
- if(config.kind!=="openrouter"&&config.kind!=="local"&&config.kind!=="openai_compatible")throw new Error("Configure a provider first (HPI_AI_PROVIDER).");
+ if(!rest.includes("--rescore")&&config.kind!=="openrouter"&&config.kind!=="local"&&config.kind!=="openai_compatible")throw new Error("Configure a provider first (HPI_AI_PROVIDER).");
  const set=JSON.parse(await readFile(EVAL_SET_PATH,"utf8"));
  const {kb}=await loadVerifiedPlatform();
  const vocab=await vocabulary(kb);
  const tasks=csvArg(rest,"--tasks").length?csvArg(rest,"--tasks"):TASK_IDS;
  const models=config.kind==="openrouter"?csvArg(rest,"--models"):[config.model||"local-default"];
  if(!models.length)throw new Error("Pass --models with one or more ':free' model ids to compare.");
+ const rescoreDir=arg(rest,"--rescore");
+ if(rescoreDir){
+  // Recompute aggregate metrics from a saved private run without any network request.
+  const raw=JSON.parse(await readFile(rescoreDir+"/raw-private.json","utf8"));
+  const prev=JSON.parse(await readFile(rescoreDir+"/aggregate.json","utf8"));
+  if(raw.set.sha256!==set.sha256)throw new Error("Saved run used a different evaluation set");
+  for(const m of raw.out)m.score=scoreEvaluation(set.items.filter(i=>tasks.includes(i.task)),new Map(Object.entries(m.raw)));
+  const aggregate={...prev,rescoredAt:new Date().toISOString(),rescoreNote:"Metrics recomputed from the saved run with the current scorer; no model was queried again.",
+   models:raw.out.map(m=>({...prev.models.find(x=>x.model===m.model),metrics:m.score.metrics,operations:m.score.operations}))};
+  await writeFile(rescoreDir+"/aggregate.json",JSON.stringify(aggregate,null,2)+"\n");
+  if(rest.includes("--publish"))await writeFile(EVAL_RESULTS_PATH,JSON.stringify(aggregate,null,2)+"\n");
+  console.log("Rescored",rescoreDir,rest.includes("--publish")?"→ "+EVAL_RESULTS_PATH:"");return;
+ }
  const stamp=new Date().toISOString().replace(/[:.]/g,"-");
  const keyBefore=config.kind==="openrouter"?await fetchKeyStatus({apiKey:readApiKey(config,process.env)}):null;
  const out=[];

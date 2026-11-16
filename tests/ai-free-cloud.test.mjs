@@ -357,8 +357,10 @@ test("evaluation set is current, held out and scorer produces honest proxy metri
   assert.ok(set.items.some(i=>i.category===cat),cat);
  assert.ok(set.items.filter(i=>i.synthetic).every(i=>i.sources.every(s=>/Synthetic/.test(s.dataClassBasis))));
  const item=set.items.find(i=>i.id==="claim:E13");
- const s=scoreEvaluation([item],new Map([[item.id,{status:"valid_pending_review",acceptedItems:[{direction:"null",endpointLevel:"receipt",mechanismIds:["M-INFORMATION-FRICTIONS"],statement:"x",quote:"y"}],rejectedReasons:[["Quote is not found verbatim in the cited source (citation verification failed)"]],latencyMs:10,usage:{costUsd:0}}]]));
+ const s=scoreEvaluation([item],new Map([[item.id,{status:"valid_pending_review",acceptedItems:[{direction:"null",endpointLevel:"receipt",mechanismIds:["M-INFORMATION-FRICTIONS"],statement:"x",quote:"y"}],rejectedReasons:[["Quote is not found verbatim in the cited source (citation verification failed)"]],latencyMs:10,usage:{costUsd:0},attempts:[{status:"completed"}]}]]));
  const m=s.metrics["claim-extraction"];
  assert.equal(m.referenceConsistentPrecision,1);assert.equal(m.citationFailureRate,0.5);assert.equal(m.nullAdverseReportedRate,1);
  assert.equal(s.operations.costUsdReported,0);
+ const notSent=scoreEvaluation([item],new Map([[item.id,{status:"not_run"}]]));
+ assert.equal(notSent.operations.requests,0,"items never sent are not counted as requests");assert.equal(notSent.metrics["claim-extraction"].providerFailed,1);
 });
