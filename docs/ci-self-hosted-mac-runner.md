@@ -17,11 +17,20 @@ GitHub push / PR → CircleCI orchestration (cloud control plane)
 - **No hosted fallback:** nothing in the config targets CircleCI-hosted Docker or macOS compute.
 - **When the Mac is asleep or offline:** jobs wait in the CircleCI queue. No status turns green, so the PR stays blocked.
 
-## Why the hosted jobs failed
+## Why the jobs fail (confirmed 16 Nov 2026)
 
-On `e5a5453`, `e9e0a66` and `c896ee9`, `website-quality` failed before its first step. It had no start time and only CircleCI's synthetic "Task information unavailable" step, so it is not a code failure. The organisation's usage export for 1–16 November shows about **119,600 credits** across all portfolio projects: about 115,300 compute and 4,300 storage. HPI accounts for about 8,300.
+**Root cause:** CircleCI blocks every HPI job before dispatch because **the organisation's plan has no credits available**. The founder read the CircleCI job metadata for job #1054 on `e28ce0c` (`GET /api/v2/project/gh/svtmzt/human-prosperity-initiative/job/1054`); [evidence](https://github.com/svtmzt/human-prosperity-initiative/pull/105#issuecomment-6921998490). It reports:
+- `messages[0].reason = performance-plan-no-credits-available`;
+- `started_at = null` and `executor = null`.
 
-This strongly suggests the organisation's hosted-compute credits or plan limit are exhausted. It is **not confirmed**: the plan's balance and allowance are not visible to this session's tools. Self-hosted runner minutes are not billed as compute, but CircleCI requires an account in good standing. If runner jobs also never start, the cause is account-level and only the account owner can resolve it, for example when credits renew.
+Self-hosted runner jobs are blocked as well. Runner compute costs 0 credits, but CircleCI requires a positive balance to dispatch any job, so moving to the Mac **cannot by itself** unblock CI. The organisation used about 119,600 credits from 1 to 16 November (about 115,300 compute and 4,300 storage; HPI about 8,300), mostly on hosted Docker jobs in other portfolio projects.
+
+**Ways to unblock** (an owner decision; none is taken here):
+1. Wait for the plan's credits to renew.
+2. Ask CircleCI whether the public HPI repository qualifies for free open-source credits. The org is on the Performance plan, so the free-plan OSS allowance may not apply.
+3. Buy a credit package. This needs explicit approval.
+
+Once any credit is available, all HPI jobs run on the Mac at 0 compute credits. Only orchestration and minimal storage remain billed.
 
 ## Security
 
@@ -33,7 +42,7 @@ This strongly suggests the organisation's hosted-compute credits or plan limit a
   - The job `PATH` is limited to the runner's isolated Node plus system directories.
   - npm and Playwright caches live in the runner account (`~/.cache/hpi-ci-*`).
   - HPI CI needs no secrets; no OpenRouter key or production credential is available to jobs.
-- **Least privilege:** the runner should run as a dedicated, **non-admin** macOS account, with no access to the founder's browser profiles, keychain, SSH keys or documents.
+- **Least privilege — open finding:** on 16 Nov 2026 the runner (`/opt/homebrew/bin/circleci-runner machine`, LaunchAgent `com.circleci.runner`) was running under the **founder's regular macOS account, which is an admin**. HPI jobs need no secrets, check out anonymously and refuse fork builds, but a job can still read anything that account can read. Before relying on it, move the runner to a dedicated, **non-admin** macOS account with no access to the founder's browser profiles, keychain, SSH keys or documents, and keep *Build forked pull requests* OFF. Until then, accept only trusted branches from the owner.
   - Each job prints the account name and warns if it is in the `admin` group.
   - Check the first HPI job log. If the warning appears, move the runner service to a dedicated standard user before relying on it.
 - **Disk:** the runner volume was 88% full on 13 November (55 GB free). Each job prints `df`. The Playwright Chromium cache adds about 150 MB once.
