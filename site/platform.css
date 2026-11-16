@@ -1,0 +1,75 @@
+/* HPI Global Prosperity Platform — extends the existing design system.
+ * No inline styles (CSP style-src 'self'); colour is never the only signal:
+ * every badge carries a text label. */
+.pf-pillars{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin:26px 0}
+.pf-pillar{border:1px solid #cbd7d0;background:#fff;border-radius:9px;padding:clamp(20px,3vw,30px);display:flex;flex-direction:column;gap:10px;overflow-wrap:anywhere}
+.pf-pillar h2,.pf-pillar h3{margin:0;font-size:clamp(1.25rem,2vw,1.6rem);line-height:1.2}
+.pf-pillar h2 a,.pf-pillar h3 a{color:var(--ink);text-decoration:none}
+.pf-pillar h2 a:hover,.pf-pillar h2 a:focus-visible,.pf-pillar h3 a:hover,.pf-pillar h3 a:focus-visible{text-decoration:underline}
+.pf-pillar p{margin:0;color:#3d5254}
+.pf-pillar .pf-foot{margin-top:auto;font-size:13px;color:#456d39;font-weight:750}
+.pf-kicker{font-size:11px;letter-spacing:.1em;font-weight:850;color:#456d39;text-transform:uppercase}
+.pf-badge{display:inline-block;max-width:100%;font-size:11px;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:3px 10px;border:1px solid;line-height:1.5;white-space:normal;overflow-wrap:anywhere;vertical-align:middle}
+.pf-badge-evidence{background:#e6f0dd;border-color:#6a9762;color:#2c4a24}
+.pf-badge-hypothesis{background:#fff6dc;border-color:#b58a1c;color:#5c4307}
+.pf-badge-synthetic{background:#f3e8f7;border-color:#8a5aa0;color:#4b2a5b}
+.pf-badge-gap{background:#f7ecea;border-color:#b0584a;color:#6b241a}
+.pf-badge-neutral{background:#eef1f2;border-color:#7e8f94;color:#2f3f44}
+.pf-badge-nogo{background:#101c29;border-color:#101c29;color:#fff}
+.pf-badge-supports{background:#e6f0dd;border-color:#6a9762;color:#2c4a24}
+.pf-badge-mixed{background:#fff6dc;border-color:#b58a1c;color:#5c4307}
+.pf-badge-null,.pf-badge-adverse{background:#f7ecea;border-color:#b0584a;color:#6b241a}
+.pf-badge-descriptive{background:#eef1f2;border-color:#7e8f94;color:#2f3f44}
+.pf-chain{list-style:none;padding:0;margin:20px 0;display:grid;gap:8px}
+.pf-chain li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;background:#fff;border:1px solid #d6dfd8;border-radius:7px;padding:12px 14px}
+.pf-chain li>span{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#101c29;color:#d1ef79;font-weight:850;font-size:13px}
+.pf-chain li strong{display:block}
+.pf-chain li small{display:block;color:#475a60;margin-top:2px}
+.pf-split{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:20px 0}
+.pf-card{border:1px solid #cbd7d0;background:#fff;border-radius:9px;padding:18px 20px;overflow-wrap:anywhere}
+.pf-card h3{margin:0 0 8px;font-size:1.15rem}
+.pf-card ul{margin:8px 0 0;padding-left:20px}
+.pf-dl{display:grid;grid-template-columns:minmax(150px,240px) 1fr;gap:8px 18px;margin:16px 0;padding:18px 20px;background:#fff;border:1px solid #d6dfd8;border-radius:8px}
+.pf-dl dt{font-weight:800;color:#293f3a}
+.pf-dl dd{margin:0;overflow-wrap:anywhere}
+.pf-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px 16px;align-items:end;background:#fff;border:1px solid #d6dfd8;border-radius:8px;padding:16px 18px;margin:18px 0}
+.pf-controls label,.pf-form label{display:block;font-weight:750;font-size:14px;margin-bottom:5px}
+.pf-controls input,.pf-controls select,.pf-form input,.pf-form select,.pf-form textarea{width:100%;min-height:44px;padding:8px 10px;border:1px solid #7e8f94;border-radius:6px;background:#fff;color:var(--ink);font:inherit}
+.pf-controls input:focus-visible,.pf-controls select:focus-visible,.pf-form input:focus-visible,.pf-form select:focus-visible,.pf-form textarea:focus-visible{outline:3px solid #101c29;outline-offset:2px}
+.pf-list{list-style:none;padding:0;margin:14px 0;display:grid;gap:10px}
+.pf-list li{background:#fff;border:1px solid #d6dfd8;border-radius:8px;padding:14px 16px;overflow-wrap:anywhere}
+.pf-list li[hidden]{display:none}
+.pf-list li a.pf-item-title{font-weight:800;color:var(--ink)}
+.pf-list li p{margin:6px 0 0;color:#3d5254}
+.pf-meta{font-size:12px;color:#475a60;margin-top:4px}
+.pf-form fieldset{border:1px solid #cbd7d0;border-radius:8px;padding:14px 16px;margin:0 0 14px;background:#fff}
+.pf-form legend{font-weight:850;padding:0 6px}
+.pf-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px}
+.pf-form button,.pf-actions button,.pf-actions a.pf-button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 18px;border-radius:6px;border:2px solid #101c29;background:#101c29;color:#fff;font-weight:800;cursor:pointer;text-decoration:none}
+.pf-form button.secondary,.pf-actions button.secondary{background:#fff;color:#101c29}
+.pf-form button:focus-visible,.pf-actions button:focus-visible{outline:3px solid #8fb271;outline-offset:2px}
+.pf-form button[disabled],.pf-actions button[disabled]{opacity:.55;cursor:not-allowed}
+.pf-actions{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.pf-result{background:#fff;border:1px solid #b7d1bb;border-left:5px solid #4b7856;padding:16px 18px;margin:14px 0;border-radius:6px}
+.pf-result[data-state="error"]{border-left-color:#b0584a}
+.pf-result[data-state="loading"]{border-left-color:#7e8f94}
+.pf-meter{display:grid;grid-template-columns:minmax(120px,220px) 1fr auto;gap:10px;align-items:center;margin:6px 0}
+.pf-meter meter{width:100%;height:20px}
+.pf-status-deficit{font-weight:850;color:#6b241a}
+.pf-status-fragile{font-weight:850;color:#5c4307}
+.pf-status-margin{font-weight:850;color:#2c4a24}
+.pf-warning{background:#fff6dc;border-left:4px solid #b58a1c;padding:14px 18px;margin:16px 0;color:#4a3608}
+.pf-synthetic-banner{background:#f3e8f7;border-left:5px solid #8a5aa0;padding:14px 18px;margin:16px 0;color:#3b2148;font-weight:650}
+.pf-nogo-banner{background:#101c29;color:#fff;padding:14px 18px;margin:16px 0;border-radius:6px}
+.pf-nogo-banner a{color:#d1ef79}
+.pf-toc{display:flex;flex-wrap:wrap;gap:8px 16px;margin:12px 0 22px;padding:0;list-style:none}
+.pf-toc a{font-weight:750}
+.pf-col-toggle{display:flex;flex-wrap:wrap;gap:8px 18px;margin:10px 0}
+.pf-col-toggle label{display:inline-flex;gap:8px;align-items:center;font-weight:700;min-height:44px}
+.pf-col-toggle input{width:20px;height:20px}
+.pf-small{font-size:13px;color:#475a60}
+.doc-table-wrap td .pf-badge{white-space:normal}
+/* WCAG 2.2 2.5.8: stacked links in table cells keep at least 24px target height. */
+.doc-table-wrap td a,.doc-table-wrap th a,.pf-card td a{display:inline-block;min-height:24px;padding:3px 0;line-height:1.4}
+@media(max-width:1020px){.pf-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.pf-split{grid-template-columns:1fr 1fr}.pf-form-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.pf-pillars,.pf-split,.pf-controls,.pf-form-grid{grid-template-columns:1fr}.pf-dl{grid-template-columns:1fr;gap:2px 0}.pf-dl dd{margin-bottom:10px}.pf-meter{grid-template-columns:1fr}}

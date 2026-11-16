@@ -5,6 +5,7 @@ import {buildPublicRoadmap} from "./roadmap-model.mjs";
 import {renderRoadmapOverview,renderInitiativeDetail} from "./roadmap-pages.mjs";
 import {publishWeb03Pages} from "./web03-pages.mjs";
 import {enhanceRt02Products} from "./rt02-products.mjs";
+import {buildPlatform} from "./platform-build.mjs";
 import {buildSourceCatalog,catalogCsvExport} from "../research-tools/source-catalog.mjs";
 import {getCandidateIndicator} from "../research-tools/indicator-contract.mjs";
 import {generateResearchArtifacts,PUBLIC_OUTPUTS} from "../research-tools/research-pipeline.mjs";
@@ -13,6 +14,7 @@ import {validateNewhamDeskSources} from "../research-tools/newham-desk-validatio
 import {evaluatePrepilotDecision} from "../research-tools/newham-prepilot-gate.mjs";
 
 const ROOT="dist";
+const MODULE_SCRIPTS=new Set(["/progress.js","/outcome-lab.js","/systems-lab.js","/solutions-planner.js"]);
 const publishedAt=new Date().toISOString();
 const revision=(process.env.VERCEL_GIT_COMMIT_SHA || process.env.CIRCLE_SHA1 || "local-build").slice(0,40);
 async function walk(dir){
@@ -61,10 +63,10 @@ if(!researchTopics.length)throw new Error("No source-derived research areas foun
 const docLinks=[...routes].map(([source,url])=>({source,url,title:sourceTitle(source,content.get(source))}));
 const safe=escapeHtml;
 const stamp='Published from GitHub '+safe(revision==="local-build"?"working tree":revision.slice(0,9))+" · "+safe(publishedAt.slice(0,16).replace("T"," "))+" UTC";
-const nav='<nav aria-label="Main navigation"><a href="/mission">Mission</a><a href="/projects">Projects</a><a href="/research">Research</a><a href="/tools">Tools</a><a href="/contribute">Get involved</a><a href="/about">About & governance</a></nav>';
-const mobileNav='<details class="mobile-menu"><summary>Menu</summary><nav aria-label="Mobile navigation"><a href="/mission">Mission</a><a href="/projects">Projects</a><a href="/research">Research</a><a href="/tools">Tools</a><a href="/contribute">Get involved</a><a href="/about">About & governance</a><a href="/roadmap">Public roadmap</a><a href="/library">Knowledge library</a><a href="/help">Help</a></nav></details>';
+const nav='<nav aria-label="Main navigation"><a href="/mission">Mission</a><a href="/platform">Platform</a><a href="/projects">Projects</a><a href="/research">Research</a><a href="/tools">Tools</a><a href="/contribute">Get involved</a><a href="/about">About & governance</a></nav>';
+const mobileNav='<details class="mobile-menu"><summary>Menu</summary><nav aria-label="Mobile navigation"><a href="/mission">Mission</a><a href="/platform">Platform</a><a href="/projects">Projects</a><a href="/research">Research</a><a href="/tools">Tools</a><a href="/contribute">Get involved</a><a href="/about">About & governance</a><a href="/roadmap">Public roadmap</a><a href="/intelligence">Intelligence</a><a href="/solutions">Solutions</a><a href="/adopt">Adopt</a><a href="/systems-lab">Systems Lab</a><a href="/library">Knowledge library</a><a href="/help">Help</a></nav></details>';
 const trustFooter='<nav class="wrap trust-footer" aria-label="Help, trust and legal information">'+
- '<div class="trust-footer-group"><h2>Understand HPI</h2><a href="/about">About HPI</a><a href="/projects">Projects</a><a href="/tools">Tools</a><a href="/updates">Editorial updates</a><a href="/governance">Governance</a><a href="/roadmap">Roadmap</a><a href="/research-integrity">Research integrity</a><a href="/site-map">Site map</a></div>'+
+ '<div class="trust-footer-group"><h2>Understand HPI</h2><a href="/about">About HPI</a><a href="/platform">Platform</a><a href="/projects">Projects</a><a href="/tools">Tools</a><a href="/updates">Editorial updates</a><a href="/governance">Governance</a><a href="/roadmap">Roadmap</a><a href="/research-integrity">Research integrity</a><a href="/site-map">Site map</a></div>'+
  '<div class="trust-footer-group"><h2>Help & accessibility</h2><a href="/help">Help & FAQ</a><a href="/contact">Contact & support status</a><a href="/accessibility">Accessibility</a><a href="/contribute">Contribute</a><a href="/activity">Activity</a></div>'+
  '<div class="trust-footer-group"><h2>Legal & privacy</h2><a href="/privacy">Privacy</a><a href="/cookies">Cookies</a><a href="/terms">Terms & limitations</a><a href="/legal">Legal & publisher</a><a href="/copyright">Copyright & licences</a></div>'+
  '</nav>';
@@ -78,7 +80,7 @@ function shell({title,description,section,body,route,lang="en",script="",stylesh
   '<meta property="og:url" content="'+ORIGIN+route+'">'+
   '<title>'+safe(title)+' — Human Prosperity Initiative</title>'+
   '<link rel="stylesheet" href="/styles.css">'+(stylesheet?'<link rel="stylesheet" href="'+safe(stylesheet)+'">':"")+'<link rel="icon" type="image/svg+xml" href="/favicon.svg">'+
-  (script?'<script src="'+safe(script)+'" '+(["/progress.js","/outcome-lab.js"].includes(script)?'type="module"':"defer")+'></script>':"")+
+  (script?'<script src="'+safe(script)+'" '+(MODULE_SCRIPTS.has(script)?'type="module"':"defer")+'></script>':"")+
   '</head><body><a class="skip" href="#main">Skip to main content</a>'+
   '<header class="header"><div class="wrap head-inner"><a class="logo" href="/" aria-label="HPI. Human Prosperity Initiative home"><span class="symbol" aria-hidden="true">✳</span> HPI<span class="lime">.</span><small>Human Prosperity<br>Initiative</small></a>'+
   nav+mobileNav+'<a class="nav-cta" href="/activity">Live progress ↗</a></div></header>'+
@@ -192,7 +194,7 @@ await publish("/research",shell({
  docLinks.filter(x=>x.source.startsWith("research/")).length+" research resources · "+
  (evidence.length-1)+" evidence ledger entries</p>"+
  '<p class="status-note">F0-02 remains preliminary. No systematic review or field experiment has been completed.</p>'+
- '<p><a href="/research/f0-02-4-ethical-partner-community-consultation-plan-v0-1">Ethical partner/community consultation design (NO-GO for outreach) ↗</a> · <a href="/research/f0-03-1-adversarial-internal-science-critique-v0-3">Adversarial internal methods critique (NOT independent) ↗</a> · <a href="/research/f0-03-1-newham-independent-review-readiness-v0-2">Independent methodology review readiness (not approved) ↗</a> · <a href="/research/newham-pension-credit">Newham Pension Credit validation ↗</a> · <a href="/research/newham-prepilot">Newham priority and study concept ↗</a> · <a href="/research/source-catalog">Source catalogue and rights ↗</a> · <a href="/research/outcome-lab">Synthetic outcome lab ↗</a> · <a href="/research/reproducibility">Reproducible open science ↗</a> · <a href="/research/responsible-tools">Research governance ↗</a></p>'+
+ '<p><a href="/research/f0-02-4-ethical-partner-community-consultation-plan-v0-1">Ethical partner/community consultation design (NO-GO for outreach) ↗</a> · <a href="/research/f0-03-1-adversarial-internal-science-critique-v0-3">Adversarial internal methods critique (NOT independent) ↗</a> · <a href="/research/f0-03-1-newham-independent-review-readiness-v0-2">Independent methodology review readiness (not approved) ↗</a> · <a href="/research/newham-pension-credit">Newham Pension Credit validation ↗</a> · <a href="/research/newham-prepilot">Newham priority and study concept ↗</a> · <a href="/research/source-catalog">Source catalogue and rights ↗</a> · <a href="/research/outcome-lab">Synthetic outcome lab ↗</a> · <a href="/research/reproducibility">Reproducible open science ↗</a> · <a href="/research/responsible-tools">Research governance ↗</a> · <a href="/intelligence">Global Prosperity Intelligence ↗</a> · <a href="/solutions">Solutions & evaluation designs ↗</a></p>'+
  cards(docLinks.filter(x=>x.source.startsWith("research/")))+
  '<p><a href="/roadmap">See how this work fits into the roadmap ↗</a></p></div>'
 }));
@@ -297,6 +299,7 @@ await publish("/research/reproducibility",shell({
   manifestRows+'</tbody></table></div>'+
   '<p>Full hashes and exact byte lengths are in the JSON manifest. Source code uses Node.js 22 standard-library utilities, CircleCI and the existing Git repository; no separate paid data pipeline or GitHub Actions are required.</p>'+
   '<h2>Reuse and independent review</h2><p>Software is MIT; original HPI-authored documentation is CC BY 4.0. These licences <strong>do not cover third-party research or datasets</strong>. Source rights, scientific methods, human research consent and real-world impact still require separate review.</p>'+
+  '<p>The Global Prosperity Platform knowledge base has its own <a href="/platform-manifest.json">SHA-256 manifest</a> and <a href="/intelligence/data">reproduction steps</a>.</p>'+
   '<p><a href="/library/docs/rt-01-3-reproducible-open-science-v1">Full method, reproduction and correction rules</a> · <a href="/research/source-catalog">Source catalogue</a> · <a href="/research/outcome-lab">Hypothetical outcomes lab</a> · <a href="/status">Published Git revision</a></p></div>'
 }));
 function trustRows(){
@@ -405,6 +408,7 @@ await publish("/research/newham-prepilot",shell({
 }));
 await publishWeb03Pages({publish,shell});
 await enhanceRt02Products({publish,shell,sourceCatalog,revision,safe});
+const platform=await buildPlatform({publish,shell,root:ROOT});
 await publish("/library",shell({
  title:"Open knowledge library",section:"Published documents",
  description:"Browse research, the founding charter, governance and all public documents. Newly added Markdown and CSV files are automatically included.",
@@ -474,7 +478,7 @@ if(!homepage.includes('<div class="wrap footer-bottom">'))throw Error("Homepage 
 homepage=homepage.replace('<div class="wrap footer-bottom">',trustFooter+'<div class="wrap footer-bottom">');
 homepage=homepage.replaceAll("https://github.com/saver1991/human-prosperity-initiative","https://github.com/svtmzt/human-prosperity-initiative");
 await publish("/",homepage);
-const allRoutes=[...new Set([...STATIC_ROUTES,...routes.values(),"/library/docs/roadmap-source","/research/source-catalog","/research/outcome-lab","/research/reproducibility","/research/newham-pension-credit","/research/newham-prepilot","/research/responsible-tools","/research/responsible-tools/it","/tools/glossary",...publicRoadmap.initiatives.map(x=>"/initiatives/"+slug(x.id))])].sort();
+const allRoutes=[...new Set([...STATIC_ROUTES,...routes.values(),"/library/docs/roadmap-source","/research/source-catalog","/research/outcome-lab","/research/reproducibility","/research/newham-pension-credit","/research/newham-prepilot","/research/responsible-tools","/research/responsible-tools/it","/tools/glossary",...platform.routes,...publicRoadmap.initiatives.map(x=>"/initiatives/"+slug(x.id))])].sort();
 const xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+
  allRoutes.map(route=>'<url><loc>'+ORIGIN+(route==="/"?"/":route)+'</loc></url>').join("")+
  '</urlset>\n';
@@ -483,7 +487,7 @@ await writeFile(ROOT+"/robots.txt","User-agent: *\nAllow: /\nSitemap: "+ORIGIN+"
 await writeFile(ROOT+"/publication.json",JSON.stringify({
  status:"published_from_git",revision,generatedAt:publishedAt,
  sourceFileCount:docLinks.length,sourcePaths:docLinks.map(x=>x.source),
- routeCount:allRoutes.length,ledgerEntryCount:evidence.length-1,sourceCatalogEntryCount:sourceCatalog.totals.all,newhamDeskValidationVersion:newhamDesk.schemaVersion,newhamPrepilotDecisionVersion:prepilotResult.schemaVersion,researchGovernanceVersion:governance.schemaVersion,researchPipelineVersion:researchBundle.manifest.pipelineVersion,activeInitiative:descriptor.currentInitiative
+ routeCount:allRoutes.length,ledgerEntryCount:evidence.length-1,sourceCatalogEntryCount:sourceCatalog.totals.all,newhamDeskValidationVersion:newhamDesk.schemaVersion,newhamPrepilotDecisionVersion:prepilotResult.schemaVersion,researchGovernanceVersion:governance.schemaVersion,researchPipelineVersion:researchBundle.manifest.pipelineVersion,platform:platform.summary,activeInitiative:descriptor.currentInitiative
 },null,2)+"\n");
 console.log("HPI published: "+docLinks.length+" document routes, "+allRoutes.length+
  " total routes, "+(evidence.length-1)+" evidence entries; revision "+revision);

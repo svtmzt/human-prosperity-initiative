@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "corrections",
+  "reviewedAt": "2026-11-16",
+  "policy": "append_only_reviewed_corrections",
+  "note": "Corrections, supersessions and retractions are appended, never deleted. Earlier documents and records remain published with a pointer to the correction. Retraction status of external studies has not been checked unless stated.",
+  "retractionCheckStatus": "not_checked_for_any_evidence_reference",
+  "items": [
+    {
+      "id": "COR-2026-11-09-NEWHAM-LOCAL-ROW",
+      "date": "2026-11-09",
+      "type": "supersession",
+      "affectedEntityIds": [],
+      "affectedDocuments": ["/research/newham-pension-credit", "/research/f0-03-newham-pension-credit-desk-validation-v0-2"],
+      "supersededBy": "/research/new-02-newham-source-reconciliation-additionality-v0-2",
+      "description": "The F0-03.2 desk report predates extraction of the DWP Newham row. Local caseload figures are superseded by the NEW-02 source-verified extraction of the 2023/24 DWP model. The earlier report remains published with a supersession notice.",
+      "reviewedBy": "internal_desk_review_not_independent"
+    },
+    {
+      "id": "COR-2026-11-16-DWP-LICENCE-RECONCILIATION",
+      "date": "2026-11-16",
+      "type": "provenance_reconciliation",
+      "affectedEntityIds": ["F-NEWHAM-PC-ELIGIBLE-2023-24", "F-NEWHAM-PC-RECEIVING-2023-24", "F-NEWHAM-PC-NOT-RECEIVING-2023-24", "F-NEWHAM-PC-CASELOAD-RATE-2023-24", "F-NEWHAM-PC-EXPENDITURE-RATE-2023-24"],
+      "affectedDocuments": ["/research/source-catalog"],
+      "supersededBy": null,
+      "description": "The 2026-11-06 public dataset registry lists the DWP local model licence as unknown. The later NEW-02 extraction (2026-11-09) recorded the publisher's OGL-3.0 statement for the ODS file. Knowledge-base facts use the later publisher statement with licence review status 'publisher statement recorded, no qualified review'. The registry entry is left unchanged as a dated historical record.",
+      "reviewedBy": "internal_desk_review_not_independent"
+    }
+  ]
+}

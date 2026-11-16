@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "taxonomy",
+  "reviewedAt": "2026-11-16",
+  "reviewStatus": "internal_draft_not_independently_reviewed",
+  "note": "Dimensions are reused from the F0-03 prosperity measurement framework V0.1 draft. No weighted or aggregate prosperity score is defined or permitted.",
+  "dimensions": [
+    {
+      "id": "D1-ECONOMIC-SECURITY",
+      "title": "Economic security",
+      "summary": "Real household resources relative to local prices, volatility of income or consumption, difficulty meeting essential expenses and capacity to absorb shocks.",
+      "measurementPitfall": "Income is not the same as disposable resources; transfers, informal earnings, household size and inflation all matter.",
+      "source": "/research/f0-03-prosperity-measurement-framework-v0-1"
+    },
+    {
+      "id": "D2-ESSENTIAL-NEEDS",
+      "title": "Essential needs",
+      "summary": "Verified receipt of eligible support, housing and energy cost burden, safe services and food security.",
+      "measurementPitfall": "Programme take-up does not necessarily translate into reduced hardship; self-reported and administrative measures have different errors.",
+      "source": "/research/f0-03-prosperity-measurement-framework-v0-1"
+    },
+    {
+      "id": "D3-HEALTH-LEARNING",
+      "title": "Health and learning",
+      "summary": "Affordable access to and continuity of care, attendance and educational progression.",
+      "measurementPitfall": "Sensitive data need strong consent, safeguarding and minimisation; utilisation can rise when illness worsens.",
+      "source": "/research/f0-03-prosperity-measurement-framework-v0-1"
+    },
+    {
+      "id": "D4-OPPORTUNITY",
+      "title": "Opportunity",
+      "summary": "Sustained net earnings, job quality and stability, and equitable access to practical choices.",
+      "measurementPitfall": "Training attendance is not employment; jobs may displace opportunities for others; selection bias and local labour demand matter.",
+      "source": "/research/f0-03-prosperity-measurement-framework-v0-1"
+    },
+    {
+      "id": "D5-AUTONOMY-FAIRNESS-SUSTAINABILITY",
+      "title": "Autonomy, fairness and sustainability",
+      "summary": "Time spent navigating services, meaningful choice, unequal treatment, and burdens shifted onto others or future generations.",
+      "measurementPitfall": "Question wording and cultural interpretation vary; subjective measures require a validated local instrument.",
+      "source": "/research/f0-03-prosperity-measurement-framework-v0-1"
+    }
+  ],
+  "problemFamilies": [
+    {
+      "id": "PF-BENEFIT-ACCESS",
+      "title": "Access to existing benefits and services",
+      "summary": "People entitled to assistance may not receive it because of awareness, administrative requirements, stigma, digital exclusion or complex processes.",
+      "pillarRole": "First worked cross-context example (Solutions & Experimentation Engine).",
+      "source": "/research/f0-02-opportunity-assessment"
+    },
+    {
+      "id": "PF-ESSENTIAL-COSTS",
+      "title": "Affordability of essential needs",
+      "summary": "Household energy and housing costs can erode living standards; the burden varies strongly by housing stock, climate, pricing and support systems.",
+      "pillarRole": "Second problem family, beginning with household energy; housing is a registered research question with an explicit evidence gap.",
+      "source": "/research/f0-02-opportunity-assessment"
+    },
+    {
+      "id": "PF-ECONOMIC-OPPORTUNITY",
+      "title": "Economic opportunity, employment quality and livelihoods",
+      "summary": "Insufficient access to quality jobs and reliable earnings prevents many households from escaping poverty.",
+      "pillarRole": "Third problem family with evidence-linked templates; no validated HPI intervention.",
+      "source": "/research/f0-02-opportunity-assessment"
+    },
+    {
+      "id": "PF-ECONOMIC-SYSTEMS",
+      "title": "Economic systems, distribution and household security",
+      "summary": "Why aggregate growth and productivity do not always translate into proportionate improvements in household security.",
+      "pillarRole": "Economic Systems Lab research agenda (long-term horizon B, starting with bounded questions now).",
+      "source": "/systems-lab"
+    }
+  ]
+}

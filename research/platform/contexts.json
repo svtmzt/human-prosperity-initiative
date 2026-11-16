@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "contexts",
+  "reviewedAt": "2026-11-16",
+  "reviewStatus": "internal_draft_not_independently_reviewed",
+  "note": "Contexts are research settings for desk analysis. Inclusion does not mean HPI operates there, has a partner there, or has assessed any individual. Fieldwork is NO-GO in every context.",
+  "items": [
+    {
+      "id": "GLOBAL",
+      "name": "Global (published international estimates)",
+      "type": "global",
+      "parent": null,
+      "countryCode": null,
+      "role": "global_reference",
+      "fieldworkStatus": "NO_GO",
+      "summary": "International estimates published by the World Bank and UNDP, used only as descriptive context. They are not comparable with local programme statistics.",
+      "programmes": [],
+      "hpiResearch": ["/research/f0-02-opportunity-assessment", "/research/f0-03-prosperity-measurement-framework-v0-1"]
+    },
+    {
+      "id": "GB",
+      "name": "Great Britain",
+      "type": "country",
+      "parent": "GLOBAL",
+      "countryCode": "GB",
+      "role": "national_reference",
+      "fieldworkStatus": "NO_GO",
+      "summary": "National DWP take-up estimates provide context for Newham but use a different method, unit and period from the local model.",
+      "programmes": ["PROG-UK-PENSION-CREDIT"],
+      "hpiResearch": ["/research/new-02-newham-source-reconciliation-additionality-v0-2"]
+    },
+    {
+      "id": "UK-NEWHAM",
+      "name": "Newham, London, United Kingdom",
+      "type": "local_authority",
+      "parent": "GB",
+      "countryCode": "GB",
+      "officialCode": "E09000025",
+      "role": "evidence_case",
+      "fieldworkStatus": "NO_GO",
+      "summary": "Bounded public-source validation of Pension Credit receipt among low-income pension-age residents. The DWP 2023/24 local model is source-verified; no HPI study, participant or partner exists.",
+      "programmes": ["PROG-UK-PENSION-CREDIT"],
+      "hpiResearch": ["/projects/newham", "/research/newham-prepilot", "/research/new-02-newham-source-reconciliation-additionality-v0-2", "/research/newham-pension-credit"]
+    },
+    {
+      "id": "BR",
+      "name": "Brazil",
+      "type": "country",
+      "parent": "GLOBAL",
+      "countryCode": "BR",
+      "role": "national_reference",
+      "fieldworkStatus": "NO_GO",
+      "summary": "Federal programme rules for CadÚnico registration and Bolsa Família selection apply nationally; the Brazilian social electricity tariff study (E24) is national evidence, not Recife-specific.",
+      "programmes": ["PROG-BR-CADUNICO-BOLSA-FAMILIA"],
+      "hpiResearch": ["/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06"]
+    },
+    {
+      "id": "BR-RECIFE",
+      "name": "Recife, Pernambuco, Brazil",
+      "type": "municipality",
+      "parent": "BR",
+      "countryCode": "BR",
+      "role": "contextual_comparator",
+      "fieldworkStatus": "NO_GO",
+      "summary": "Contextual comparator for registration and administrative barriers in CadÚnico and Bolsa Família. No local eligible-but-not-receiving gap has been measured; identified research data require a qualifying research institution under LGPD.",
+      "programmes": ["PROG-BR-CADUNICO-BOLSA-FAMILIA"],
+      "hpiResearch": ["/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06"]
+    },
+    {
+      "id": "IT",
+      "name": "Italy",
+      "type": "country",
+      "parent": "GLOBAL",
+      "countryCode": "IT",
+      "role": "national_reference",
+      "fieldworkStatus": "NO_GO",
+      "summary": "INPS publishes national Assegno di Inclusione caseload statistics; these do not estimate any city's take-up.",
+      "programmes": ["PROG-IT-ADI"],
+      "hpiResearch": ["/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06"]
+    },
+    {
+      "id": "IT-CAMPANIA",
+      "name": "Campania, Italy",
+      "type": "region",
+      "parent": "IT",
+      "countryCode": "IT",
+      "role": "regional_reference",
+      "fieldworkStatus": "NO_GO",
+      "summary": "Regional household relative poverty published from ISTAT 2025 statistics; region-level only.",
+      "programmes": ["PROG-IT-ADI"],
+      "hpiResearch": ["/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06"]
+    },
+    {
+      "id": "IT-NAPLES",
+      "name": "Naples metropolitan area, Campania, Italy",
+      "type": "metropolitan_area",
+      "parent": "IT-CAMPANIA",
+      "countryCode": "IT",
+      "role": "reserve_comparator",
+      "fieldworkStatus": "NO_GO",
+      "summary": "Reserve comparator for households potentially eligible for Assegno di Inclusione. Local eligible denominator, take-up and service additionality are unknown.",
+      "programmes": ["PROG-IT-ADI"],
+      "hpiResearch": ["/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06"]
+    }
+  ],
+  "programmes": [
+    {
+      "id": "PROG-UK-PENSION-CREDIT",
+      "name": "Pension Credit (UK)",
+      "administeredBy": "Department for Work and Pensions",
+      "accessModel": "claim_based",
+      "pathway": [
+        {"stage": "potentially_eligible", "description": "Pension-age household meets income and other conditions (modelled by DWP at local-authority level)."},
+        {"stage": "applied", "description": "A claim is made to DWP (online, telephone or with assistance)."},
+        {"stage": "approved", "description": "DWP assesses and awards the claim."},
+        {"stage": "received", "description": "Payments are received; DWP models households in receipt."},
+        {"stage": "sustained_improvement", "description": "Any durable change in household security; not measured by any HPI source."}
+      ],
+      "eligibilityNote": "Modelled potential eligibility is not verified individual entitlement.",
+      "sources": ["https://www.gov.uk/government/statistics/households-potentially-eligible-for-pension-credit-2023-to-2024"]
+    },
+    {
+      "id": "PROG-BR-CADUNICO-BOLSA-FAMILIA",
+      "name": "CadÚnico registration and Bolsa Família (Brazil)",
+      "administeredBy": "Federal Ministry (MDS) with municipal CRAS registration services",
+      "accessModel": "registration_then_federal_selection",
+      "pathway": [
+        {"stage": "potentially_eligible", "description": "Household per-capita income at or below the published threshold can be considered."},
+        {"stage": "applied", "description": "Household registers or updates its CadÚnico record at a municipal CRAS."},
+        {"stage": "approved", "description": "Federal assessment selects households; entry is not automatic and depends on assessment and budget."},
+        {"stage": "received", "description": "Monthly payments are received."},
+        {"stage": "sustained_improvement", "description": "Any durable change in household security; not measured by any HPI source."}
+      ],
+      "eligibilityNote": "Meeting the income threshold makes a family eligible to be considered, not entitled to automatic entry.",
+      "sources": ["https://www.gov.br/pt-br/servicos/receber-o-bolsa-familia", "https://conecta.recife.pe.gov.br/servico/352"]
+    },
+    {
+      "id": "PROG-IT-ADI",
+      "name": "Assegno di Inclusione (Italy)",
+      "administeredBy": "INPS with territorial social services",
+      "accessModel": "application_based_means_tested",
+      "pathway": [
+        {"stage": "potentially_eligible", "description": "Household meets composition, means and other conditions."},
+        {"stage": "applied", "description": "Application submitted to INPS, directly or through intermediaries such as patronati."},
+        {"stage": "approved", "description": "INPS approves the application."},
+        {"stage": "received", "description": "Monthly payments are received; INPS publishes national caseload statistics."},
+        {"stage": "sustained_improvement", "description": "Any durable change in household security; not measured by any HPI source."}
+      ],
+      "eligibilityNote": "Low household income alone does not establish ADI eligibility.",
+      "sources": ["https://www.inps.it/it/it/dettaglio-scheda.it.schede-servizio-strumento.schede-servizi.assegno-di-inclusione-adi.html"]
+    }
+  ]
+}

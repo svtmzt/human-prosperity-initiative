@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "problems",
+  "reviewedAt": "2026-11-16",
+  "reviewStatus": "internal_draft_not_independently_reviewed",
+  "note": "Problem definitions are research objects for desk analysis, not diagnoses of any person or place. No severity score or ranking is computed.",
+  "items": [
+    {
+      "id": "P-BENEFIT-NONTAKEUP",
+      "title": "Eligible people not receiving existing entitlements",
+      "familyId": "PF-BENEFIT-ACCESS",
+      "dimensions": ["D2-ESSENTIAL-NEEDS", "D1-ECONOMIC-SECURITY", "D5-AUTONOMY-FAIRNESS-SUSTAINABILITY"],
+      "summary": "Some people entitled to income support never receive it. The gap can arise at any stage between potential eligibility, application, approval and payment, and receipt does not by itself establish improved security.",
+      "affectedPopulations": ["Low-income pension-age households (Newham case)", "Very low-income families needing CadÚnico registration or update (Recife comparator)", "Low-income households potentially meeting ADI conditions (Naples comparator)"],
+      "contexts": ["UK-NEWHAM", "BR-RECIFE", "IT-NAPLES", "GB", "BR", "IT"],
+      "mechanisms": ["M-INFORMATION-FRICTIONS", "M-COMPLIANCE-BURDEN", "M-PROCEDURAL-DENIAL", "M-PSYCHOLOGICAL-COSTS", "M-ELIGIBILITY-UNCERTAINTY", "M-DIGITAL-ACCESS-BARRIERS", "M-INSTITUTIONAL-FRAGMENTATION"],
+      "uncertainties": ["Local eligible denominators are modelled (Newham) or unmeasured (Recife, Naples).", "Linked trials are mostly from the United States and Western Europe.", "Applications, approvals and receipt are different outcomes."],
+      "evidenceGaps": ["No HPI context has a verified local application or approval series.", "No linked study tests institutional fragmentation directly.", "No evidence linked from Brazil or Italy on benefit take-up interventions."],
+      "researchDocuments": ["/research/f0-02-critical-synthesis-2026-11-06", "/research/f0-02-3-jurisdiction-population-shortlist-2026-11-06", "/research/new-02-newham-source-reconciliation-additionality-v0-2"]
+    },
+    {
+      "id": "P-ENERGY-AFFORDABILITY",
+      "title": "Unaffordable or inadequate household energy",
+      "familyId": "PF-ESSENTIAL-COSTS",
+      "dimensions": ["D2-ESSENTIAL-NEEDS", "D3-HEALTH-LEARNING", "D1-ECONOMIC-SECURITY"],
+      "summary": "Energy costs can consume a large share of resources, and households may ration energy below adequate levels. Lower bills and adequate warmth are different targets.",
+      "affectedPopulations": ["Low-income households in inefficient housing", "Households eligible for social tariffs"],
+      "contexts": ["BR", "GLOBAL"],
+      "mechanisms": ["M-BUILDING-INEFFICIENCY", "M-PRICE-TARIFF-BURDEN", "M-UNDERCONSUMPTION", "M-SPLIT-INCENTIVES"],
+      "uncertainties": ["Realised savings are often below predicted savings.", "Lower consumption may indicate rationing."],
+      "evidenceGaps": ["No energy-burden context fact is recorded for any HPI context.", "No linked study isolates tenure or split incentives."],
+      "researchDocuments": ["/research/f0-02-critical-synthesis-2026-11-06", "/research/f0-02-opportunity-assessment"]
+    },
+    {
+      "id": "P-HOUSING-COST-BURDEN",
+      "title": "Housing costs eroding residual income",
+      "familyId": "PF-ESSENTIAL-COSTS",
+      "dimensions": ["D2-ESSENTIAL-NEEDS", "D1-ECONOMIC-SECURITY"],
+      "summary": "Registered research question. Housing costs are a major essential expense, but the current HPI corpus contains no housing-specific evaluation.",
+      "affectedPopulations": ["Low-income renters (hypothesis to be examined)"],
+      "contexts": [],
+      "mechanisms": ["M-HOUSING-COST-PRESSURE", "M-SPLIT-INCENTIVES"],
+      "uncertainties": ["Definitions of housing cost burden vary by country and survey."],
+      "evidenceGaps": ["No housing-cost evidence claims are linked yet.", "No housing context facts are recorded."],
+      "researchDocuments": ["/research/f0-02-opportunity-assessment"]
+    },
+    {
+      "id": "P-LOW-EARNINGS-JOB-QUALITY",
+      "title": "Low and insecure earnings and poor job quality",
+      "familyId": "PF-ECONOMIC-OPPORTUNITY",
+      "dimensions": ["D4-OPPORTUNITY", "D1-ECONOMIC-SECURITY", "D3-HEALTH-LEARNING"],
+      "summary": "Insufficient access to quality jobs and reliable earnings prevents many households from escaping poverty. Employment counts alone can hide fading gains or harmful work.",
+      "affectedPopulations": ["Young jobseekers (linked trials in Uganda and Ghana)", "Ultra-poor households (graduation trials)", "Factory job applicants (Ethiopia trial)"],
+      "contexts": ["GLOBAL"],
+      "mechanisms": ["M-CAPITAL-CONSTRAINTS", "M-SKILLS-GAPS", "M-JOB-SEARCH-FRICTIONS", "M-JOB-QUALITY-RISK", "M-LABOUR-DEMAND-CONSTRAINTS"],
+      "uncertainties": ["Effects can fade over long follow-up.", "Displacement of nonparticipants is rarely measured."],
+      "evidenceGaps": ["No HPI context (Newham, Recife, Naples) has linked livelihoods evidence.", "Long-run follow-up is rare."],
+      "researchDocuments": ["/research/f0-02-critical-synthesis-2026-11-06"]
+    },
+    {
+      "id": "P-INSECURITY-DESPITE-GROWTH",
+      "title": "Household insecurity despite aggregate growth",
+      "familyId": "PF-ECONOMIC-SYSTEMS",
+      "dimensions": ["D1-ECONOMIC-SECURITY", "D5-AUTONOMY-FAIRNESS-SUSTAINABILITY"],
+      "summary": "Economic Systems Lab question: why growth and productivity do not always translate into proportionate improvements in household security for different groups.",
+      "affectedPopulations": ["Households whose essential costs rise faster than their income (illustrative archetypes only)"],
+      "contexts": ["GLOBAL"],
+      "mechanisms": ["M-ESSENTIAL-COSTS-OUTPACING-INCOME", "M-PRODUCTIVITY-PAY-PASS-THROUGH", "M-HOUSING-COST-PRESSURE"],
+      "uncertainties": ["Competing explanations are not yet tested against data.", "The Systems Lab model is illustrative and uses synthetic inputs."],
+      "evidenceGaps": ["No distributional dataset has been ingested.", "No evidence claims attached to the systems mechanisms yet."],
+      "researchDocuments": ["/systems-lab"]
+    }
+  ]
+}

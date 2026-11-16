@@ -96,8 +96,8 @@ test("privacy, cookie and accessibility disclosures never invent approved legal 
 test("WEB-03.2 design task technically accepted; WEB-03.6 legal human requirements remain OPEN",async()=>{
  const web=map.initiatives.find(x=>x.id==="WEB-03");
  assert.equal(web.epics.length,7);
- assert.equal(project.reviewedAt,"2026-11-12");
- assert.equal(details.reviewedAt,"2026-11-12");
+ // Snapshot review dates may advance with later releases (HPI-SCALE: 2026-11-16) but never precede WEB-03.
+ for(const d of [project.reviewedAt,details.reviewedAt])assert.ok(/^\d{4}-\d\d-\d\d$/.test(d)&&d>="2026-11-12",d);
  const e2=web.epics.find(x=>x.id==="WEB-03.2");
  const e6=web.epics.find(x=>x.id==="WEB-03.6");
  assert.equal(e2.issue,91);

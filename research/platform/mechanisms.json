@@ -1,0 +1,213 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "mechanisms",
+  "reviewedAt": "2026-11-16",
+  "reviewStatus": "internal_draft_not_independently_reviewed",
+  "note": "A mechanism is a proposed causal pathway that may recur across settings. 'Evidence-linked' means abstract-level studies are attached, not that the mechanism is established for any HPI context. Recurrence entries describe documented programme design, never measured local barrier magnitudes unless a source says so.",
+  "recurrenceStatuses": {
+    "pathway_documented_barrier_unmeasured": "The programme pathway contains the step through which this mechanism could operate (documented from official sources); the size of the barrier is not measured.",
+    "risk_noted_in_hpi_desk_research": "HPI desk research recorded this as a risk or constraint for the context; not measured.",
+    "not_assessed": "No HPI assessment for this context."
+  },
+  "items": [
+    {
+      "id": "M-INFORMATION-FRICTIONS",
+      "title": "Information and learning costs",
+      "familyId": "PF-BENEFIT-ACCESS",
+      "status": "evidence_linked",
+      "description": "People may not know a support exists, believe they are ineligible, or not understand how to claim. Lowering learning costs can raise interest or applications without necessarily changing receipt.",
+      "openQuestions": ["When does information change receipt rather than only applications?", "Which groups are reached by low-touch information, and who is left out?"],
+      "recurrence": [
+        {"contextId": "UK-NEWHAM", "status": "pathway_documented_barrier_unmeasured", "note": "Pension Credit is claim-based; a modelled 2,500 eligible households were not in receipt in 2023/24. Reasons for non-receipt are not published."},
+        {"contextId": "BR-RECIFE", "status": "pathway_documented_barrier_unmeasured", "note": "Families must register or update CadÚnico before federal selection; awareness of the registration step is not measured."},
+        {"contextId": "IT-NAPLES", "status": "pathway_documented_barrier_unmeasured", "note": "ADI requires an application with means and household conditions; local awareness is not measured."}
+      ]
+    },
+    {
+      "id": "M-COMPLIANCE-BURDEN",
+      "title": "Compliance burden (documents, forms, interviews)",
+      "familyId": "PF-BENEFIT-ACCESS",
+      "status": "evidence_linked",
+      "description": "Completing applications, providing documentation and attending interviews imposes time and cost. Hands-on assistance targets this burden directly.",
+      "openQuestions": ["What is the marginal cost of assistance per additional verified recipient?", "Does assistance displace existing local services?"],
+      "recurrence": [
+        {"contextId": "UK-NEWHAM", "status": "pathway_documented_barrier_unmeasured", "note": "An existing council service already reports supporting 220 residents to claim in 2024/25; additionality of any new assistance is unknown."},
+        {"contextId": "BR-RECIFE", "status": "risk_noted_in_hpi_desk_research", "note": "F0-02.3 records documentation and internet barriers as risks; municipal CRAS offers digital booking and offline service channels."},
+        {"contextId": "IT-NAPLES", "status": "pathway_documented_barrier_unmeasured", "note": "INPS application, often via patronati intermediaries; burden not measured at city level."}
+      ]
+    },
+    {
+      "id": "M-PROCEDURAL-DENIAL",
+      "title": "Procedural denials",
+      "familyId": "PF-BENEFIT-ACCESS",
+      "status": "evidence_linked",
+      "description": "Eligible applicants may be refused for procedural reasons such as missed interviews or incomplete verification rather than ineligibility.",
+      "openQuestions": ["Are procedural denial rates published for any HPI context?"],
+      "recurrence": [
+        {"contextId": "UK-NEWHAM", "status": "not_assessed", "note": "No published Newham data on denial reasons."},
+        {"contextId": "BR-RECIFE", "status": "risk_noted_in_hpi_desk_research", "note": "F0-02.3 warns not to frame non-award as service failure without distinguishing eligibility, data quality, quota and programme decisions."},
+        {"contextId": "IT-NAPLES", "status": "not_assessed", "note": "No local data on denial reasons."}
+      ]
+    },
+    {
+      "id": "M-PSYCHOLOGICAL-COSTS",
+      "title": "Psychological costs and stigma",
+      "familyId": "PF-BENEFIT-ACCESS",
+      "status": "evidence_linked",
+      "description": "Stigma, loss of autonomy or distrust can deter claims. Framing interventions target perceptions; current linked evidence measures interest only.",
+      "openQuestions": ["Does reduced stigma change verified receipt, not only stated interest?"],
+      "recurrence": [
+        {"contextId": "UK-NEWHAM", "status": "risk_noted_in_hpi_desk_research", "note": "The Newham pre-pilot register lists older people's stigma as a potential risk of outreach."},
+        {"contextId": "BR-RECIFE", "status": "not_assessed", "note": "Not assessed."},
+        {"contextId": "IT-NAPLES", "status": "not_assessed", "note": "Not assessed."}
+      ]
+    },
+    {
+      "id": "M-ELIGIBILITY-UNCERTAINTY",
+      "title": "Eligibility uncertainty",
+      "familyId": "PF-BENEFIT-ACCESS",
+      "status": "evidence_linked",
+      "description": "When eligibility is uncertain, outreach can raise applications from people who are then not approved, adding burden without receipt.",
+      "openQuestions": ["How can a study avoid encouraging applications that predictably fail?"],
+      "recurrence": [
+        {"contextId": "UK-NEWHAM", "status": "pathway_documented_barrier_unmeasured", "note": "Modelled potential eligibility is not verified individual entitlement."},
+        {"contextId": "BR-RECIFE", "status": "pathway_documented_barrier_unmeasured", "note": "Meeting the income threshold allows consideration only; entry depends on federal assessment and budget."},
+        {"contextId": "IT-NAPLES", "status": "pathway_documented_barrier_unmeasured", "note": "Low income does not by itself establish ADI eligibility."}
+      ]
+    },
+    {
+      "id": "M-DIGITAL-ACCESS-BARRIERS",
+      "title": "Digital and channel access barriers",
+      "familyId": "PF-BENEFIT-ACCESS",
+      "status": "evidence_linked",
+      "description": "Online-only channels or tools may exclude people without connectivity, skills or accessible devices. The linked evidence is a null result for an online simulator, not a direct test of exclusion.",
+      "openQuestions": ["Do non-digital channels change receipt for digitally excluded groups?"],
+      "recurrence": [
+        {"contextId": "UK-NEWHAM", "status": "risk_noted_in_hpi_desk_research", "note": "Non-digital access is a mandatory gate in the Newham pre-pilot register."},
+        {"contextId": "BR-RECIFE", "status": "risk_noted_in_hpi_desk_research", "note": "Internet barriers recorded as a risk in F0-02.3."},
+        {"contextId": "IT-NAPLES", "status": "not_assessed", "note": "Not assessed."}
+      ]
+    },
+    {
+      "id": "M-INSTITUTIONAL-FRAGMENTATION",
+      "title": "Institutional fragmentation across agencies",
+      "familyId": "PF-BENEFIT-ACCESS",
+      "status": "candidate_hypothesis",
+      "description": "Where registration, assessment and payment are split across institutions, hand-offs may lose people. HPI has no linked evidence claim for this mechanism yet.",
+      "openQuestions": ["Which studies test hand-offs between agencies on verified receipt?"],
+      "recurrence": [
+        {"contextId": "UK-NEWHAM", "status": "not_assessed", "note": "Claim assessed nationally by DWP; council provides advice."},
+        {"contextId": "BR-RECIFE", "status": "pathway_documented_barrier_unmeasured", "note": "Municipal registration and federal selection are separate steps."},
+        {"contextId": "IT-NAPLES", "status": "pathway_documented_barrier_unmeasured", "note": "INPS and territorial social services both involved."}
+      ]
+    },
+    {
+      "id": "M-BUILDING-INEFFICIENCY",
+      "title": "Inefficient building fabric and heating",
+      "familyId": "PF-ESSENTIAL-COSTS",
+      "status": "evidence_linked",
+      "description": "Poor insulation and heating raise the energy needed for adequate warmth. Realised savings and adequate warmth are different targets.",
+      "openQuestions": ["When do realised savings cover investment costs?", "Who bears costs when tenants and landlords differ?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-PRICE-TARIFF-BURDEN",
+      "title": "Energy price and tariff burden",
+      "familyId": "PF-ESSENTIAL-COSTS",
+      "status": "evidence_linked",
+      "description": "Energy prices relative to income determine affordability; social tariffs and financial support act directly on this burden.",
+      "openQuestions": ["How should affordability be measured without rewarding underconsumption?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-UNDERCONSUMPTION",
+      "title": "Energy rationing and underconsumption",
+      "familyId": "PF-ESSENTIAL-COSTS",
+      "status": "evidence_linked",
+      "description": "Lower bills can reflect households going without adequate energy. Bills alone can therefore mislead about welfare.",
+      "openQuestions": ["Which validated measures capture adequate energy services rather than spending?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-SPLIT-INCENTIVES",
+      "title": "Split incentives between landlords and tenants",
+      "familyId": "PF-ESSENTIAL-COSTS",
+      "status": "candidate_hypothesis",
+      "description": "Owners may not invest when tenants capture savings. Recorded as a replication constraint in F0-02; no linked evidence claim yet.",
+      "openQuestions": ["Which evaluations isolate tenure effects?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-HOUSING-COST-PRESSURE",
+      "title": "Housing cost pressure on disposable income",
+      "familyId": "PF-ESSENTIAL-COSTS",
+      "status": "candidate_hypothesis",
+      "description": "Rising rents or housing costs reduce residual income for essentials. Registered as a research question; the HPI corpus contains no housing-specific evaluation yet.",
+      "openQuestions": ["Which housing-cost interventions have been evaluated on household security outcomes?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-CAPITAL-CONSTRAINTS",
+      "title": "Capital and credit constraints",
+      "familyId": "PF-ECONOMIC-OPPORTUNITY",
+      "status": "evidence_linked",
+      "description": "Lack of capital can prevent productive self-employment or asset accumulation. Grants and graduation packages relax this constraint; effects can fade.",
+      "openQuestions": ["Why do some gains persist and others converge?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-SKILLS-GAPS",
+      "title": "Skills gaps",
+      "familyId": "PF-ECONOMIC-OPPORTUNITY",
+      "status": "evidence_linked",
+      "description": "Missing skills can limit access to better work. Training effects are often small on average and depend on provider quality and labour demand.",
+      "openQuestions": ["Which training designs are cost-effective on sustained earnings?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-JOB-SEARCH-FRICTIONS",
+      "title": "Job search and matching frictions",
+      "familyId": "PF-ECONOMIC-OPPORTUNITY",
+      "status": "evidence_linked",
+      "description": "Difficulty finding suitable vacancies can reduce employment quality. Linked evidence includes a case where extra matching worsened outcomes.",
+      "openQuestions": ["When does matching help rather than harm job quality?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-JOB-QUALITY-RISK",
+      "title": "Job quality and occupational health risk",
+      "familyId": "PF-ECONOMIC-OPPORTUNITY",
+      "status": "evidence_linked",
+      "description": "Some jobs offer income without durable gains and with health risks. Employment counts alone can hide harm.",
+      "openQuestions": ["Which job-quality measures are valid across contexts?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-LABOUR-DEMAND-CONSTRAINTS",
+      "title": "Local labour demand and displacement",
+      "familyId": "PF-ECONOMIC-OPPORTUNITY",
+      "status": "evidence_linked",
+      "description": "Programmes may help participants partly by displacing others when local demand is limited; reviews link small average effects to context.",
+      "openQuestions": ["How can displacement among nonparticipants be measured credibly?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-ESSENTIAL-COSTS-OUTPACING-INCOME",
+      "title": "Essential costs rising faster than household income",
+      "familyId": "PF-ECONOMIC-SYSTEMS",
+      "status": "candidate_hypothesis",
+      "description": "Household security can fall when housing, energy and food costs rise faster than earnings and transfers, even when aggregate output grows. Explored with an illustrative model in the Economic Systems Lab.",
+      "openQuestions": ["How large is this gap for different household types in published distributional data?"],
+      "recurrence": []
+    },
+    {
+      "id": "M-PRODUCTIVITY-PAY-PASS-THROUGH",
+      "title": "Partial pass-through of productivity to pay",
+      "familyId": "PF-ECONOMIC-SYSTEMS",
+      "status": "candidate_hypothesis",
+      "description": "Productivity gains may reach wages only partly, depending on institutions, bargaining, market structure and measurement choices. Competing explanations are registered in the Systems Lab; no evidence claim is attached yet.",
+      "openQuestions": ["How does measured pass-through depend on price deflators and compensation definitions?"],
+      "recurrence": []
+    }
+  ]
+}

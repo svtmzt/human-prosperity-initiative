@@ -11,7 +11,7 @@
   "governanceSystem": "HubOS",
   "researchExecutionSystem": "SolOS",
   "sourceOfTruth": "GitHub HPI",
-  "reviewedAt": "2026-11-12",
+  "reviewedAt": "2026-11-16",
   "portfolioRecordId": "human-prosperity-initiative",
   "mode": "applied_poverty_reduction_with_long_term_systems_research",
   "currentInitiative": "F0-04",
@@ -428,6 +428,188 @@
           "tasksPlanned": 4
         }
       ]
+    },
+    {
+      "id": "HPI-SCALE",
+      "name": "Global Prosperity Platform: operating model transformation",
+      "status": "in_progress",
+      "horizon": "Now",
+      "priority": "P0",
+      "issue": 96,
+      "epics": [
+        {
+          "id": "HPI-SCALE.1",
+          "name": "Evidence-backed current-state audit",
+          "issue": 96
+        },
+        {
+          "id": "HPI-SCALE.2",
+          "name": "Theory of change, operating model, ADR and charter addendum candidate",
+          "issue": 96
+        },
+        {
+          "id": "HPI-SCALE.3",
+          "name": "Roadmap, issues and HubOS tracking",
+          "issue": 96
+        }
+      ],
+      "plannedTasks": 7
+    },
+    {
+      "id": "GPI",
+      "name": "Global Prosperity Intelligence",
+      "status": "in_progress",
+      "horizon": "Now",
+      "priority": "P0",
+      "issue": 97,
+      "epics": [
+        {
+          "id": "GPI.1",
+          "name": "Versioned data contract and build-failing validator",
+          "issue": 97
+        },
+        {
+          "id": "GPI.2",
+          "name": "Initial multi-context research corpus",
+          "issue": 97
+        },
+        {
+          "id": "GPI.3",
+          "name": "Intelligence experience and exports",
+          "issue": 97
+        },
+        {
+          "id": "GPI.4",
+          "name": "Transparent opportunity assessment",
+          "issue": 97
+        }
+      ],
+      "plannedTasks": 8
+    },
+    {
+      "id": "SEE",
+      "name": "Solutions & Experimentation Engine",
+      "status": "in_progress",
+      "horizon": "Now",
+      "priority": "P0",
+      "issue": 98,
+      "epics": [
+        {
+          "id": "SEE.1",
+          "name": "Solution specification and evidence-gated maturity",
+          "issue": 98
+        },
+        {
+          "id": "SEE.2",
+          "name": "Benefit-access vertical slice",
+          "issue": 98
+        },
+        {
+          "id": "SEE.3",
+          "name": "Energy and livelihoods templates",
+          "issue": 98
+        }
+      ],
+      "plannedTasks": 5
+    },
+    {
+      "id": "GAN",
+      "name": "Global Adoption Network",
+      "status": "in_progress",
+      "horizon": "Next",
+      "priority": "P1",
+      "issue": 99,
+      "epics": [
+        {
+          "id": "GAN.1",
+          "name": "Resource catalogue and downloads",
+          "issue": 99
+        },
+        {
+          "id": "GAN.2",
+          "name": "Readiness matrix and self-check",
+          "issue": 99
+        },
+        {
+          "id": "GAN.3",
+          "name": "Contribution and correction pathways",
+          "issue": 99
+        }
+      ],
+      "plannedTasks": 3
+    },
+    {
+      "id": "ESL",
+      "name": "Economic Systems Lab",
+      "status": "in_progress",
+      "horizon": "Next",
+      "priority": "P1",
+      "issue": 100,
+      "epics": [
+        {
+          "id": "ESL.1",
+          "name": "Research agenda and model registry",
+          "issue": 100
+        },
+        {
+          "id": "ESL.2",
+          "name": "Deterministic household resilience model",
+          "issue": 100
+        }
+      ],
+      "plannedTasks": 3
+    },
+    {
+      "id": "HPI-AI",
+      "name": "AI research assistance and evidence reliability",
+      "status": "in_progress",
+      "horizon": "Next",
+      "priority": "P1",
+      "issue": 101,
+      "epics": [
+        {
+          "id": "HPI-AI.1",
+          "name": "Configuration and provider adapter",
+          "issue": 101
+        },
+        {
+          "id": "HPI-AI.2",
+          "name": "Safeguards and deterministic baseline",
+          "issue": 101
+        },
+        {
+          "id": "HPI-AI.3",
+          "name": "Live provider evaluation",
+          "issue": 101
+        }
+      ],
+      "plannedTasks": 3
+    },
+    {
+      "id": "HPI-QA",
+      "name": "Integrated quality, security and release verification",
+      "status": "in_progress",
+      "horizon": "Now",
+      "priority": "P0",
+      "issue": 102,
+      "epics": [
+        {
+          "id": "HPI-QA.1",
+          "name": "Unit and integration tests",
+          "issue": 102
+        },
+        {
+          "id": "HPI-QA.2",
+          "name": "Browser and accessibility QA",
+          "issue": 102
+        },
+        {
+          "id": "HPI-QA.3",
+          "name": "Release verification",
+          "issue": 102
+        }
+      ],
+      "plannedTasks": 4
     }
   ],
   "dataPolicy": {
@@ -437,7 +619,7 @@
     "noSharedDatabaseAcrossProducts": true
   },
   "sync": {
-    "hubos": "existing HPI programme; RT-01 and business-options portfolio mapping pending verified HubOS issue",
+    "hubos": "existing HPI programme; RT-01 and business-options portfolio mapping pending verified HubOS issue; HPI-SCALE workstreams recorded in portfolio/hubos-sync/hpi-scale-registration-v0.1.json as a pending, unexecuted additive manifest",
     "solos": "HPI read-only projection of RT-01 and F0-04.8 subject to independent SolOS approval and release",
     "githubIssues": "authoritative_for_public_tasks"
   },

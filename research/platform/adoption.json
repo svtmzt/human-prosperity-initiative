@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "collection": "adoption",
+  "reviewedAt": "2026-11-16",
+  "reviewStatus": "internal_draft_not_independently_reviewed",
+  "note": "No external organisation has adopted, endorsed or partnered with HPI. The adoption and partnership registers are empty by design and can only accept entries with verifiable public evidence.",
+  "maturityLevels": [
+    {"level": 1, "id": "research_question", "title": "Research question", "definition": "Problem or mechanism under investigation.", "evidenceRequired": "Published research question document."},
+    {"level": 2, "id": "evidence_reviewed", "title": "Evidence reviewed", "definition": "Relevant evidence assessed, with limitations stated.", "evidenceRequired": "Published evidence review; state whether internal or independent."},
+    {"level": 3, "id": "prototype", "title": "Prototype", "definition": "Initial technical or methodological implementation.", "evidenceRequired": "Published, reproducible artifact."},
+    {"level": 4, "id": "evaluation_ready", "title": "Evaluation ready", "definition": "Protocol and prerequisites specified; approvals may still be pending.", "evidenceRequired": "Published protocol with comparator, estimand, power and named gates."},
+    {"level": 5, "id": "independently_evaluated", "title": "Independently evaluated", "definition": "Valid external evaluation evidence available.", "evidenceRequired": "Evaluation report by an evaluator independent of HPI."},
+    {"level": 6, "id": "replication_assessed", "title": "Replication assessed", "definition": "Transferability examined in additional contexts.", "evidenceRequired": "Independent evidence from at least one further context."},
+    {"level": 7, "id": "adopted", "title": "Adopted", "definition": "Actual, independently evidenced use by an external organisation.", "evidenceRequired": "Verifiable public evidence of use by the adopting organisation."}
+  ],
+  "readinessDimensions": [
+    {"id": "R-LEGAL", "title": "Legal and regulatory compatibility", "questions": ["Is there a legally accountable operator?", "Is the activity permitted under local law and programme rules?", "Is any data processing lawful, with a named controller?"], "specialistReview": "Qualified local legal counsel"},
+    {"id": "R-INSTITUTIONAL", "title": "Institutional feasibility", "questions": ["Does the administering agency support the activity where its processes are involved?", "Is there capacity to deliver without displacing existing services?"], "specialistReview": "Institutional leadership"},
+    {"id": "R-LANGUAGE-ACCESS", "title": "Language and accessibility", "questions": ["Are materials available in the languages people use?", "Are non-digital and accessible channels available?"], "specialistReview": "Accessibility specialists and community representatives"},
+    {"id": "R-DATA", "title": "Local data availability", "questions": ["Is the primary outcome measurable from lawful sources?", "Is a verified local denominator available?"], "specialistReview": "Data protection and statistics specialists"},
+    {"id": "R-TRANSFERABILITY", "title": "Scientific transferability", "questions": ["Does the mechanism plausibly operate here, with documented evidence?", "Which local differences could change the effect?"], "specialistReview": "Independent methodologist"},
+    {"id": "R-COSTS", "title": "Costs and resources", "questions": ["Are delivery and evaluation costed?", "Is funding secured for the full follow-up?"], "specialistReview": "Finance lead"},
+    {"id": "R-ETHICS", "title": "Ethics, privacy and safeguarding", "questions": ["Has an independent ethics body reviewed the design?", "Is there a staffed safeguarding and confidential reporting route?"], "specialistReview": "Independent ethics committee and safeguarding lead"},
+    {"id": "R-CAPACITY", "title": "Human capacity", "questions": ["Are trained staff available for delivery, supervision and data handling?"], "specialistReview": "Operational lead"},
+    {"id": "R-MEASUREMENT", "title": "Measurement feasibility", "questions": ["Can verified receipt (or the relevant primary outcome) be observed at follow-up?", "Can harms and equity gaps be measured?"], "specialistReview": "Independent evaluator"}
+  ],
+  "readinessStatuses": ["not_assessed", "not_met", "partially_met", "met_with_evidence", "not_applicable"],
+  "resources": [
+    {"id": "RES-KNOWLEDGE-BASE", "title": "Prosperity knowledge base (JSON)", "type": "dataset_metadata", "url": "/platform-knowledge-base.json", "licence": "CC BY 4.0 for HPI-authored structure and text; third-party figures retain their owners' rights (see each record).", "audience": ["researchers", "developers"], "prerequisites": "None; read each record's rights and verification level before reuse.", "maturityLevel": 3},
+    {"id": "RES-CONTEXT-FACTS-CSV", "title": "Context facts with provenance (CSV)", "type": "dataset_metadata", "url": "/platform-context-facts.csv", "licence": "CC BY 4.0 for HPI-authored fields; figures are attributed citations, not redistributed datasets.", "audience": ["researchers"], "prerequisites": "Check the redistribution status column.", "maturityLevel": 3},
+    {"id": "RES-EVIDENCE-CLAIMS-CSV", "title": "Evidence claims linked to mechanisms (CSV)", "type": "dataset_metadata", "url": "/platform-evidence-claims.csv", "licence": "CC BY 4.0 for HPI-authored text; underlying studies retain their owners' rights.", "audience": ["researchers"], "prerequisites": "Claims are abstract-level; verify against full texts.", "maturityLevel": 3},
+    {"id": "RES-GRAPH-EDGES-CSV", "title": "Problem-mechanism-intervention graph edges (CSV)", "type": "dataset_metadata", "url": "/platform-graph-edges.csv", "licence": "CC BY 4.0", "audience": ["researchers", "developers"], "prerequisites": "None.", "maturityLevel": 3},
+    {"id": "RES-SCHEMA", "title": "Knowledge-base data contract (JSON)", "type": "specification", "url": "/platform-schema.json", "licence": "CC BY 4.0", "audience": ["developers"], "prerequisites": "None.", "maturityLevel": 3},
+    {"id": "RES-BENEFIT-PACKAGE", "title": "Benefit-access evaluation package (JSON)", "type": "method", "url": "/downloads/benefit-access-evaluation-package.json", "licence": "CC BY 4.0", "audience": ["researchers", "public_sector", "ngos"], "prerequisites": "Requires all readiness dimensions to be assessed before any field use.", "maturityLevel": 3},
+    {"id": "RES-PROTOCOL-TEMPLATE", "title": "Evaluation protocol template (Markdown)", "type": "template", "url": "/downloads/evaluation-protocol-template.md", "licence": "CC BY 4.0", "audience": ["researchers", "public_sector", "ngos"], "prerequisites": "Independent methods and ethics review before use with people.", "maturityLevel": 3},
+    {"id": "RES-READINESS-CHECKLIST", "title": "Adaptation readiness checklist (Markdown)", "type": "template", "url": "/downloads/adaptation-readiness-checklist.md", "licence": "CC BY 4.0", "audience": ["public_sector", "ngos", "researchers"], "prerequisites": "None.", "maturityLevel": 3},
+    {"id": "RES-SYSTEMS-MODEL", "title": "Household resilience model (JavaScript module)", "type": "software", "url": "/systems-lab-model.js", "licence": "MIT", "audience": ["researchers", "developers"], "prerequisites": "Illustrative model with synthetic inputs; not a forecast.", "maturityLevel": 3},
+    {"id": "RES-OUTCOME-EVALUATION", "title": "Synthetic outcome evaluation module (JavaScript)", "type": "software", "url": "/research-outcome-evaluation.js", "licence": "MIT", "audience": ["researchers", "developers"], "prerequisites": "Synthetic or approved public-aggregate inputs only.", "maturityLevel": 3}
+  ],
+  "adoptionRecords": [],
+  "partnerships": []
+}

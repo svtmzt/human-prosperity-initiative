@@ -61,6 +61,16 @@ const initiativeRoutes=publicModel.initiatives.map(x=>
  "/initiatives/"+String(x.id).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""));
 const routes=["/","/mission","/projects","/projects/newham","/tools","/tools/glossary","/updates","/roadmap","/research","/research/source-catalog","/research/outcome-lab","/research/reproducibility","/research/responsible-tools","/research/responsible-tools/it","/research/newham-pension-credit","/research/newham-prepilot","/research/evidence-ledger",
  "/library","/activity","/status","/contribute","/governance","/privacy","/cookies","/help","/contact","/accessibility","/legal",...initiativeRoutes];
+// HPI-SCALE Global Prosperity Platform: representative pages for every template.
+const platformCore=["/platform","/platform/it","/intelligence","/intelligence/compare","/intelligence/evidence","/intelligence/methods","/intelligence/data",
+ "/intelligence/ai-assistance","/intelligence/problems/benefit-nontakeup","/intelligence/mechanisms/compliance-burden","/intelligence/interventions/assisted-application",
+ "/intelligence/contexts/newham","/intelligence/contexts/recife","/intelligence/contexts/naples","/intelligence/facts/newham-pc-caseload-rate-2023-24",
+ "/solutions","/solutions/benefit-access","/solutions/energy-affordability","/solutions/livelihoods","/adopt","/systems-lab"];
+routes.push(...platformCore);
+const sitemapXml=await readFile(resolve(distRoot,"sitemap.xml"),"utf8");
+const platformAll=[...sitemapXml.matchAll(/<loc>https:\/\/human-prosperity-initiative\.vercel\.app(\/[^<]*)<\/loc>/g)].map(m=>m[1])
+ .filter(r=>/^\/(platform|intelligence|solutions|adopt|systems-lab)(\/|$)/.test(r));
+if(platformAll.length<70)throw new Error("Expected the full platform route set in the sitemap");
 const report={source:"local-generated-site",browser:"chromium",viewports:widths,
  checkedRoutes:routes,checks:[],violations:[],screenshots:[],status:"in_progress",
  automationScope:"Chromium axe WCAG 2.2 AA; zoom-equivalent reflow; CSS text-resize stress; ARIA snapshots; keyboard traversal. Not a real screen reader or OS zoom audit."};
@@ -207,7 +217,7 @@ if(route==="/research/source-catalog"){
    }
    if((viewport.name==="desktop"||viewport.name==="mobile")&&
       (["/","/mission","/projects","/projects/newham","/tools","/updates","/research","/roadmap","/research/evidence-ledger","/library","/activity","/status"].includes(route)||
-      initiativeRoutes.includes(route))){
+      initiativeRoutes.includes(route)||platformCore.includes(route))){
     const result=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21aa","wcag22aa"]).analyze();
     const serious=result.violations;
     for(const violation of result.violations){
@@ -306,6 +316,97 @@ if(route==="/research/source-catalog"){
  }
 
 
+ // HPI-SCALE: every platform page at mobile width, then interactive journeys
+ // with explicit failure states. Local build only; not human usability testing.
+ {
+  const context=await browser.newContext({viewport:{width:390,height:844},reducedMotion:"reduce",deviceScaleFactor:1,acceptDownloads:true});
+  const sweep=await context.newPage();
+  const sweepErrors=[];
+  sweep.on("pageerror",err=>sweepErrors.push(err.message));
+  let swept=0;
+  for(const route of platformAll){
+   const response=await sweep.goto(base+route,{waitUntil:"networkidle",timeout:20000});
+   const layout=await sweep.evaluate(()=>({w:document.documentElement.scrollWidth,v:window.innerWidth,h1:document.querySelectorAll("main h1").length}));
+   if(response?.status()===200&&layout.h1===1&&layout.w<=layout.v+2)swept++;
+   else record("platform mobile sweep "+route,false,JSON.stringify({status:response?.status(),...layout}));
+  }
+  record("platform mobile sweep: all "+platformAll.length+" pages HTTP 200, one h1, no overflow",swept===platformAll.length,swept+"/"+platformAll.length);
+  record("platform mobile sweep: no JavaScript errors",!sweepErrors.length,sweepErrors.join(" | "));
+  await sweep.close();
+  const page=await context.newPage();
+  const requests=[];page.on("request",r=>requests.push(new URL(r.url()).pathname));
+  // Journey 1 — explore and filter the knowledge base
+  await page.goto(base+"/intelligence",{waitUntil:"networkidle"});
+  const total=await page.locator("[data-pf-item]").count();
+  await page.locator("#pf-type").selectOption("mechanism");
+  await page.locator("#pf-status").selectOption("candidate_hypothesis");
+  const hypotheses=await page.locator("[data-pf-item]:not([hidden])").count();
+  record("intelligence explorer filters to candidate hypotheses only",hypotheses===5&&(await page.locator("[data-pf-count]").textContent()).includes("5 of "+total),String(hypotheses));
+  await page.locator("#pf-status").selectOption("all");await page.locator("#pf-type").selectOption("all");
+  await page.locator("#pf-q").fill("zzzz-no-match");
+  record("intelligence explorer shows an accessible empty state",await page.locator("[data-pf-empty]").isVisible());
+  await page.locator("#pf-q").fill("Recife");
+  record("intelligence explorer text search finds the Recife context",await page.locator('[data-pf-item][data-pf-type="context"]:not([hidden])').count()>=1);
+  // Journey 3 — evidence trail from a mechanism claim to the source
+  await page.goto(base+"/intelligence/mechanisms/compliance-burden",{waitUntil:"networkidle"});
+  const sourceHref=await page.locator('main table a[href^="https://doi.org/"]').first().getAttribute("href");
+  record("mechanism evidence claims link to the external publisher source",/^https:\/\/doi\.org\//.test(sourceHref||""));
+  await page.goto(base+"/intelligence/evidence",{waitUntil:"networkidle"});
+  await page.locator("#ev-direction").selectOption("null");
+  const nulls=await page.locator("tr[data-pf-item]:not([hidden])").count();
+  record("evidence trail filters null findings",nulls>=5&&(await page.locator("tr[data-pf-item]:not([hidden])").allTextContents()).every(t=>t.includes("Null finding")),String(nulls));
+  // Journey 2 — compare contexts with comparability warnings and failure state
+  await page.goto(base+"/intelligence/compare",{waitUntil:"networkidle"});
+  await page.locator('[data-pf-toggle="BR-RECIFE"]').uncheck();
+  record("compare view hides a context column on request",await page.locator('td[data-pf-col="BR-RECIFE"]').first().isHidden()&&await page.locator('td[data-pf-col="UK-NEWHAM"]').first().isVisible());
+  await page.locator("#pf-fact-a").selectOption("F-NEWHAM-PC-CASELOAD-RATE-2023-24");
+  await page.locator("#pf-fact-b").selectOption("F-GB-PC-TAKEUP-FYE2025");
+  await page.locator('#pf-compare-form button[type="submit"]').click();
+  await page.locator('#pf-compare-result[data-state="warning"]').waitFor({timeout:5000});
+  const verdict=(await page.locator("#pf-compare-result").textContent())||"";
+  record("comparability check refuses Newham 78% versus GB 62%",verdict.includes("Not directly comparable")&&verdict.includes("population unit"),verdict.slice(0,200));
+  await page.route("**/platform-comparability.json",r=>r.fulfill({status:503,body:"{}"}));
+  await page.goto(base+"/intelligence/compare",{waitUntil:"networkidle"});
+  await page.locator('#pf-compare-form button[type="submit"]').click();
+  await page.locator('#pf-compare-result[data-state="error"]').waitFor({timeout:5000});
+  record("comparability check reports provider failure instead of a verdict",((await page.locator("#pf-compare-result").textContent())||"").includes("could not be loaded"));
+  await page.unroute("**/platform-comparability.json");
+  // Journey 4 — systems lab model, invalid input and data failure
+  await page.goto(base+"/systems-lab",{waitUntil:"networkidle"});
+  await page.locator('#sl-result[data-state="ok"]').waitFor({timeout:5000});
+  await page.locator("#sl-preset").selectOption("S2-ESSENTIAL-COST-SHOCK");
+  await page.waitForFunction(()=>document.getElementById("sl-result").textContent.includes("2 deficit"),{timeout:5000});
+  record("systems lab essential-cost shock produces two synthetic deficits",true);
+  await page.locator("#sl-passThroughShare").fill("5");
+  await page.locator('#sl-form button[type="submit"]').click();
+  record("systems lab rejects out-of-bounds assumptions",(await page.locator("#sl-result").getAttribute("data-state"))==="error"&&
+   ((await page.locator("#sl-result").textContent())||"").includes("outside bounds"));
+  await page.route("**/systems-lab-data.json",r=>r.fulfill({status:500,body:"{}"}));
+  await page.goto(base+"/systems-lab",{waitUntil:"networkidle"});
+  await page.locator('#sl-result[data-state="error"]').waitFor({timeout:5000});
+  record("systems lab discloses failed input loading and keeps precomputed tables",await page.locator("#sc-s2-essential-cost-shock").count()===1);
+  await page.unroute("**/systems-lab-data.json");
+  // Journey 5 — evaluation planner
+  await page.goto(base+"/solutions/benefit-access",{waitUntil:"networkidle"});
+  await page.locator('#pf-planner button[type="submit"]').click();
+  record("sample-size planner returns a labelled planning estimate",((await page.locator("#pf-planner-result").textContent())||"").includes("analysed per arm"));
+  await page.locator("#pl-comp").fill("0.10");
+  await page.locator('#pf-planner button[type="submit"]').click();
+  record("sample-size planner refuses a zero difference",(await page.locator("#pf-planner-result").getAttribute("data-state"))==="error");
+  // Journey 6 — adoption readiness self-check stays local and downloads a plan
+  await page.goto(base+"/adopt",{waitUntil:"networkidle"});
+  const before=requests.length;
+  for(const sel of await page.locator("[data-pf-readiness]").all())await sel.selectOption("met_with_evidence");
+  await page.locator('#pf-readiness button[type="submit"]').click();
+  const summary=(await page.locator("#pf-readiness-result").textContent())||"";
+  record("readiness self-check treats unevidenced claims as not met",summary.includes("treated as not met")&&summary.includes("Not ready for fieldwork"));
+  const dl=page.waitForEvent("download");
+  await page.locator("#pf-readiness-md").click();
+  record("readiness plan downloads locally as Markdown",(await dl).suggestedFilename()==="hpi-readiness-plan.md");
+  record("readiness self-check sends no network requests",requests.length===before,requests.slice(before).join(","));
+  await page.close();await context.close();
+ }
+
  // WEB-01-NET / RT-01-EXPORT: real Chromium request audit with a saved HAR
  // and explicit API failure fixtures. This is local-build QA, not a capture
  // of every request in the remote production browser or a full security audit.
@@ -388,7 +489,8 @@ if(route==="/research/source-catalog"){
    viewport:{width:scenario.width,height:900},reducedMotion:"reduce",deviceScaleFactor:1
   });
   for(const route of ["/","/mission","/projects","/projects/newham","/tools","/updates","/research","/research/evidence-ledger",
-   "/library","/activity","/status","/contribute","/governance","/roadmap","/initiatives/web-02","/initiatives/f0-03-1"]){
+   "/library","/activity","/status","/contribute","/governance","/roadmap","/initiatives/web-02","/initiatives/f0-03-1",
+   "/platform","/intelligence","/intelligence/compare","/intelligence/evidence","/solutions/benefit-access","/adopt","/systems-lab"]){
    const page=await context.newPage();
    const response=await page.goto(base+route,{waitUntil:"networkidle",timeout:20000});
    record(scenario.name+" "+route+" HTTP 200",response?.status()===200);
@@ -461,7 +563,8 @@ if(route==="/research/source-catalog"){
  // technology's semantic tree. It is not NVDA/VoiceOver speech validation.
  const keyboardContext=await browser.newContext({viewport:{width:1440,height:900},
   reducedMotion:"reduce",deviceScaleFactor:1});
- for(const route of ["/","/projects","/projects/newham","/tools","/updates","/research","/status","/roadmap","/initiatives/web-02","/initiatives/f0-03-1"]){
+ for(const route of ["/","/projects","/projects/newham","/tools","/updates","/research","/status","/roadmap","/initiatives/web-02","/initiatives/f0-03-1",
+  "/platform","/intelligence","/solutions/benefit-access","/adopt","/systems-lab"]){
   const page=await keyboardContext.newPage();
   await page.goto(base+route,{waitUntil:"networkidle",timeout:20000});
   const mainSnapshot=await page.locator("main").ariaSnapshot();
