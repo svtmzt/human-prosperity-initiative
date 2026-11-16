@@ -5,6 +5,8 @@ import {inspect,latestStates,BASE,REPO} from "../scripts/ops-watch.mjs";
 const SHA="a".repeat(40);
 const OLD_SHA="b".repeat(40);
 const NOW=new Date("2026-11-05T19:00:00Z");
+const run=(id,name,state)=>({id,name,app:{slug:"github-actions"},
+ status:state==="pending"?"in_progress":"completed",conclusion:state==="pending"?null:state});
 function fixture({published=SHA,status="success",generatedAt="2026-11-05T18:00:00Z",mainCommittedAt=null,missingRoute=null}={}){
  return async url=>{
   const path=new URL(url).pathname;
@@ -16,10 +18,11 @@ function fixture({published=SHA,status="success",generatedAt="2026-11-05T18:00:0
   if(path.endsWith("/commits/main"))
    return new Response(JSON.stringify({sha:SHA,commit:{committer:{date:mainCommittedAt||generatedAt}}}),{status:200});
   if(path.endsWith("/commits/"+SHA+"/status"))
-   return new Response(JSON.stringify({statuses:[
-    {context:"ci/circleci: website-quality",state:"success"},
-    {context:"ci/circleci: browser-accessibility",state:status},
-    {context:"Vercel",state:"success"}
+   return new Response(JSON.stringify({statuses:[{context:"Vercel",state:"success"}]}),{status:200});
+  if(path.endsWith("/commits/"+SHA+"/check-runs"))
+   return new Response(JSON.stringify({check_runs:[
+    run(1,"website-quality","success"),
+    run(2,"browser-accessibility",status)
    ]}),{status:200});
   if(url.startsWith(REPO+"/commits?"))
    return new Response(JSON.stringify([{sha:SHA}]),{status:200});
@@ -28,10 +31,10 @@ function fixture({published=SHA,status="success",generatedAt="2026-11-05T18:00:0
 }
 test("latest status wins if GitHub returns historical pending entries",()=>{
  const data=latestStates([
-  {context:"ci/circleci: website-quality",state:"success"},
-  {context:"ci/circleci: website-quality",state:"pending"}
+  {context:"Vercel",state:"success"},
+  {context:"Vercel",state:"pending"}
  ]);
- assert.equal(data.get("ci/circleci: website-quality"),"success");
+ assert.equal(data.get("Vercel"),"success");
 });
 test("daily public probe validates website, provenance, CI and estimates public commit velocity",async()=>{
  const report=await inspect({fetchImpl:fixture(),now:NOW});
@@ -39,7 +42,7 @@ test("daily public probe validates website, provenance, CI and estimates public 
  assert.equal(report.routes.length,9);
  assert.ok(report.routes.some(x=>x.path==="/initiatives/web-02"));
  assert.ok(report.routes.some(x=>x.path==="/initiatives/f0-03-1"));
- assert.equal(report.ci["ci/circleci: browser-accessibility"],"success");
+ assert.equal(report.ci["browser-accessibility"],"success");
  assert.equal(report.resourceSignals.publicMainCommitsLast7Days,1);
  assert.equal(report.resourceSignals.providerBilledCost,null);
  assert.equal(report.issues.length,0);
@@ -65,12 +68,12 @@ test("broken public routes fail rather than silently reporting healthy",async()=
  assert.ok(report.issues.some(x=>x.includes("/research")));
 });
 
-test("fresh pending CircleCI on the just-merged SHA is a warning, not an outage",async()=>{
+test("fresh pending CI on the just-merged SHA is a warning, not an outage",async()=>{
  const report=await inspect({fetchImpl:fixture({status:"pending",mainCommittedAt:"2026-11-05T18:55:00Z"}),now:NOW});
  assert.equal(report.result,"passed");
  assert.ok(report.warnings.some(x=>x.includes("CI grace window")));
 });
-test("CircleCI still pending beyond propagation window must fail",async()=>{
+test("CI still pending beyond propagation window must fail",async()=>{
  const report=await inspect({fetchImpl:fixture({status:"pending",mainCommittedAt:"2026-11-05T18:00:00Z"}),now:NOW});
  assert.equal(report.result,"failed");
  assert.ok(report.issues.some(x=>x.includes("browser-accessibility")));

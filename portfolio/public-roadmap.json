@@ -2742,16 +2742,20 @@
     {
       "id": "HPI-AI",
       "kind": "platform",
-      "summary": "A tested, disabled-by-default AI research-assistance layer with grounding, citation verification, injection defence and human review; no paid inference.",
-      "gate": "Adapter and safeguards implemented and tested against simulated transports. No inference provider is connected in production and no AI-generated content is published. Live evaluation requires an available local or explicitly approved provider.",
+      "summary": "A tested AI research-assistance layer with local and verified-free cloud providers, grounding, citation and numeric verification, injection defence, data-routing policy and mandatory human review; no paid inference and no AI on the public website.",
+      "gate": "Internal research mode is operational with verified free OpenRouter models and a published held-out evaluation (automated agreement with HPI's own curated reference, not independent review). Local inference is live-tested on the founder's Mac (Ollama, qwen3.5:4b): bounded classification and extraction runs produced validated review-queue items; no broad local evaluation yet. Hosted public inference is not deployed: it needs a durable quota store, authentication and privacy/legal approval (#103). No AI output is published as evidence.",
       "deliverables": [
         {
-          "label": "AI status and safeguards",
+          "label": "AI status, evaluation and safeguards",
           "url": "/intelligence/ai-assistance"
         },
         {
-          "label": "AI architecture documentation",
-          "url": "/library/docs/platform/ai-research-assistance-v1"
+          "label": "AI architecture, privacy and activation guide",
+          "url": "/library/docs/platform/ai-research-assistance-v2"
+        },
+        {
+          "label": "AI evaluation report",
+          "url": "/library/docs/platform/ai-evaluation-2026-11-16"
         }
       ],
       "epics": [
@@ -2788,14 +2792,63 @@
         {
           "id": "HPI-AI.3",
           "title": "Live provider evaluation",
-          "status": "blocked",
+          "status": "in_progress",
           "issue": 101,
           "tasks": [
             {
               "id": "HPI-AI.3-T01",
               "title": "Measure extraction accuracy with a real local or approved provider",
+              "status": "in_progress",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/105"
+            },
+            {
+              "id": "HPI-AI.3-T02",
+              "title": "Live local-model run through the HPI CLI (Ollama, qwen3.5:4b) producing validated review-queue items",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/105"
+            },
+            {
+              "id": "HPI-AI.3-T03",
+              "title": "Human expert review of a sample of AI review-queue items before any reliance",
               "status": "blocked",
-              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101"
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            }
+          ]
+        },
+        {
+          "id": "HPI-AI.4",
+          "title": "Verified free cloud provider, model discovery and free-only routing",
+          "status": "complete",
+          "issue": 101,
+          "tasks": [
+            {
+              "id": "HPI-AI.4-T01",
+              "title": "Implement OpenRouter free-only provider, catalogue verification, selection policy, quotas and circuit breaker",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/105"
+            }
+          ]
+        },
+        {
+          "id": "HPI-AI.5",
+          "title": "Hosted public research gateway",
+          "status": "blocked",
+          "issue": 101,
+          "tasks": [
+            {
+              "id": "HPI-AI.5-T01",
+              "title": "Activate gateway only after durable quota store, authentication and privacy/legal approval",
+              "status": "blocked",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/103"
             }
           ]
         }

@@ -1,7 +1,7 @@
 /**
  * RT-01.3 exact artifact verification: the same source files must generate
  * exactly the same canonical bytes, citation manifest and correction history.
- * Optional --archive saves only these safe reports to CircleCI artifact store;
+ * Optional --archive saves only these safe reports for upload as CI artifacts;
  * never writes participant data, network or deployment/portfolio state.
  */
 import {readFile,mkdir,writeFile} from "node:fs/promises";

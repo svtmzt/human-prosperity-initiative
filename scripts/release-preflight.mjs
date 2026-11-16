@@ -5,13 +5,10 @@
  * Deployment Check or human-authorised staged-release operator.
  */
 import {pathToFileURL} from "node:url";
+import {REQUIRED_CHECKS,latestStatusStates,requiredStates} from "./ci-checks.mjs";
 const SHA=/^[0-9a-f]{40}$/;
-const DEFAULT_REPO="https://api.github.com/repos/saver1991/human-prosperity-initiative";
-export const REQUIRED_CONTEXTS=[
-  "ci/circleci: website-quality",
-  "ci/circleci: browser-accessibility",
-  "Vercel"
-];
+const DEFAULT_REPO="https://api.github.com/repos/svtmzt/human-prosperity-initiative";
+export const REQUIRED_CONTEXTS=REQUIRED_CHECKS;
 export function validateCandidateUrl(raw){
   const url=new URL(raw);
   if(url.protocol!=="https:"||url.username||url.password||url.search||url.hash||
@@ -21,14 +18,7 @@ export function validateCandidateUrl(raw){
     throw new Error("Candidate must be an HTTPS Vercel deployment origin");
   return url.origin;
 }
-export function currentCommitStatuses(statuses){
-  const seen=new Map();
-  // GitHub combined-status API returns newest first. Do not let a later
-  // stale/older success overwrite the most recent pending/failure.
-  for(const entry of statuses)if(!seen.has(entry.context))
-    seen.set(entry.context,entry.state);
-  return seen;
-}
+export const currentCommitStatuses=latestStatusStates;
 export async function inspectRelease({sha,candidateOrigin,fetchImpl=fetch,repo=DEFAULT_REPO}){
   const summary={
     requestedSha:sha,verifiedSha:null,origin:null,
@@ -49,9 +39,12 @@ export async function inspectRelease({sha,candidateOrigin,fetchImpl=fetch,repo=D
     const result=await readJson(repo+"/commits/"+sha+"/status");
     if(result.sha!==sha)throw Error("Combined status SHA mismatch");
     summary.verifiedSha=result.sha;
-    const states=currentCommitStatuses(Array.isArray(result.statuses)?result.statuses:[]);
+    const runs=await readJson(repo+"/commits/"+sha+"/check-runs?per_page=100");
+    const states=requiredStates({
+      statuses:Array.isArray(result.statuses)?result.statuses:[],
+      checkRuns:Array.isArray(runs.check_runs)?runs.check_runs:[]});
     for(const context of REQUIRED_CONTEXTS){
-      const state=states.get(context)||"missing";
+      const state=states[context];
       summary.statuses[context]=state;
       if(state!=="success")summary.reasons.push(context+": "+state);
     }

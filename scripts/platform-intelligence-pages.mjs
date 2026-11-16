@@ -23,7 +23,7 @@ function findingsFor(audit,ids){
  return f.length?'<h2>Automated consistency notes (deterministic, not AI)</h2>'+list(f.map(x=>badge(x.severity==="caution"?"mixed":"neutral",humanize(x.type))+" "+safe(x.message))):"";
 }
 
-export async function publishIntelligence({publish,shell,kb,audit,assessment,exportsInfo,aiStatus}){
+export async function publishIntelligence({publish,shell,kb,audit,assessment,exportsInfo,aiStatus,aiExtras=null}){
  const routes=[];
  const page=async(route,opts)=>{routes.push(route);await publish(route,shell({route,section:SECTION,stylesheet:"/platform.css",...opts}))};
  const p=kb.parsed;
@@ -72,7 +72,7 @@ export async function publishIntelligence({publish,shell,kb,audit,assessment,exp
   '<h2>Reliability at a glance</h2><ul>'+
   '<li>'+safe(String(caution))+' automated cautions (conflicting evidence or intermediate-only endpoints) — see <a href="/intelligence/methods#consistency">consistency audit</a>.</li>'+
   '<li>'+safe(String(facts.filter(f=>f.verificationLevel==="byte_hashed_extraction").length))+' of '+facts.length+' figures are byte-hashed extractions; the rest are transcribed citations with declared missing provenance.</li>'+
-  '<li>AI assistance: <strong>'+safe(aiStatus.productionInference?"connected":"not connected")+'</strong>. '+a("/intelligence/ai-assistance","What this means")+'.</li></ul></div>'
+  '<li>AI assistance: <strong>no AI on the public website</strong>; internal research use is evaluated and human-reviewed. '+a("/intelligence/ai-assistance","What this means")+'.</li></ul></div>'
  });
 
  // ---------- Problems ----------
@@ -271,17 +271,41 @@ export async function publishIntelligence({publish,shell,kb,audit,assessment,exp
 
  // ---------- AI assistance status ----------
  const cfg=aiStatus.configuration;
+ const ev=aiExtras?.evaluation,snap=aiExtras?.snapshot,pol=aiExtras?.policy;
+ const yes=v=>v?"Yes":"No";
+ const fmtRate=v=>v==null?"—":Math.round(v*100)+"%";
+ const evalRows=ev?ev.models.flatMap(m=>{const x=m.metrics||{},c=x["claim-extraction"]||{},k=x["source-classification"]||{},g=x["mechanism-tagging"]||{},gp=x["evidence-gap-detection"]||{},ct=x["contradiction-detection"]||{};
+  return [tr([safe(m.model),safe(String(m.operations?.requests??0)),fmtRate(c.structuredValidityRate),fmtRate(c.referenceConsistentPrecision),fmtRate(c.citationFailureRate),fmtRate(c.correctAbstentionRate),
+   fmtRate(k.acceptableAccuracy),fmtRate(g.tagPrecision),fmtRate(gp.stageAccuracy),fmtRate(ct.relationAccuracy),safe(m.operations?.latencyMsMedian==null?"—":(m.operations.latencyMsMedian/1000).toFixed(1)+" s")])]}):[];
  await page("/intelligence/ai-assistance",{
-  title:"AI research assistance: status and safeguards",description:"Whether an inference provider is connected, what the AI layer can and cannot do, its safeguards and how to activate it locally.",
+  title:"AI research assistance: status, evaluation and safeguards",description:"What AI does inside HPI, which free models were tested and how they performed, the data and cost safeguards, and what is not available.",
   breadcrumb:crumbs(I_CRUMB,"AI assistance"),
-  body:'<div class="index-content"><div class="'+(aiStatus.productionInference?"status-note":"pf-nogo-banner")+'"><strong>Inference provider: '+safe(aiStatus.productionInference?"connected":"not connected")+'.</strong> '+safe(aiStatus.statement)+'</div>'+
-  '<dl class="pf-dl"><dt>Provider</dt><dd>'+safe(cfg.provider)+'</dd><dt>Reason</dt><dd>'+safe(cfg.reasonDisabled||"Configured")+'</dd><dt>AI-generated content published</dt><dd>'+safe(String(aiStatus.publishedAiGeneratedContent))+'</dd><dt>Request ceiling per run</dt><dd>'+safe(String(cfg.limits.maxRequests))+' requests, '+safe(String(cfg.limits.maxInputChars))+' input characters</dd></dl>'+
-  '<h2>What is implemented and tested</h2>'+list(["A provider adapter for OpenAI-compatible chat endpoints (local runtimes such as Ollama, LM Studio, llama.cpp server or LiteLLM). It is tested against simulated transports, not a live model.","Claim extraction and source classification prompts, versioned and fingerprinted.","Validation of model output against a strict schema, the cited source and the knowledge-base vocabularies.","A human review queue written only to local, git-ignored files."].map(safe))+
+  body:'<div class="index-content"><div class="pf-nogo-banner"><strong>Public website: no AI inference.</strong> '+safe(aiStatus.statement)+'</div>'+
+  '<dl class="pf-dl"><dt>AI-generated content published</dt><dd>'+safe(String(aiStatus.publishedAiGeneratedContent))+'</dd><dt>Hosted (public) inference</dt><dd>Disabled — not deployed</dd>'+
+  '<dt>Internal research mode</dt><dd>'+safe(ev?"Operational with verified free OpenRouter models; live evaluation published "+ev.evaluatedAt.slice(0,10):"Implemented")+'</dd>'+
+  '<dt>Local models</dt><dd>Supported (loopback only); not yet live-tested</dd><dt>Paid inference</dt><dd>Not used; no paid fallback exists</dd></dl>'+
+  '<h2>What you can do on this page</h2><p>Read how AI is used in HPI research, inspect the published evaluation and model policy, and download the machine-readable status. There are no AI controls on the public website: running AI requires the open-source command-line tools, and every result goes to a private human-review queue.</p>'+
+  '<h2>Operating modes</h2>'+table("",["Mode","Status","Data boundary"],aiStatus.modes.map(m=>tr([safe(m.label),safe(m.status),safe(m.boundary)])),{label:"AI operating modes"})+
+  '<h2 id="evaluation">Evaluation of free cloud models</h2>'+(ev?
+   '<p class="status-note"><strong>Automated agreement with HPI’s own curated reference — not independent expert review.</strong> '+safe(ev.referenceStatement)+' Held-out set '+safe(ev.evaluationSet.version)+' ('+safe(String(ev.evaluationSet.items))+' items, SHA-256 <code>'+safe(ev.evaluationSet.sha256.slice(0,16))+'…</code>). Each model was measured alone, with fallback disabled.</p>'+
+   table("",["Model","Requests","Claims: valid JSON","Claims: reference-consistent","Claims: citation failures","Correct abstention","Design (acceptable)","Mechanism precision","Gap stages correct","Contradiction relation","Median latency"],evalRows,{label:"Evaluation metrics per model"})+
+   '<p>Spend during the evaluation: '+safe(ev.spend?("$"+ev.spend.usageUsdBefore+" before, $"+ev.spend.usageUsdAfter+" after (provider account view)"):"not recorded")+'. Provider unavailability (shared free pools rate-limited upstream) is counted as failure, not hidden. '+a("/platform-ai-evaluation.json","Full aggregate metrics (JSON)")+'.</p>'
+   :'<p>No live evaluation has been published.</p>')+
+  '<h2>Free-model policy</h2>'+list(["Only models whose catalogue ID ends in “:free” and whose every listed price is zero, verified from OpenRouter metadata less than 24 hours old and per-endpoint pricing.",
+   "Every request carries a maximum price of zero, disables provider fallbacks, never lists fallback models, and asks OpenRouter to use only endpoints that do not collect or train on prompts.",
+   "The served model and reported cost are checked on every response; an unexpected model or any non-zero cost stops the run.",
+   "The random free router is excluded: "+(pol?.router?.reason||"not reproducible")+"",
+   "Zero-priced entries that are not “:free” variants (for example music generation billed per song) are never treated as free."].map(safe))+
+  (pol?.excluded?.length?table("",["Excluded model","Reason"],pol.excluded.map(x=>tr([safe(x.id),safe(x.reason)])),{label:"Models excluded by HPI policy"}):"")+
+  (snap?'<p>Catalogue snapshot '+safe(snap.fetchedAt.slice(0,10))+': '+safe(String(snap.counts.total))+' models listed; '+safe(String(snap.counts.eligibleFreeText))+' verified free text models; '+safe(String(snap.counts.zeroPricedNotFreeVariant))+' zero-priced non-free entries excluded. '+a("/platform-ai-models.json","Snapshot and selection policy (JSON)")+'.</p>':"")+
+  '<h2>Data routing</h2>'+table("",["Data class","Local model","Free cloud","Approved remote"],aiStatus.dataRouting.map(d=>tr([safe(d.label),yes(d.local),yes(d.freeCloud),yes(d.approvedRemote)])),{label:"Which data may reach which inference boundary"})+
+  '<p>Personal-data indicators (emails, national insurance, NHS, CPF or codice fiscale numbers, phone numbers, case references) reclassify text as sensitive, which no boundary accepts. Zero Data Retention is claimed only for endpoints on OpenRouter’s published ZDR list when ZDR is enforced on the request.</p>'+
+  '<h2>Capacity and quotas</h2><p>Free models are shared and limited: OpenRouter documents 20 free-model requests per minute and 50 per day (1,000 per day after a qualifying credit purchase, which HPI has not authorised for this purpose). Failed requests can count. HPI adds per-run request, token and attempt ceilings, an application daily ceiling, pacing and a circuit breaker. When a shared free pool or the daily quota is exhausted, work stops and is reported; it never switches to a paid model.</p>'+
   '<h2>Safeguards</h2>'+list(aiStatus.safeguards.map(safe))+
   '<h2>Never permitted</h2>'+list(aiStatus.prohibitedUses.map(safe))+
   '<h2>Prompt versions</h2>'+table("",["Prompt","SHA-256"],aiStatus.promptTemplates.map(t=>tr([safe(t.id),'<code>'+safe(t.sha256)+'</code>'])),{label:"Prompt fingerprints"})+
-  '<h2>What runs today without AI</h2><p>The <a href="/intelligence/methods#consistency">deterministic consistency audit</a> flags conflicting evidence, intermediate-only endpoints, non-independent studies, older evidence and unverified provenance at every build. A rule-based source profiler is available with <code>npm run ai:baseline</code>.</p>'+
-  '<h2>Activate locally (no paid API by default)</h2><pre class="doc-code">HPI_AI_PROVIDER=openai_compatible\nHPI_AI_BASE_URL=http://127.0.0.1:11434\nHPI_AI_MODEL=your-local-model\nnpm run ai:extract -- --ids E04,E12</pre><p>Remote hosts must be HTTPS and listed in <code>HPI_AI_ALLOWED_HOSTS</code>. Known paid providers are refused unless <code>HPI_AI_PAID_USE_APPROVAL_REF</code> points to a GitHub issue recording explicit cost approval. '+a("/library/docs/platform/ai-research-assistance-v1","Full AI architecture and safeguards")+' · '+a("/platform-ai-status.json","Status (JSON)")+'</p></div>'
+  '<h2>What runs without AI</h2><p>The <a href="/intelligence/methods#consistency">deterministic consistency audit</a> runs at every build. A rule-based source profiler is available with <code>npm run ai:baseline</code>.</p>'+
+  '<h2>For HPI researchers</h2><pre class="doc-code"># Local model on your own machine (nothing leaves it)\nHPI_AI_PROVIDER=local HPI_AI_LOCAL_RUNTIME=ollama npm run ai:extract -- --ids E08\n\n# Verified free cloud models (key kept in a local secret store, never committed)\nHPI_AI_PROVIDER=openrouter OPENROUTER_API_KEY=… npm run ai:discover\nHPI_AI_PROVIDER=openrouter OPENROUTER_API_KEY=… npm run ai:extract -- --ids E08\nnpm run ai:review -- list</pre><p>'+a("/library/docs/platform/ai-research-assistance-v2","Architecture, privacy and activation guide")+' · '+a("/library/docs/platform/ai-evaluation-2026-11-16","Evaluation report")+' · '+a("/platform-ai-status.json","Status (JSON)")+'</p></div>'
  });
 
  // ---------- Data & reuse ----------

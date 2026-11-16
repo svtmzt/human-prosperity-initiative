@@ -1,6 +1,6 @@
 # ADR 0003 — Offline, content-addressed research publishing via existing HPI infrastructure
 
-**Status:** Accepted for bounded RT-01.3 technical implementation, 6 November 2026.
+**Status:** Accepted for bounded RT-01.3 technical implementation, 6 November 2026. The CI clauses (CircleCI, "no GitHub Actions") were superseded on 16 November 2026 by [ADR 0005](0005-ci-github-actions.md).
 **Decision scope:** software, source provenance and reproducibility only. Does **not** authorise research on people, acceptance of external source licences, methodological peer review, new cloud spending, data protection controller status or institutional incorporation.
 
 ## Context

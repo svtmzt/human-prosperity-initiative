@@ -16,7 +16,7 @@ import {evaluatePrepilotDecision} from "../research-tools/newham-prepilot-gate.m
 const ROOT="dist";
 const MODULE_SCRIPTS=new Set(["/progress.js","/outcome-lab.js","/systems-lab.js","/solutions-planner.js"]);
 const publishedAt=new Date().toISOString();
-const revision=(process.env.VERCEL_GIT_COMMIT_SHA || process.env.CIRCLE_SHA1 || "local-build").slice(0,40);
+const revision=(process.env.VERCEL_GIT_COMMIT_SHA || process.env.HPI_COMMIT_SHA || "local-build").slice(0,40);
 async function walk(dir){
  const out=[];
  for(const item of await readdir(dir,{withFileTypes:true})){
@@ -297,7 +297,7 @@ await publish("/research/reproducibility",shell({
   '<h2>Public input provenance</h2><div class="doc-table-wrap" role="region" tabindex="0" aria-label="Content hashes for research pipeline inputs"><table>'+
   '<thead><tr><th scope="col">Source</th><th scope="col">SHA-256 prefix</th><th scope="col">UTF-8 bytes</th></tr></thead><tbody>'+
   manifestRows+'</tbody></table></div>'+
-  '<p>Full hashes and exact byte lengths are in the JSON manifest. Source code uses Node.js 22 standard-library utilities, CircleCI and the existing Git repository; no separate paid data pipeline or GitHub Actions are required.</p>'+
+  '<p>Full hashes and exact byte lengths are in the JSON manifest. Source code uses Node.js 22 standard-library utilities, free GitHub Actions checks and the existing Git repository; no separate paid data pipeline is required.</p>'+
   '<h2>Reuse and independent review</h2><p>Software is MIT; original HPI-authored documentation is CC BY 4.0. These licences <strong>do not cover third-party research or datasets</strong>. Source rights, scientific methods, human research consent and real-world impact still require separate review.</p>'+
   '<p>The Global Prosperity Platform knowledge base has its own <a href="/platform-manifest.json">SHA-256 manifest</a> and <a href="/intelligence/data">reproduction steps</a>.</p>'+
   '<p><a href="/library/docs/rt-01-3-reproducible-open-science-v1">Full method, reproduction and correction rules</a> · <a href="/research/source-catalog">Source catalogue</a> · <a href="/research/outcome-lab">Hypothetical outcomes lab</a> · <a href="/status">Published Git revision</a></p></div>'

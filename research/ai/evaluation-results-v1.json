@@ -1,0 +1,600 @@
+{
+  "schemaVersion": "1.0",
+  "kind": "hpi_ai_evaluation_results",
+  "evaluatedAt": "2026-11-16T14:40:18.644Z",
+  "evaluationSet": {
+    "path": "research/ai/evaluation-set-v1.json",
+    "version": "1.0.0",
+    "sha256": "06ff4acdab2750f870225122ff33dd2fea40b1a9eb12c63390d165e78b0fa0a6",
+    "items": 46
+  },
+  "providerKind": "openrouter",
+  "dataPolicy": "deny_collection",
+  "prompts": [
+    {
+      "id": "claim-extraction@1.1.0",
+      "sha256": "07adccb0f0105afe42286cc34e3b3a2e2229d467f1ddb8244fb393e9f2a6ac92"
+    },
+    {
+      "id": "source-classification@1.1.0",
+      "sha256": "e768a76fcd95855db4cacda757bc2095d3d8f9fb9b5b47f7ef1f317e7250f7c2"
+    },
+    {
+      "id": "mechanism-tagging@1.0.0",
+      "sha256": "d09f7a0177ed8f9e89765665ee4249d339f36d68b590cc72484e49a9265719ae"
+    },
+    {
+      "id": "evidence-gap-detection@1.0.0",
+      "sha256": "a65c8e9e61f9f937b3c3c38f39bb23205bf96e944a54a876d44221220f67cbd1"
+    },
+    {
+      "id": "contradiction-detection@1.0.0",
+      "sha256": "dcc005c7eaad9ec5c28d649a14da40ba8ab5716a68ba0e4b29cb8d77a92e3cf1"
+    }
+  ],
+  "parameters": {
+    "temperature": 0,
+    "maxOutputTokens": 800,
+    "maxRetries": 1,
+    "minIntervalMs": 5000,
+    "fallback": "disabled during evaluation (each model measured alone)"
+  },
+  "referenceStatement": "Reference judgements are HPI internal curation committed before this evaluation; they are not independent expert review (G-05 open). Metrics are automated agreement proxies.",
+  "spend": {
+    "usageUsdBefore": 0,
+    "usageUsdAfter": 0,
+    "freeRequestsUsedBefore": 99,
+    "freeRequestsUsedAfter": 234
+  },
+  "models": [
+    {
+      "model": "dots-studio/dots-3-note-preview:free",
+      "status": "completed",
+      "metrics": {
+        "claim-extraction": {
+          "items": 21,
+          "answered": 16,
+          "validOutput": 16,
+          "invalidOutput": 0,
+          "providerFailed": 4,
+          "proposals": 19,
+          "accepted": 17,
+          "citationFailures": 2,
+          "ungroundedNumbers": 0,
+          "certaintyOrRecommendation": 0,
+          "vocabularyErrors": 0,
+          "referenceItems": 11,
+          "acceptedOnRef": 16,
+          "referenceConsistent": 5,
+          "referenceClaims": 11,
+          "referenceClaimsRecovered": 4,
+          "directionAgreement": 8,
+          "mechanismTags": 14,
+          "mechanismTagsInReference": 8,
+          "nullAdverseItems": 4,
+          "nullAdverseReported": 2,
+          "nullAdverseUpgradedToSupports": 1,
+          "dossierItems": 2,
+          "geographyMisattributions": 0,
+          "nonDescriptiveDossierClaims": 0,
+          "quarantined": 1,
+          "correctQuarantine": 1,
+          "abstentionItems": 3,
+          "injectionFollowed": 1,
+          "correctAbstention": 2,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0.2,
+          "referenceConsistentPrecision": 0.313,
+          "referenceRecall": 0.364,
+          "unsupportedProposalRate": 0.105,
+          "citationFailureRate": 0.105,
+          "mechanismTagPrecision": 0.571,
+          "correctAbstentionRate": 0.667,
+          "nullAdverseReportedRate": 0.5
+        },
+        "evidence-gap-detection": {
+          "items": 3,
+          "answered": 3,
+          "validOutput": 3,
+          "invalidOutput": 0,
+          "providerFailed": 0,
+          "stages": 15,
+          "stagesCorrect": 12,
+          "referenceGaps": 13,
+          "gapsMissedAsMeasured": 2,
+          "gapsDetected": 10,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0,
+          "stageAccuracy": 0.8,
+          "gapRecall": 0.769
+        },
+        "source-classification": {
+          "items": 8,
+          "answered": 7,
+          "validOutput": 7,
+          "invalidOutput": 0,
+          "providerFailed": 1,
+          "exact": 4,
+          "acceptable": 4,
+          "citationFailures": 2,
+          "abstained": 1,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0.125,
+          "exactAccuracy": 0.571,
+          "acceptableAccuracy": 0.571
+        },
+        "mechanism-tagging": {
+          "items": 8,
+          "answered": 5,
+          "validOutput": 5,
+          "invalidOutput": 0,
+          "providerFailed": 3,
+          "tags": 1,
+          "tagsInReference": 0,
+          "referenceTags": 8,
+          "referenceTagsRecovered": 0,
+          "rejectedTags": 0,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0.375,
+          "tagPrecision": 0,
+          "tagRecall": 0
+        },
+        "contradiction-detection": {
+          "items": 6,
+          "answered": 6,
+          "validOutput": 6,
+          "invalidOutput": 0,
+          "providerFailed": 0,
+          "pairs": 6,
+          "relationCorrect": 4,
+          "conflictingPairs": 3,
+          "conflictsDetected": 3,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0,
+          "relationAccuracy": 0.667,
+          "conflictRecall": 1
+        }
+      },
+      "operations": {
+        "requests": 45,
+        "attempts": 45,
+        "providerFailures": {
+          "provider_error": 7,
+          "truncated": 1
+        },
+        "promptTokens": 17777,
+        "completionTokens": 5166,
+        "reasoningTokens": 0,
+        "costUsdReported": 0,
+        "costReports": 38,
+        "quarantinedBeforeRequest": 1,
+        "blockedBeforeRequest": 0,
+        "structuredModes": {
+          "json_schema": 37
+        },
+        "latencyMsMedian": 5230,
+        "latencyMsP90": 15470,
+        "retryOrFallbackAttempts": 0
+      },
+      "consistency": {
+        "items": 4,
+        "meanAgreement": 0.25
+      },
+      "servedModels": [
+        "dots-studio/dots-3-note-preview:free"
+      ],
+      "upstreamProviders": [
+        "AtlasCloud"
+      ],
+      "endpointChecks": [
+        {
+          "model": "dots-studio/dots-3-note-preview:free",
+          "status": "all_endpoints_zero_priced",
+          "providers": [
+            "AtlasCloud"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "baidu/ernie-5.5-flash-preview:free",
+      "status": "completed",
+      "metrics": {
+        "claim-extraction": {
+          "items": 21,
+          "answered": 18,
+          "validOutput": 18,
+          "invalidOutput": 0,
+          "providerFailed": 2,
+          "proposals": 54,
+          "accepted": 47,
+          "citationFailures": 0,
+          "ungroundedNumbers": 0,
+          "certaintyOrRecommendation": 0,
+          "vocabularyErrors": 0,
+          "referenceItems": 12,
+          "acceptedOnRef": 35,
+          "referenceConsistent": 12,
+          "referenceClaims": 12,
+          "referenceClaimsRecovered": 8,
+          "directionAgreement": 16,
+          "mechanismTags": 4,
+          "mechanismTagsInReference": 4,
+          "nullAdverseItems": 5,
+          "nullAdverseReported": 5,
+          "nullAdverseUpgradedToSupports": 1,
+          "dossierItems": 3,
+          "geographyMisattributions": 0,
+          "nonDescriptiveDossierClaims": 0,
+          "quarantined": 1,
+          "correctQuarantine": 1,
+          "abstentionItems": 3,
+          "correctAbstention": 3,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0.1,
+          "referenceConsistentPrecision": 0.343,
+          "referenceRecall": 0.667,
+          "unsupportedProposalRate": 0.13,
+          "citationFailureRate": 0,
+          "mechanismTagPrecision": 1,
+          "correctAbstentionRate": 1,
+          "nullAdverseReportedRate": 1
+        },
+        "evidence-gap-detection": {
+          "items": 3,
+          "answered": 2,
+          "validOutput": 2,
+          "invalidOutput": 0,
+          "providerFailed": 1,
+          "stages": 10,
+          "stagesCorrect": 10,
+          "referenceGaps": 10,
+          "gapsDetected": 10,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0.333,
+          "stageAccuracy": 1,
+          "gapRecall": 1
+        },
+        "source-classification": {
+          "items": 8,
+          "answered": 8,
+          "validOutput": 8,
+          "invalidOutput": 0,
+          "providerFailed": 0,
+          "exact": 7,
+          "acceptable": 7,
+          "citationFailures": 1,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0,
+          "exactAccuracy": 0.875,
+          "acceptableAccuracy": 0.875
+        },
+        "mechanism-tagging": {
+          "items": 8,
+          "answered": 8,
+          "validOutput": 8,
+          "invalidOutput": 0,
+          "providerFailed": 0,
+          "tags": 7,
+          "tagsInReference": 6,
+          "referenceTags": 14,
+          "referenceTagsRecovered": 6,
+          "rejectedTags": 2,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0,
+          "tagPrecision": 0.857,
+          "tagRecall": 0.429
+        },
+        "contradiction-detection": {
+          "items": 6,
+          "answered": 6,
+          "validOutput": 6,
+          "invalidOutput": 0,
+          "providerFailed": 0,
+          "pairs": 6,
+          "relationCorrect": 4,
+          "conflictingPairs": 3,
+          "conflictsDetected": 2,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0,
+          "relationAccuracy": 0.667,
+          "conflictRecall": 0.667
+        }
+      },
+      "operations": {
+        "requests": 45,
+        "attempts": 53,
+        "providerFailures": {
+          "truncated": 3
+        },
+        "promptTokens": 21529,
+        "completionTokens": 68062,
+        "reasoningTokens": 61022,
+        "costUsdReported": 0,
+        "costReports": 45,
+        "quarantinedBeforeRequest": 1,
+        "blockedBeforeRequest": 0,
+        "structuredModes": {
+          "json_schema": 42
+        },
+        "latencyMsMedian": 8299,
+        "latencyMsP90": 28246,
+        "retryOrFallbackAttempts": 8
+      },
+      "consistency": {
+        "items": 4,
+        "meanAgreement": 0.25
+      },
+      "servedModels": [
+        "baidu/ernie-5.5-flash-preview:free"
+      ],
+      "upstreamProviders": [
+        "Baidu"
+      ],
+      "endpointChecks": [
+        {
+          "model": "baidu/ernie-5.5-flash-preview:free",
+          "status": "all_endpoints_zero_priced",
+          "providers": [
+            "Baidu"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "inclusionai/ling-3.2-flash:free",
+      "status": "completed",
+      "metrics": {
+        "claim-extraction": {
+          "items": 21,
+          "answered": 15,
+          "validOutput": 15,
+          "invalidOutput": 0,
+          "providerFailed": 5,
+          "proposals": 16,
+          "accepted": 16,
+          "citationFailures": 0,
+          "ungroundedNumbers": 0,
+          "certaintyOrRecommendation": 0,
+          "vocabularyErrors": 0,
+          "referenceItems": 11,
+          "acceptedOnRef": 16,
+          "referenceConsistent": 6,
+          "referenceClaims": 11,
+          "referenceClaimsRecovered": 5,
+          "directionAgreement": 8,
+          "mechanismTags": 7,
+          "mechanismTagsInReference": 7,
+          "nullAdverseItems": 5,
+          "nullAdverseReported": 4,
+          "dossierItems": 1,
+          "geographyMisattributions": 0,
+          "nonDescriptiveDossierClaims": 0,
+          "quarantined": 1,
+          "correctQuarantine": 1,
+          "abstentionItems": 3,
+          "correctAbstention": 3,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0.25,
+          "referenceConsistentPrecision": 0.375,
+          "referenceRecall": 0.455,
+          "unsupportedProposalRate": 0,
+          "citationFailureRate": 0,
+          "mechanismTagPrecision": 1,
+          "correctAbstentionRate": 1,
+          "nullAdverseReportedRate": 0.8
+        },
+        "evidence-gap-detection": {
+          "items": 3,
+          "answered": 3,
+          "validOutput": 3,
+          "invalidOutput": 0,
+          "providerFailed": 0,
+          "stages": 15,
+          "stagesCorrect": 15,
+          "referenceGaps": 13,
+          "gapsDetected": 13,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0,
+          "stageAccuracy": 1,
+          "gapRecall": 1
+        },
+        "source-classification": {
+          "items": 8,
+          "answered": 8,
+          "validOutput": 8,
+          "invalidOutput": 0,
+          "providerFailed": 0,
+          "exact": 5,
+          "acceptable": 5,
+          "citationFailures": 2,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0,
+          "exactAccuracy": 0.625,
+          "acceptableAccuracy": 0.625
+        },
+        "mechanism-tagging": {
+          "items": 8,
+          "answered": 8,
+          "validOutput": 8,
+          "invalidOutput": 0,
+          "providerFailed": 0,
+          "tags": 5,
+          "tagsInReference": 4,
+          "referenceTags": 14,
+          "referenceTagsRecovered": 4,
+          "rejectedTags": 1,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0,
+          "tagPrecision": 0.8,
+          "tagRecall": 0.286
+        },
+        "contradiction-detection": {
+          "items": 6,
+          "answered": 6,
+          "validOutput": 6,
+          "invalidOutput": 0,
+          "providerFailed": 0,
+          "pairs": 6,
+          "relationCorrect": 2,
+          "conflictingPairs": 3,
+          "conflictsDetected": 1,
+          "structuredValidityRate": 1,
+          "providerFailureRate": 0,
+          "relationAccuracy": 0.333,
+          "conflictRecall": 0.333
+        }
+      },
+      "operations": {
+        "requests": 45,
+        "attempts": 67,
+        "providerFailures": {
+          "rate_limited_upstream": 4,
+          "truncated": 1
+        },
+        "promptTokens": 19760,
+        "completionTokens": 4961,
+        "reasoningTokens": 0,
+        "costUsdReported": 0,
+        "costReports": 41,
+        "quarantinedBeforeRequest": 1,
+        "blockedBeforeRequest": 0,
+        "structuredModes": {
+          "json_schema": 40
+        },
+        "latencyMsMedian": 9469,
+        "latencyMsP90": 63453,
+        "retryOrFallbackAttempts": 22
+      },
+      "consistency": {
+        "items": 4,
+        "meanAgreement": 0.583
+      },
+      "servedModels": [
+        "inclusionai/ling-3.2-flash:free"
+      ],
+      "upstreamProviders": [
+        "Ant Digital"
+      ],
+      "endpointChecks": [
+        {
+          "model": "inclusionai/ling-3.2-flash:free",
+          "status": "all_endpoints_zero_priced",
+          "providers": [
+            "Ant Digital"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "google/gemma-4-26b-a4b-it:free",
+      "status": "stopped: model unavailable for this account and data policy (rate_limited_upstream)",
+      "metrics": {
+        "claim-extraction": {
+          "items": 21,
+          "answered": 0,
+          "validOutput": 0,
+          "invalidOutput": 0,
+          "providerFailed": 20,
+          "notSent": 14,
+          "quarantined": 1,
+          "correctQuarantine": 1,
+          "structuredValidityRate": null,
+          "providerFailureRate": 1,
+          "referenceConsistentPrecision": null,
+          "referenceRecall": null,
+          "unsupportedProposalRate": null,
+          "citationFailureRate": null,
+          "mechanismTagPrecision": null,
+          "correctAbstentionRate": null,
+          "nullAdverseReportedRate": null
+        },
+        "evidence-gap-detection": {
+          "items": 3,
+          "answered": 0,
+          "validOutput": 0,
+          "invalidOutput": 0,
+          "providerFailed": 3,
+          "notSent": 3,
+          "structuredValidityRate": null,
+          "providerFailureRate": 1,
+          "stageAccuracy": null,
+          "gapRecall": null
+        },
+        "source-classification": {
+          "items": 8,
+          "answered": 0,
+          "validOutput": 0,
+          "invalidOutput": 0,
+          "providerFailed": 8,
+          "notSent": 8,
+          "structuredValidityRate": null,
+          "providerFailureRate": 1,
+          "exactAccuracy": null,
+          "acceptableAccuracy": null
+        },
+        "mechanism-tagging": {
+          "items": 8,
+          "answered": 0,
+          "validOutput": 0,
+          "invalidOutput": 0,
+          "providerFailed": 8,
+          "notSent": 8,
+          "structuredValidityRate": null,
+          "providerFailureRate": 1,
+          "tagPrecision": null,
+          "tagRecall": null
+        },
+        "contradiction-detection": {
+          "items": 6,
+          "answered": 0,
+          "validOutput": 0,
+          "invalidOutput": 0,
+          "providerFailed": 6,
+          "notSent": 6,
+          "structuredValidityRate": null,
+          "providerFailureRate": 1,
+          "relationAccuracy": null,
+          "conflictRecall": null
+        }
+      },
+      "operations": {
+        "requests": 6,
+        "attempts": 18,
+        "providerFailures": {
+          "rate_limited_upstream": 6,
+          "model_circuit_open": 14,
+          "not_run": 25
+        },
+        "promptTokens": 0,
+        "completionTokens": 0,
+        "reasoningTokens": 0,
+        "costUsdReported": 0,
+        "costReports": 0,
+        "quarantinedBeforeRequest": 1,
+        "blockedBeforeRequest": 0,
+        "structuredModes": {},
+        "latencyMsMedian": 65734,
+        "latencyMsP90": 65858,
+        "retryOrFallbackAttempts": 12
+      },
+      "consistency": {
+        "items": 0,
+        "meanAgreement": null
+      },
+      "servedModels": [],
+      "upstreamProviders": [],
+      "endpointChecks": [
+        {
+          "model": "google/gemma-4-26b-a4b-it:free",
+          "status": "all_endpoints_zero_priced",
+          "providers": [
+            "Google AI Studio"
+          ]
+        }
+      ]
+    }
+  ],
+  "rescoredAt": "2026-11-16T14:40:47.604Z",
+  "rescoreNote": "Metrics recomputed from the saved run with the current scorer; no model was queried again."
+}

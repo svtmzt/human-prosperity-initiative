@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {readFile,stat} from "node:fs/promises";
 import {createHash} from "node:crypto";
 import {compareScenarios} from "../research-tools/household-resilience-model.mjs";
-import {buildHubosManifest,MANIFEST_PATH,WORKSTREAMS} from "../scripts/hubos-sync-manifest.mjs";
+import {buildHubosManifest,buildHpiAiStatusDelta,MANIFEST_PATH,HPI_AI_DELTA_PATH,EXECUTED_MANIFEST_SHA256,WORKSTREAMS} from "../scripts/hubos-sync-manifest.mjs";
 
 const read=p=>readFile(p,"utf8");
 const sha=b=>createHash("sha256").update(b).digest("hex");
@@ -83,7 +83,7 @@ test("pages state limits honestly: no adoption, synthetic labels, NO-GO fieldwor
  assert.match(slice,/SYNTHETIC ONLY/);assert.match(slice,/not authorised fieldwork/);
  for(const ctx of ["Newham","Recife","Naples"])assert.ok(slice.includes(ctx),ctx);
  assert.match(await read("dist/systems-lab.html"),/ILLUSTRATIVE MODEL · SYNTHETIC INPUTS/);
- assert.match(await read("dist/intelligence/ai-assistance.html"),/Inference provider: not connected/);
+ assert.match(await read("dist/intelligence/ai-assistance.html"),/Public website: no AI inference/);
  const recife=await read("dist/intelligence/contexts/recife.html");
  assert.match(recife,/Fieldwork: NO-GO/);
  const fact=await read("dist/intelligence/facts/newham-pc-caseload-rate-2023-24.html");
@@ -101,11 +101,19 @@ test("established routes, tools and research pages still exist and link into the
  assert.ok((await read("dist/research.html")).includes('href="/intelligence"'));
  for(const id of ["hpi-scale","gpi","see","gan","esl","hpi-ai","hpi-qa"])await stat("dist/initiatives/"+id+".html");
 });
-test("HubOS manifest is current, additive, collision-free and never creates a company record",async()=>{
+test("executed HubOS manifest is immutable; HPI-AI delta is current, non-colliding and never marks human gates done",async()=>{
  const project=JSON.parse(await read("portfolio/project.json")),roadmap=JSON.parse(await read("portfolio/public-roadmap.json"));
- const expected=JSON.stringify(buildHubosManifest(project,roadmap),null,2)+"\n";
- assert.equal(await read(MANIFEST_PATH),expected,"run node scripts/hubos-sync-manifest.mjs");
- const m=JSON.parse(expected);
+ const executedText=await read(MANIFEST_PATH);
+ assert.equal(createHash("sha256").update(executedText).digest("hex"),EXECUTED_MANIFEST_SHA256,"executed registration (HubOS #152) must never be rewritten");
+ const delta=JSON.stringify(buildHpiAiStatusDelta(project,roadmap,JSON.parse(executedText)),null,2)+"\n";
+ assert.equal(await read(HPI_AI_DELTA_PATH),delta,"run node scripts/hubos-sync-manifest.mjs");
+ const d=JSON.parse(delta);
+ assert.equal(d.executed,false);assert.equal(d.collisions.length,0);assert.equal(d.createsCompanyRecord,false);
+ assert.ok([...d.updates.map(u=>u.id),...Object.values(d.appends).flat().map(r=>r.id)].every(id=>/^hpi-(ai|link-hpi-ai)/.test(id)),"delta touches HPI-AI only");
+ assert.ok(d.appends.tasks.filter(t=>/HUMAN\/EXTERNAL GATE/.test(t.description)).every(t=>t.status!=="done"));
+ assert.ok(d.updates.filter(u=>u.collection==="tasks").every(u=>u.set.status!=="done"||!/GATE/.test(u.set.description||"")));
+ assert.ok(typeof buildHubosManifest==="function");
+ const m=JSON.parse(executedText);
  assert.equal(m.executed,false);assert.equal(m.createsCompanyRecord,false);assert.equal(m.status,"pending_operator_execution");
  assert.ok(!("companies" in m.records));
  const all=[...m.records.projects,...m.records.epics,...m.records.tasks];

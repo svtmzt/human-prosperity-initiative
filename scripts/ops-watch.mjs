@@ -1,20 +1,16 @@
 /**
  * HPI public production watch: no credentials, customer records, paid APIs or changes.
- * CircleCI scheduled pipeline only. Failure becomes a CI failure, not a guarantee
+ * GitHub Actions scheduled workflow only. Failure becomes a CI failure, not a guarantee
  * that email/SMS/webhook notifications are configured for the maintainer.
  */
 import {mkdir,writeFile} from "node:fs/promises";
 import {pathToFileURL} from "node:url";
+import {REQUIRED_CHECKS,latestStatusStates,requiredStates} from "./ci-checks.mjs";
 
 export const BASE="https://human-prosperity-initiative.vercel.app";
 export const REPO="https://api.github.com/repos/svtmzt/human-prosperity-initiative";
 const SHA=/^[0-9a-f]{40}$/;
 const ROUTES=["/","/mission","/research","/library","/roadmap","/initiatives/web-02","/initiatives/f0-03-1","/status","/publication.json"];
-const STATUS_CONTEXTS=[
- "ci/circleci: website-quality",
- "ci/circleci: browser-accessibility",
- "Vercel"
-];
 
 async function request(url,fetchImpl){
  const response=await fetchImpl(url,{
@@ -28,13 +24,7 @@ async function request(url,fetchImpl){
  return response;
 }
 
-export function latestStates(statuses){
- const observed=new Map();
- for(const item of statuses){
-  if(!observed.has(item.context))observed.set(item.context,item.state);
- }
- return observed;
-}
+export const latestStates=latestStatusStates;
 
 export async function inspect({fetchImpl=fetch,now=new Date()}={}){
  const report={
@@ -78,9 +68,12 @@ export async function inspect({fetchImpl=fetch,now=new Date()}={}){
  if(mainSha){
   try{
    const data=await (await request(REPO+"/commits/"+mainSha+"/status",fetchImpl)).json();
-   const statuses=latestStates(Array.isArray(data.statuses)?data.statuses:[]);
-   for(const context of STATUS_CONTEXTS){
-    const status=statuses.get(context)||"missing";
+   const runs=await (await request(REPO+"/commits/"+mainSha+"/check-runs?per_page=100",fetchImpl)).json();
+   const states=requiredStates({
+    statuses:Array.isArray(data.statuses)?data.statuses:[],
+    checkRuns:Array.isArray(runs.check_runs)?runs.check_runs:[]});
+   for(const context of REQUIRED_CHECKS){
+    const status=states[context];
     report.ci[context]=status;
     if(status!=="success"){
      const ciMayStillBeRunning=(status==="pending"||status==="missing")&&
@@ -111,7 +104,7 @@ async function main(){
  await writeFile("qa-artifacts/ops-watch-report.json",JSON.stringify(result,null,2)+"\n");
  console.log("HPI public watch",result.result,JSON.stringify({
   publication:result.publication,checks:result.ci,failures:result.issues,warnings:result.warnings,
-  costCoverage:"Only public commit-velocity proxy. Vercel/CircleCI/Neon billed charges need separately authorised access."
+  costCoverage:"Only public commit-velocity proxy. Vercel/Neon billed charges need separately authorised access."
  }));
  if(result.result!=="passed")process.exitCode=1;
 }

@@ -148,9 +148,8 @@ test("Vercel fails publishing when validations fail, only local scripts are exec
  assert.match(csp,/script-src 'self'/);
  assert.match(csp,/connect-src 'self'/);
  assert.match(csp,/frame-ancestors 'none'/);
- const ci=await read(".circleci/config.yml");
+ const ci=await read(".github/workflows/ci.yml");
  assert.match(ci,/npm run check/);
- assert.doesNotMatch(ci,/github-actions|uses:\s*actions\//i);
  const activity=await read("dist/activity.js");
  assert.match(activity,/textContent/);
  assert.doesNotMatch(activity,/innerHTML|document\.write/);

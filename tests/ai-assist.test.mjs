@@ -120,9 +120,9 @@ test("request and input budgets stop runs, and partial failures are reported hon
 test("published AI status discloses the disabled state and zero AI content",()=>{
  const s=buildAiStatus(readAiConfig({}));
  assert.equal(s.productionInference,false);assert.equal(s.publishedAiGeneratedContent,0);
- assert.match(s.statement,/No inference provider is connected/);
+ assert.match(s.statement,/public website performs no AI inference/);assert.equal(s.websiteCallsModels,false);assert.equal(s.publicHostedInference,"disabled");
  assert.ok(s.prohibitedUses.includes("Decisions about individuals"));
- assert.equal(s.promptTemplates.length,2);assert.ok(s.promptTemplates.every(t=>/^[a-f0-9]{64}$/.test(t.sha256)));
+ assert.equal(s.promptTemplates.length,5);assert.ok(s.promptTemplates.every(t=>/^[a-f0-9]{64}$/.test(t.sha256)));
 });
 test("deterministic baseline profiles designs without AI and avoids known false positives",async()=>{
  const sources=await evidenceSourceTexts();
