@@ -253,6 +253,9 @@ export function createOllamaNativeProvider(config,{fetchImpl=globalThis.fetch,ap
   }};
 }
 
+/** Embedding / reranking models cannot answer chat tasks; never auto-select them. */
+export const isNonChatModel=id=>/(?:^|[\/:_-])(?:[a-z0-9.]*-)?(?:embed(?:ding)?s?|rerank(?:er)?|bge|e5|gte)(?:$|[\/:_.-])/i.test(String(id));
+
 /** Local provider: loopback runtime with model discovery when no model is configured. */
 export async function createLocalProvider(config,{fetchImpl=globalThis.fetch,apiKey}={}){
  if(config?.provider!=="local"||!config.available)return {provider:createDisabledProvider(config?.reasonDisabled||"Local provider not configured."),discovery:null};
@@ -260,8 +263,11 @@ export async function createLocalProvider(config,{fetchImpl=globalThis.fetch,api
  if(!discovery.ok)return {provider:{...createDisabledProvider(discovery.reason),id:"local",kind:"local",offline:true},discovery};
  let model=config.model;
  if(model&&!discovery.models.includes(model))return {provider:createDisabledProvider("Configured model '"+model+"' is not served by the local runtime. Available: "+discovery.models.slice(0,10).join(", ")),discovery};
- if(!model)model=discovery.models[0]||null;
- if(!model)return {provider:createDisabledProvider("The local runtime serves no models."),discovery};
+ const chat=discovery.models.filter(m=>!isNonChatModel(m));
+ discovery.chatModels=chat;discovery.nonChatModels=discovery.models.filter(isNonChatModel);
+ if(model&&isNonChatModel(model))return {provider:createDisabledProvider("Model '"+model+"' looks like an embedding or reranking model, not a chat model."),discovery};
+ if(!model)model=chat[0]||null;
+ if(!model)return {provider:createDisabledProvider("The local runtime serves no chat models"+(discovery.nonChatModels.length?" (only embedding/reranking models: "+discovery.nonChatModels.join(", ")+")":"")+"."),discovery};
  const provider=config.runtime==="ollama"&&config.localApi!=="openai"
   ?createOllamaNativeProvider(config,{fetchImpl,apiKey,model})
   :createOpenAiCompatibleProvider(config,{fetchImpl,apiKey,model});

@@ -8,7 +8,7 @@ import {createHash} from "node:crypto";
 import {readAiConfig,describeAiConfig,readApiKey} from "../research-tools/ai-assist/config.mjs";
 import {verifyFreePricing,classifyModel,parseCatalog,catalogFreshness,loadCatalog,verifyModelEndpoints,catalogSnapshot} from "../research-tools/ai-assist/catalog.mjs";
 import {selectModels,validateSelectionPolicy} from "../research-tools/ai-assist/selection.mjs";
-import {createOpenRouterProvider,createLocalProvider,discoverLocalModels,buildOpenRouterBody,classifyHttpError,interpretCompletion,CircuitBreaker,buildOllamaBody,interpretOllama} from "../research-tools/ai-assist/providers.mjs";
+import {createOpenRouterProvider,createLocalProvider,discoverLocalModels,buildOpenRouterBody,classifyHttpError,interpretCompletion,CircuitBreaker,buildOllamaBody,interpretOllama,isNonChatModel} from "../research-tools/ai-assist/providers.mjs";
 import {MemoryQuotaStore,QuotaLedger,parseKeyStatus} from "../research-tools/ai-assist/quota.mjs";
 import {checkRouting,classifySource,screenPersonalData} from "../research-tools/ai-assist/policy.mjs";
 import {validateClaimExtraction,validateSourceClassification,validateMechanismTagging,validateEvidenceGaps,validateContradiction,parseModelJson,outputSchemaFor} from "../research-tools/ai-assist/safeguards.mjs";
@@ -401,4 +401,9 @@ test("Ollama native API: thinking off, explicit context window, JSON-schema form
   assert.equal(bodies.length,2);assert.equal(bodies[0].think,false);assert.ok(!("think" in bodies[1]));
   assert.equal(bodies[1].options.num_ctx,16384);assert.equal(bodies[1].options.num_predict,1600);
  }finally{server.close()}
+});
+
+test("local discovery distinguishes chat models from embedding/reranking models",()=>{
+ for(const id of ["qwen3-embedding:0.6b","nomic-embed-text:latest","bge-m3","mxbai-embed-large","qwen3-reranker:4b"])assert.equal(isNonChatModel(id),true,id);
+ for(const id of ["qwen3.5:4b-q4_K_M","qwen3.5:9b","nemotron-3-nano:4b","hf.co/ISTA-DASLab/Qwen3.8-27B-GSQ-RCO-GGUF:IQ3_S","llama3.2:3b"])assert.equal(isNonChatModel(id),false,id);
 });

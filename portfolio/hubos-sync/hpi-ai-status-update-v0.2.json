@@ -24,7 +24,7 @@
     "appendProjects": 0,
     "appendEpics": 2,
     "appendTasks": 4,
-    "appendTaskResources": 6,
+    "appendTaskResources": 7,
     "collisions": 0
   },
   "updates": [
@@ -32,7 +32,7 @@
       "collection": "projects",
       "id": "hpi-ai",
       "set": {
-        "description": "A tested AI research-assistance layer with local and verified-free cloud providers, grounding, citation and numeric verification, injection defence, data-routing policy and mandatory human review; no paid inference and no AI on the public website. Canonical issue https://github.com/svtmzt/human-prosperity-initiative/issues/101. Gate: Internal research mode is operational with verified free OpenRouter models and a published held-out evaluation (automated agreement with HPI's own curated reference, not independent review). Local-model live testing is blocked: no local runtime was reachable from the build environment. Hosted public inference is not deployed: it needs a durable quota store, authentication and privacy/legal approval (#103). No AI output is published as evidence.",
+        "description": "A tested AI research-assistance layer with local and verified-free cloud providers, grounding, citation and numeric verification, injection defence, data-routing policy and mandatory human review; no paid inference and no AI on the public website. Canonical issue https://github.com/svtmzt/human-prosperity-initiative/issues/101. Gate: Internal research mode is operational with verified free OpenRouter models and a published held-out evaluation (automated agreement with HPI's own curated reference, not independent review). Local inference is live-tested on the founder's Mac (Ollama, qwen3.5:4b): bounded classification and extraction runs produced validated review-queue items; no broad local evaluation yet. Hosted public inference is not deployed: it needs a durable quota store, authentication and privacy/legal approval (#103). No AI output is published as evidence.",
         "updatedAt": "2026-11-16T18:00:00.000Z"
       }
     },
@@ -77,11 +77,11 @@
         "companyId": "human-prosperity-initiative",
         "projectId": "hpi-ai",
         "epicId": "hpi-ai-3",
-        "title": "HPI-AI.3-T02 — Live local-model evaluation (Ollama/LM Studio/llama.cpp/LiteLLM on a researcher machine)",
-        "description": "HUMAN/EXTERNAL GATE — remains open until genuine evidence exists. Canonical source: https://github.com/svtmzt/human-prosperity-initiative/issues/101.",
+        "title": "HPI-AI.3-T02 — Live local-model run through the HPI CLI (Ollama, qwen3.5:4b) producing validated review-queue items",
+        "description": "Canonical source: https://github.com/svtmzt/human-prosperity-initiative/issues/101. Technical PR evidence: https://github.com/svtmzt/human-prosperity-initiative/pull/105.",
         "priority": "p1",
-        "category": "governance",
-        "status": "backlog",
+        "category": "engineering",
+        "status": "done",
         "sprint": "next",
         "rank": 30,
         "createdAt": "2026-11-16T18:00:00.000Z",
@@ -148,6 +148,15 @@
         "taskId": "hpi-ai-3-t02",
         "label": "HPI-AI.3-T02 canonical HPI issue",
         "url": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+        "kind": "link",
+        "createdAt": "2026-11-16T18:00:00.000Z",
+        "updatedAt": "2026-11-16T18:00:00.000Z"
+      },
+      {
+        "id": "hpi-link-hpi-ai-3-t02-pr",
+        "taskId": "hpi-ai-3-t02",
+        "label": "HPI-AI.3-T02 technical PR evidence",
+        "url": "https://github.com/svtmzt/human-prosperity-initiative/pull/105",
         "kind": "link",
         "createdAt": "2026-11-16T18:00:00.000Z",
         "updatedAt": "2026-11-16T18:00:00.000Z"

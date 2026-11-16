@@ -7,8 +7,8 @@ Distinguish these achievements — they are different:
 | Achievement | State |
 |---|---|
 | Adapter implemented (local, OpenRouter, generic) | Yes |
-| Provider connected | OpenRouter: yes (internal CLI, key in the session's secret store). Local: Ollama discovered on the founder's Mac (5 models); real HPI tasks not yet validated (see below) |
-| Real inference tested | Yes, OpenRouter free models only |
+| Provider connected | OpenRouter: yes (internal CLI, key in the session's secret store). Local: Ollama 0.40.16 on the founder's Mac (5 models discovered) |
+| Real inference tested | Yes: OpenRouter free models (46-item evaluation); local `qwen3.5:4b-q4_K_M` on two bounded tasks (founder-run, see below) |
 | Research quality evaluated | Automated agreement with HPI's own curated reference; **no independent or human expert review yet** |
 | Public inference securely enabled | No |
 | Production-scalable service | No |
@@ -31,7 +31,12 @@ For `HPI_AI_LOCAL_RUNTIME=ollama` the adapter therefore uses the **native `/api/
 
 `done_reason:"length"` is always treated as a truncation, and output that contains only thinking text is treated as reasoning exhaustion. Neither is ever accepted. Set `HPI_AI_LOCAL_API=openai` to use `/v1` instead; LM Studio, llama.cpp and LiteLLM always use it.
 
-**Local live evaluation remains pending** until a real HPI task on a local model produces a validated human-review candidate. Sample run on the researcher's machine:
+**Live local result (16 Nov 2026, founder-run on head `3e21274`, [evidence](https://github.com/svtmzt/human-prosperity-initiative/pull/105#issuecomment-6920780819)):** with real Ollama 0.40.16 and `qwen3.5:4b-q4_K_M`, no mocks:
+- `ai:run -- source-classification --ids E04` returned `completed_pending_human_review` with 1 validated queue item, in 4.2 s;
+- `ai:extract -- --ids E04` returned `completed_pending_human_review` with 2 validated candidate claims, in 4.3 s;
+- 0 failures and 0 blocked items; outputs stayed in private queues.
+
+This shows that local inference works on these bounded tasks. It does **not** show scientific validity or broad reliability. A held-out local evaluation and a comparison of at least two local models (for example `qwen3.5:9b`) are still to do. Embedding-only models (for example `qwen3-embedding:0.6b`) are not chat models; select a chat model with `HPI_AI_MODEL`. Sample run on the researcher's machine:
 
 ```
 ollama list

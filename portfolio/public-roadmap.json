@@ -2743,7 +2743,7 @@
       "id": "HPI-AI",
       "kind": "platform",
       "summary": "A tested AI research-assistance layer with local and verified-free cloud providers, grounding, citation and numeric verification, injection defence, data-routing policy and mandatory human review; no paid inference and no AI on the public website.",
-      "gate": "Internal research mode is operational with verified free OpenRouter models and a published held-out evaluation (automated agreement with HPI's own curated reference, not independent review). Local-model live testing is blocked: no local runtime was reachable from the build environment. Hosted public inference is not deployed: it needs a durable quota store, authentication and privacy/legal approval (#103). No AI output is published as evidence.",
+      "gate": "Internal research mode is operational with verified free OpenRouter models and a published held-out evaluation (automated agreement with HPI's own curated reference, not independent review). Local inference is live-tested on the founder's Mac (Ollama, qwen3.5:4b): bounded classification and extraction runs produced validated review-queue items; no broad local evaluation yet. Hosted public inference is not deployed: it needs a durable quota store, authentication and privacy/legal approval (#103). No AI output is published as evidence.",
       "deliverables": [
         {
           "label": "AI status, evaluation and safeguards",
@@ -2804,9 +2804,10 @@
             },
             {
               "id": "HPI-AI.3-T02",
-              "title": "Live local-model evaluation (Ollama/LM Studio/llama.cpp/LiteLLM on a researcher machine)",
-              "status": "blocked",
-              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101"
+              "title": "Live local-model run through the HPI CLI (Ollama, qwen3.5:4b) producing validated review-queue items",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/105"
             },
             {
               "id": "HPI-AI.3-T03",
