@@ -2,7 +2,7 @@
 
 **What this is:** the first live evaluation of verified-free OpenRouter models on HPI research tasks. **What it is not:** independent or expert validation. Every "accuracy" figure below is automated agreement with HPI's own curated knowledge base (written by HPI contributors before this evaluation, not independently reviewed — gate G-05 open). A verbatim quote proves that text exists in the source, not that the model's interpretation is right. No model output from this evaluation has been published; it sits in a private, git-ignored review queue.
 
-Machine-readable results: [`research/ai/evaluation-results-v1.json`](../../research/ai/evaluation-results-v1.json) (aggregates only). Set: [`research/ai/evaluation-set-v1.json`](../../research/ai/evaluation-set-v1.json). Architecture: [AI research assistance V2](ai-research-assistance-v2.md).
+Machine-readable results: [`research/ai/evaluation-results-v1.json`](../../research/ai/evaluation-results-v1.json) (aggregates only). Set: [`research/ai/evaluation-set-v1.json`](../../research/ai/evaluation-set-v1.json). Architecture: [AI research assistance V2](ai-research-assistance-v2.md). Release: [PR #105](https://github.com/svtmzt/human-prosperity-initiative/pull/105); tracking: [#101](https://github.com/svtmzt/human-prosperity-initiative/issues/101).
 
 ## Method
 
