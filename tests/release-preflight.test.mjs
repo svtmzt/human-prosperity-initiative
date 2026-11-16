@@ -4,13 +4,16 @@ import {inspectRelease,validateCandidateUrl,currentCommitStatuses} from "../scri
 const SHA="a".repeat(40);
 const ORIGIN="https://human-prosperity-initiative-abc-hub-ai-workflows.vercel.app";
 const success=[
- {context:"ci/circleci: website-quality",state:"success"},
- {context:"ci/circleci: browser-accessibility",state:"success"},
- {context:"Vercel",state:"success"}
+ {name:"website-quality",state:"success"},
+ {name:"browser-accessibility",state:"success"},
+ {name:"Vercel",state:"success"}
 ];
-const mock=(statuses=success,revision=SHA,observedSha=SHA)=>async url=>({
- status:200,json:async()=>url.includes("/publication.json")?{revision}:{
-  sha:observedSha,statuses}
+const asRun=(x,i)=>({id:i+1,name:x.name,app:{slug:"github-actions"},
+ status:x.state==="pending"?"queued":"completed",conclusion:x.state==="pending"?null:x.state});
+const mock=(checks=success,revision=SHA,observedSha=SHA)=>async url=>({
+ status:200,json:async()=>url.includes("/publication.json")?{revision}:
+  url.includes("/check-runs")?{check_runs:checks.filter(x=>x.name!=="Vercel").map(asRun)}:
+  {sha:observedSha,statuses:checks.filter(x=>x.name==="Vercel").map(x=>({context:x.name,state:x.state}))}
 });
 test("WEB-01 preview release preflight requires exact verified merged SHA and candidate manifest",async()=>{
  const report=await inspectRelease({sha:SHA,candidateOrigin:ORIGIN,fetchImpl:mock()});
@@ -22,8 +25,10 @@ test("WEB-01 preview release preflight requires exact verified merged SHA and ca
 test("WEB-01 release preflight never accepts missing, pending or failed post-merge CI",async()=>{
  for(const statuses of [
   success.slice(0,2),
-  success.map(x=>x.context==="ci/circleci: browser-accessibility"?{...x,state:"pending"}:x),
-  success.map(x=>x.context==="Vercel"?{...x,state:"failure"}:x)
+  success.slice(1),
+  success.map(x=>x.name==="website-quality"?{...x,state:"failure"}:x),
+  success.map(x=>x.name==="browser-accessibility"?{...x,state:"pending"}:x),
+  success.map(x=>x.name==="Vercel"?{...x,state:"failure"}:x)
  ]){
   const result=await inspectRelease({sha:SHA,candidateOrigin:ORIGIN,fetchImpl:mock(statuses)});
   assert.equal(result.readyForHumanPromotion,false);

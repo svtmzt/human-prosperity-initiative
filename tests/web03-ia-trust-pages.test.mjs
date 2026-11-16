@@ -136,12 +136,13 @@ test("published browser scripts do not knowingly add third-party tracking or bro
 });
 
 
-test("every CircleCI job checks out the current canonical repository without old-owner redirects",async()=>{
- const config=await read(".circleci/config.yml");
- const current="https://github.com/svtmzt/human-prosperity-initiative.git";
- assert.ok(config.includes(current));
- assert.equal(config.split("- exact-checkout").length-1,3,"all three jobs use the shared exact-SHA canonical checkout");
- assert.ok(!config.includes("https://github.com/saver1991/human-prosperity-initiative.git"));
+test("every CI job checks out the exact commit of the canonical repository with pinned actions",async()=>{
+ const ci=await read(".github/workflows/ci.yml");
+ assert.ok(!ci.includes("saver1991"),"no old-owner references");
+ assert.ok(!ci.includes("repository:"),"jobs check out this repository, not a redirect or fork");
+ assert.equal(ci.split("uses: actions/checkout@").length-1,3,"all three jobs check out the repository");
+ for(const use of ci.match(/uses:\s*\S+/g))assert.match(use,/@[0-9a-f]{40}$/,"action pinned to a full commit SHA: "+use);
+ assert.equal(ci.split("persist-credentials: false").length-1,3,"no job keeps a Git token in the workspace");
 });
 
 test("WEB-03.4 added audience-led project and tool discovery, with safe Newham chronology",async()=>{

@@ -49,19 +49,20 @@ test("roadmap read-only source and safe outage states are linked from the live w
  assert.ok(policy.includes("not_in_recent_feed"));
  assert.doesNotMatch(module,/innerHTML|document\.write|localStorage|method:"POST"/);
 });
-test("CI runs only on the self-hosted Mac runner with the same required job names, exact SHA and fork refusal",async()=>{
- const ci=await readFile(".circleci/config.yml","utf8");
- assert.match(ci,/resource_class: svtmzt\/m4-pro-mac/);
- assert.doesNotMatch(ci,/docker:|image:|cimg\/|mcr\.microsoft\.com|resource_class: (small|medium|large)/,"no CircleCI-hosted compute fallback");
- for(const job of ["website-quality","browser-accessibility","public-operations-watch"])assert.match(ci,new RegExp("\\n  "+job+":\\n    executor: mac-runner"));
- assert.match(ci,/test "\$\(git rev-parse HEAD\)" = "\$CIRCLE_SHA1"/);
- assert.match(ci,/CIRCLE_PR_USERNAME/);
- assert.match(ci,/requires:\n\s+- website-quality/);
- assert.doesNotMatch(ci,/persist_to_workspace|attach_workspace/,"no billed workspace transfer");
- assert.doesNotMatch(ci,/OPENROUTER|HPI_AI_API_KEY|context:/,"no secrets or contexts reach the personal runner");
+test("CI runs on free GitHub-hosted runners with the required job names, exact SHA and no secrets",async()=>{
+ const ci=await readFile(".github/workflows/ci.yml","utf8");
+ assert.doesNotMatch(ci,/self-hosted|svtmzt\/m4-pro-mac/,"no personal or self-hosted runner");
+ assert.match(ci,/runs-on: ubuntu-24\.04/);
+ for(const job of ["website-quality","browser-accessibility","public-operations-watch"])
+  assert.match(ci,new RegExp("\\n  "+job+":\\n    name: "+job+"\\n"));
+ assert.match(ci,/HPI_COMMIT_SHA: \$\{\{ github\.event\.pull_request\.head\.sha \|\| github\.sha \}\}/);
+ assert.match(ci,/test "\$\(git rev-parse HEAD\)" = "\$HPI_COMMIT_SHA"/);
+ assert.match(ci,/needs: website-quality/);
+ assert.match(ci,/permissions:\n  contents: read\n/,"read-only token");
+ assert.doesNotMatch(ci,/pull_request_target|\$\{\{\s*secrets\.|OPENROUTER|HPI_AI_API_KEY/,"no secrets reach CI and forks cannot gain write access");
 });
-test("the existing CircleCI release gate and independent operational watch remain intact",async()=>{
- const ci=await readFile(".circleci/config.yml","utf8");
+test("the CI release gate and independent operational watch remain intact",async()=>{
+ const ci=await readFile(".github/workflows/ci.yml","utf8");
  const cfg=JSON.parse(await readFile("vercel.json","utf8"));
  assert.ok(ci.includes("website-quality:"));
  assert.ok(ci.includes("browser-accessibility:"));
@@ -69,18 +70,20 @@ test("the existing CircleCI release gate and independent operational watch remai
  assert.ok(ci.includes("npm run check"));
  assert.ok(ci.includes("scripts/browser-qa.mjs"));
  assert.ok(ci.includes("scripts/ops-watch.mjs"));
- assert.doesNotMatch(ci,/uses:\s*actions\/|github-actions/i);
+ assert.match(ci,/schedule:\n\s+#[^\n]*\n\s+- cron:/);
  assert.equal(cfg.buildCommand,"npm run check");
  const source=await readFile("scripts/ops-watch.mjs","utf8");
  assert.ok(source.includes('"/initiatives/web-02"'));
  assert.ok(source.includes('"/initiatives/f0-03-1"'));
+ await assert.rejects(stat(".circleci/config.yml"),"CircleCI is retired; no duplicate CI system");
 });
 test("a public runbook states the human accessibility and post-merge release limits",async()=>{
  const doc=await readFile("docs/WEB-02-release-and-maintenance.md","utf8");
  assert.ok(doc.includes("NVDA/VoiceOver/TalkBack"));
  assert.ok(doc.includes("post-merge"));
  assert.ok(doc.includes("not"));
- assert.ok(doc.includes("No GitHub Actions"));
+ assert.ok(doc.includes("GitHub Actions"));
+ assert.ok(!doc.includes("No GitHub Actions"));
  assert.ok(doc.includes("15-minute"));
  assert.ok(doc.includes("rollback"));
  assert.ok(doc.includes("source"));

@@ -20,7 +20,7 @@ A developer merge or AI-assisted recommendation is **not** an independent resear
 
 ## 3. Decision categories and records
 
-1. **Operational/documentary** (fixes, accessible site changes, citation corrections): reviewed PR, green required CircleCI and Vercel checks, reasoned commit and issue link; sensitive details redacted.
+1. **Operational/documentary** (fixes, accessible site changes, citation corrections): reviewed PR, green required GitHub Actions and Vercel checks, reasoned commit and issue link; sensitive details redacted.
 2. **Research methods/results** (outcome changes, eligibility, comparisons, risk claims, interpretation): proposal plus source evidence, alternative methods, conflict declarations and explicit version decision; independent challenge before a real-world method becomes approved. Preserve negative evidence and study deviations.
 3. **Ethical/participant safeguards**: **hard stop** until a competent independent ethics/safeguarding decision, local legal/data-processing assessment and a responsible partner are established. Founder preference cannot waive a legal or non-negotiable safety condition.
 4. **Mission/charter/legal/financial commitments**: public proposal and review; attributable founder/eligible governance approval, then formal legal advice or establishment as applicable. No unilateral public claim that HPI is a charity or sponsor.

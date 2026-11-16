@@ -1,4 +1,6 @@
-# HPI CI on the self-hosted Mac runner
+# HPI CI on the self-hosted Mac runner (superseded)
+
+> **Superseded on 16 November 2026** by [ADR 0005](decisions/0005-ci-github-actions.md). HPI CI now runs on free GitHub Actions hosted runners and `.circleci/config.yml` has been removed. This page is kept as a historical record of the CircleCI credit block and the runner security finding.
 
 **Status, 16 November 2026:** HPI's CircleCI configuration targets the existing machine-runner resource class **`svtmzt/m4-pro-mac`**. That class was already registered for the portfolio under the MDR-06 pilot, and between 13 and 14 November it ran jobs from five other repositories at 0 credits. A job log from that period shows macOS 26.6.2 on arm64 and an isolated Node.js 22.16.0 in the runner account. HPI adds no new resource class and no new runner registration. Whether HPI jobs actually run on the Mac and report to GitHub is recorded in PR #105; see [Verification](#verification).
 

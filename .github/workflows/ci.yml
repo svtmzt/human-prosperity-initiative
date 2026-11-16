@@ -1,0 +1,114 @@
+# HPI CI — GitHub Actions on GitHub-hosted Linux runners.
+# Free for this public repository; no personal machine, no paid compute, no secrets.
+# Required checks on main: `website-quality`, `browser-accessibility` and `Vercel`.
+# Decision record: docs/decisions/0005-ci-github-actions.md
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    # Daily read-only public production watch (06:17 UTC).
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+env:
+  # Test and publish provenance for the exact commit under review, never the synthetic merge commit.
+  HPI_COMMIT_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+  NODE_VERSION: "22.16.0"
+
+jobs:
+  website-quality:
+    name: website-quality
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out the exact commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.HPI_COMMIT_SHA }}
+          persist-credentials: false
+      - name: Verify exact commit
+        run: test "$(git rev-parse HEAD)" = "$HPI_COMMIT_SHA"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Build and test HPI website
+        run: npm run check
+      - name: Archive exact public-source research artifact attestations (RT-01.3)
+        run: npm run research:pipeline:archive
+      - name: Upload research reproducibility reports
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: open-research-reproducibility
+          path: qa-artifacts/research-pipeline
+          if-no-files-found: ignore
+          retention-days: 30
+
+  browser-accessibility:
+    name: browser-accessibility
+    if: github.event_name != 'schedule'
+    needs: website-quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out the exact commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.HPI_COMMIT_SHA }}
+          persist-credentials: false
+      - name: Verify exact commit
+        run: test "$(git rev-parse HEAD)" = "$HPI_COMMIT_SHA"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Rebuild the site for this exact commit
+        run: npm run build
+      - name: Install pinned open-source browser QA tools and Chromium
+        run: |
+          npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund playwright@1.64.1 @axe-core/playwright@4.14.0
+          npx playwright install --with-deps chromium
+      - name: Real Chromium responsive, WCAG accessibility and keyboard checks
+        run: node scripts/browser-qa.mjs
+      - name: Upload browser quality report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: public-browser-quality
+          path: qa-artifacts/browser-report.json
+          if-no-files-found: ignore
+          retention-days: 30
+
+  public-operations-watch:
+    name: public-operations-watch
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Read-only public production and release status check
+        run: node scripts/ops-watch.mjs
+      - name: Upload operations watch report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: public-operations-watch
+          path: qa-artifacts/ops-watch-report.json
+          if-no-files-found: ignore
+          retention-days: 30
