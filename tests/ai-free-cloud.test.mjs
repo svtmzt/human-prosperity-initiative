@@ -8,7 +8,7 @@ import {createHash} from "node:crypto";
 import {readAiConfig,describeAiConfig,readApiKey} from "../research-tools/ai-assist/config.mjs";
 import {verifyFreePricing,classifyModel,parseCatalog,catalogFreshness,loadCatalog,verifyModelEndpoints,catalogSnapshot} from "../research-tools/ai-assist/catalog.mjs";
 import {selectModels,validateSelectionPolicy} from "../research-tools/ai-assist/selection.mjs";
-import {createOpenRouterProvider,createLocalProvider,discoverLocalModels,buildOpenRouterBody,classifyHttpError,interpretCompletion,CircuitBreaker} from "../research-tools/ai-assist/providers.mjs";
+import {createOpenRouterProvider,createLocalProvider,discoverLocalModels,buildOpenRouterBody,classifyHttpError,interpretCompletion,CircuitBreaker,buildOllamaBody,interpretOllama} from "../research-tools/ai-assist/providers.mjs";
 import {MemoryQuotaStore,QuotaLedger,parseKeyStatus} from "../research-tools/ai-assist/quota.mjs";
 import {checkRouting,classifySource,screenPersonalData} from "../research-tools/ai-assist/policy.mjs";
 import {validateClaimExtraction,validateSourceClassification,validateMechanismTagging,validateEvidenceGaps,validateContradiction,parseModelJson,outputSchemaFor} from "../research-tools/ai-assist/safeguards.mjs";
@@ -215,14 +215,14 @@ test("local runtime: real loopback HTTP discovery, offline handling and configur
  await new Promise(r=>server.listen(0,"127.0.0.1",r));
  const port=server.address().port;
  try{
-  const cfg=readAiConfig({HPI_AI_PROVIDER:"local",HPI_AI_BASE_URL:"http://127.0.0.1:"+port});
+  const cfg=readAiConfig({HPI_AI_PROVIDER:"local",HPI_AI_LOCAL_API:"openai",HPI_AI_BASE_URL:"http://127.0.0.1:"+port});
   const d=await discoverLocalModels(cfg);
   assert.deepEqual(d.models,["llama3.2:3b","qwen3:8b"]);
   const {provider:p,model}=await createLocalProvider(cfg);
   assert.equal(model,"llama3.2:3b");assert.equal(p.boundary,"local");
   const r=await p.complete([{role:"system",content:"s"},{role:"user",content:"u"}]);
   assert.equal(r.ok,true);assert.equal(r.model,"llama3.2:3b");
-  const wrong=await createLocalProvider(readAiConfig({HPI_AI_PROVIDER:"local",HPI_AI_BASE_URL:"http://127.0.0.1:"+port,HPI_AI_MODEL:"missing:1b"}));
+  const wrong=await createLocalProvider(readAiConfig({HPI_AI_PROVIDER:"local",HPI_AI_LOCAL_API:"openai",HPI_AI_BASE_URL:"http://127.0.0.1:"+port,HPI_AI_MODEL:"missing:1b"}));
   assert.equal(wrong.provider.available,false);
  }finally{server.close()}
  const off=await createLocalProvider(readAiConfig({HPI_AI_PROVIDER:"local",HPI_AI_BASE_URL:"http://127.0.0.1:9"}));
@@ -363,4 +363,42 @@ test("evaluation set is current, held out and scorer produces honest proxy metri
  assert.equal(s.operations.costUsdReported,0);
  const notSent=scoreEvaluation([item],new Map([[item.id,{status:"not_run"}]]));
  assert.equal(notSent.operations.requests,0,"items never sent are not counted as requests");assert.equal(notSent.metrics["claim-extraction"].providerFailed,1);
+});
+
+test("Ollama native API: thinking off, explicit context window, JSON-schema format; truncation and thinking-only output never accepted",async()=>{
+ const cfg=readAiConfig({HPI_AI_PROVIDER:"local"});
+ assert.equal(cfg.localApi,"native");assert.equal(cfg.numCtx,16384);
+ assert.equal(readAiConfig({HPI_AI_PROVIDER:"local",HPI_AI_LOCAL_RUNTIME:"lmstudio"}).localApi,"openai");
+ assert.match(readAiConfig({HPI_AI_PROVIDER:"local",HPI_AI_LOCAL_RUNTIME:"lmstudio",HPI_AI_LOCAL_API:"native"}).reasonDisabled,/native/);
+ const schema=outputSchemaFor("claim-extraction",vocab);
+ const b=buildOllamaBody({model:"qwen3.5:4b",messages:[{role:"system",content:"s"}],maxTokens:1600,schema,mode:"json_schema",numCtx:16384});
+ assert.equal(b.think,false);assert.equal(b.stream,false);assert.deepEqual(b.options,{temperature:0,seed:7,num_predict:1600,num_ctx:16384});
+ assert.equal(b.format.type,"object");
+ assert.equal(buildOllamaBody({model:"m",messages:[],maxTokens:10,mode:"json_object",numCtx:4096}).format,"json");
+ assert.equal(interpretOllama({model:"m",message:{content:'{"claims":[',thinking:"long..."},done_reason:"length"}).status,"truncated");
+ assert.equal(interpretOllama({model:"m",message:{content:"",thinking:"hmm"},done_reason:"stop"}).status,"reasoning_budget_exhausted");
+ assert.equal(interpretOllama({model:"m",message:{content:""},done_reason:"stop"}).status,"empty_output");
+ assert.equal(interpretOllama({model:"m",message:{content:"{}"},done_reason:"stop",prompt_eval_count:900,eval_count:40}).usage.promptTokens,900);
+ assert.equal(interpretCompletion({choices:[{finish_reason:"stop",message:{content:"",reasoning:"thinking..."}}]}).status,"reasoning_budget_exhausted","OpenAI-compatible servers that return reasoning text only");
+ // simulated loopback Ollama (no /v1): discovery via /api/tags; first chat rejects `think` (model without thinking support), adapter retries without it
+ const bodies=[];
+ const server=createServer((req,res)=>{res.setHeader("content-type","application/json");
+  if(req.url==="/v1/models"){res.statusCode=404;return res.end("{}")}
+  if(req.url==="/api/tags")return res.end(JSON.stringify({models:[{name:"qwen3.5:4b-q4_K_M"}]}));
+  if(req.url==="/api/chat"){let x="";req.on("data",c=>x+=c);req.on("end",()=>{const body=JSON.parse(x);bodies.push(body);
+   if("think" in body){res.statusCode=400;return res.end(JSON.stringify({error:"\"qwen3.5:4b-q4_K_M\" does not support thinking"}))}
+   const sid=body.messages[1].content.match(/SOURCE id=(\w+)/)[1];
+   res.end(JSON.stringify({model:body.model,done:true,done_reason:"stop",prompt_eval_count:700,eval_count:60,message:{role:"assistant",content:JSON.stringify({claims:[{...goodClaim,sourceId:sid}],abstain:false,abstainReason:""})}}))});return}
+  res.statusCode=404;res.end("{}")});
+ await new Promise(r=>server.listen(0,"127.0.0.1",r));
+ try{
+  const local=readAiConfig({HPI_AI_PROVIDER:"local",HPI_AI_BASE_URL:"http://127.0.0.1:"+server.address().port,HPI_AI_MAX_OUTPUT_TOKENS:"1600"});
+  const {provider:p,discovery}=await createLocalProvider(local);
+  assert.equal(discovery.source,"/api/tags");assert.equal(p.api,"ollama_native");
+  const r=await runResearchTask({task:"claim-extraction",provider:p,config:local,vocab,items:[{id:"E08",sources:[source]}]});
+  assert.equal(r.status,"completed_pending_human_review");assert.equal(r.queue.length,1);
+  assert.equal(r.queue[0].provenance.boundary,"local");assert.equal(r.queue[0].provenance.structuredMode,"json_schema");
+  assert.equal(bodies.length,2);assert.equal(bodies[0].think,false);assert.ok(!("think" in bodies[1]));
+  assert.equal(bodies[1].options.num_ctx,16384);assert.equal(bodies[1].options.num_predict,1600);
+ }finally{server.close()}
 });

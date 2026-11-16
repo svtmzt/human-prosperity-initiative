@@ -72,7 +72,10 @@ export function readAiConfig(env={}){
   if(parsed.error)return {...base,reasonDisabled:parsed.error};
   if(!parsed.loopback)return {...base,reasonDisabled:"The local provider only accepts loopback endpoints (localhost, 127.0.0.1, ::1). Never expose a local runtime to the internet; use an authenticated organisational gateway with HPI_AI_PROVIDER=openai_compatible instead."};
   if(!["http:","https:"].includes(parsed.url.protocol))return {...base,reasonDisabled:"Unsupported URL scheme."};
+  const localApi=(env.HPI_AI_LOCAL_API||(runtime==="ollama"?"native":"openai")).trim();
+  if(!["native","openai"].includes(localApi)||(localApi==="native"&&runtime!=="ollama"))return {...base,reasonDisabled:"HPI_AI_LOCAL_API must be 'openai', or 'native' with the ollama runtime."};
   return {...base,provider:"local",kind:"local",boundary:"local",available:true,model:model||null,modelSource:model?"configured":"discover_from_runtime",
+   localApi,numCtx:int(env.HPI_AI_LOCAL_NUM_CTX,16384,2048,262144),
    runtime,runtimeLabel:LOCAL_RUNTIMES[runtime].label,baseUrl:parsed.baseUrl,baseHost:parsed.host,loopback:true,paidHost:false,reasonDisabled:null};
  }
 
@@ -117,7 +120,7 @@ export function readApiKey(config,env={}){
 export function describeAiConfig(config){
  return {provider:config.provider,kind:config.kind,boundary:config.boundary,available:config.available,model:config.model,host:config.baseHost,
   loopback:config.loopback??null,paidHost:config.paidHost??false,paidUseApprovalRef:config.paidUseApprovalRef,
-  freeOnly:config.freeOnly,dataPolicy:config.dataPolicy??null,runtime:config.runtime??null,fallbackModels:config.fallbackModels??[],
+  freeOnly:config.freeOnly,dataPolicy:config.dataPolicy??null,runtime:config.runtime??null,localApi:config.localApi??null,numCtx:config.numCtx??null,fallbackModels:config.fallbackModels??[],
   apiKeyPresent:config.apiKeyPresent,dataClass:config.dataClass,
   limits:{maxRequests:config.maxRequests,maxInputChars:config.maxInputChars,maxOutputTokens:config.maxOutputTokens,timeoutMs:config.timeoutMs,
    maxRetries:config.maxRetries,dailyRequestCeiling:config.dailyRequestCeiling,minIntervalMs:config.minIntervalMs},

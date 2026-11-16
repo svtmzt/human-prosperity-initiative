@@ -7,7 +7,7 @@ Distinguish these achievements — they are different:
 | Achievement | State |
 |---|---|
 | Adapter implemented (local, OpenRouter, generic) | Yes |
-| Provider connected | OpenRouter: yes (internal CLI, key in the session's secret store). Local: no runtime reachable |
+| Provider connected | OpenRouter: yes (internal CLI, key in the session's secret store). Local: Ollama discovered on the founder's Mac (5 models); real HPI tasks not yet validated (see below) |
 | Real inference tested | Yes, OpenRouter free models only |
 | Research quality evaluated | Automated agreement with HPI's own curated reference; **no independent or human expert review yet** |
 | Public inference securely enabled | No |
@@ -19,6 +19,30 @@ Distinguish these achievements — they are different:
 2. **Internal research — verified free cloud** (`HPI_AI_PROVIDER=openrouter`). For researchers without AI-capable hardware.
 3. **Limited public cloud** — `research-tools/ai-assist/gateway.mjs`, not routed. See [activation](#public-gateway-activation).
 4. **Institutional / sponsored capacity** — interfaces only: an organisational OpenAI-compatible gateway (`openai_compatible`, allowlisted HTTPS host) or an institution-held key with the same free-only or a separately approved budget. Nothing is provisioned, and paid routes require a separate approval recorded in #103.
+
+### Local models: Ollama specifics and a real sample run
+
+A founder test on 16 Nov 2026 (Ollama v0.40.16 on a Mac) found that HPI tasks through Ollama's OpenAI-compatible `/v1` endpoint failed safely: `truncated` with Qwen 3.5 4B and `empty_output` with Nemotron 3 Nano 4B. Basic inference worked. Two Ollama behaviours explain this: `/v1` does not reliably accept `think:false`, so reasoning models spend the budget thinking; and Ollama's small default context window (`num_ctx`) cannot be raised through `/v1`, so long grounded prompts plus the answer hit `done_reason: length`.
+
+For `HPI_AI_LOCAL_RUNTIME=ollama` the adapter therefore uses the **native `/api/chat`** API (`HPI_AI_LOCAL_API=native`, the default), which sends:
+- `think:false` (retried without it if a model rejects the field);
+- the task's JSON schema as `format` (then `"json"`, then prompt-only);
+- `options.num_ctx = HPI_AI_LOCAL_NUM_CTX` (default 16384) and `options.num_predict = HPI_AI_MAX_OUTPUT_TOKENS`.
+
+`done_reason:"length"` is always treated as a truncation, and output that contains only thinking text is treated as reasoning exhaustion. Neither is ever accepted. Set `HPI_AI_LOCAL_API=openai` to use `/v1` instead; LM Studio, llama.cpp and LiteLLM always use it.
+
+**Local live evaluation remains pending** until a real HPI task on a local model produces a validated human-review candidate. Sample run on the researcher's machine:
+
+```
+ollama list
+HPI_AI_PROVIDER=local npm run ai:local
+HPI_AI_PROVIDER=local HPI_AI_MODEL=qwen3.5:4b-q4_K_M HPI_AI_MAX_OUTPUT_TOKENS=1600 HPI_AI_MAX_REQUESTS=1 npm run ai:extract -- --ids E08
+HPI_AI_PROVIDER=local HPI_AI_MODEL=qwen3.5:9b HPI_AI_MAX_OUTPUT_TOKENS=1600 npm run ai:run -- source-classification --ids E08
+HPI_AI_PROVIDER=local HPI_AI_MODEL=qwen3.5:9b HPI_AI_MAX_OUTPUT_TOKENS=1600 HPI_AI_TIMEOUT_MS=300000 npm run ai:evaluate -- --tasks claim-extraction,evidence-gap-detection
+npm run ai:review -- list
+```
+
+If a run reports `truncated`, raise `HPI_AI_LOCAL_NUM_CTX` (for example to 32768) and `HPI_AI_MAX_OUTPUT_TOKENS`, then try again. Never relax validation.
 
 ## Free-only policy (fixes the V1 OpenRouter blocker)
 

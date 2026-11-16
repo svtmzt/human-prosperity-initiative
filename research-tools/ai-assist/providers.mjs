@@ -104,7 +104,8 @@ export function interpretCompletion(data,{acceptableModelIds=null}={}){
  const content=typeof message.content==="string"?message.content:"";
  if(choice.finish_reason==="length")return {ok:false,status:"truncated",scope:"request",reason:"Output was truncated at the token limit; partial output is never accepted.",...base};
  if(!content.trim()){
-  const exhausted=u.reasoningTokens!==null&&u.completionTokens!==null&&u.completionTokens>0&&u.reasoningTokens>=u.completionTokens*0.9;
+  const reasoningText=[message.reasoning,message.reasoning_content].some(x=>typeof x==="string"&&x.trim());
+  const exhausted=reasoningText||u.reasoningTokens!==null&&u.completionTokens!==null&&u.completionTokens>0&&u.reasoningTokens>=u.completionTokens*0.9;
   return {ok:false,status:exhausted?"reasoning_budget_exhausted":"empty_output",scope:"request",reason:exhausted?"The model spent its token budget on reasoning and returned no answer.":"Provider response has no message content.",...base};
  }
  return {ok:true,status:"completed",content,...base};
@@ -198,6 +199,60 @@ export async function discoverLocalModels(config,{fetchImpl=globalThis.fetch,api
  return {ok:false,status:openai.status||"unavailable",models:[],reason:"Local runtime "+config.runtimeLabel+" at "+config.baseUrl+" is not reachable or returned no model list ("+(openai.reason||"no data")+"). Start it locally; it must stay bound to loopback."};
 }
 
+/**
+ * Ollama native chat API (/api/chat). Preferred over Ollama's OpenAI-compatible
+ * /v1 endpoint because only the native API reliably accepts `think:false`
+ * (reasoning models such as Qwen 3.5 otherwise spend the budget thinking),
+ * a JSON-schema `format`, and an explicit context window (`options.num_ctx`;
+ * Ollama's small default window silently truncates grounded prompts).
+ * done_reason "length" is a truncation and is never accepted.
+ */
+export function buildOllamaBody({model,messages,maxTokens,schema,mode,numCtx,think=false,seed=7}){
+ const body={model,messages:mode==="prompt_only"?withPromptOnly(messages):messages,stream:false,
+  options:{temperature:0,seed,num_predict:maxTokens,num_ctx:numCtx}};
+ if(think!==null)body.think=think;
+ if(mode==="json_schema"&&schema)body.format=schema.schema;
+ else if(mode==="json_object")body.format="json";
+ return body;
+}
+export function interpretOllama(data){
+ if(data?.error)return {ok:false,status:"provider_error",scope:"request",reason:"Ollama error: "+String(data.error).slice(0,160)};
+ const msg=data?.message;
+ if(!msg||typeof msg!=="object")return {ok:false,status:"malformed_response",scope:"request",reason:"Ollama response has no message."};
+ const usage={promptTokens:data.prompt_eval_count??null,completionTokens:data.eval_count??null,reasoningTokens:null,costUsd:null};
+ const base={model:data.model??null,providerName:"ollama-local",generationId:null,usage,finishReason:data.done_reason??null};
+ const content=typeof msg.content==="string"?msg.content:"";
+ const thinking=typeof msg.thinking==="string"&&msg.thinking.trim().length>0;
+ if(data.done_reason==="length")return {ok:false,status:"truncated",scope:"request",reason:"Ollama stopped at the token or context limit (done_reason=length)"+(thinking?" while reasoning; thinking could not be disabled for this model":"")+". Raise HPI_AI_MAX_OUTPUT_TOKENS or HPI_AI_LOCAL_NUM_CTX; partial output is never accepted.",...base};
+ if(!content.trim())return {ok:false,status:thinking?"reasoning_budget_exhausted":"empty_output",scope:"request",reason:thinking?"The model produced only reasoning text and no answer.":"Ollama returned no message content.",...base};
+ return {ok:true,status:"completed",content,...base};
+}
+export function createOllamaNativeProvider(config,{fetchImpl=globalThis.fetch,apiKey,model}={}){
+ const headers={"content-type":"application/json",...(apiKey?{authorization:"Bearer "+apiKey}:{})};
+ return {id:"local",kind:"local",boundary:"local",available:true,model,api:"ollama_native",
+  async complete(messages,{maxTokens=config.maxOutputTokens,schema=null}={}){
+   const attempts=[];
+   let think=false;
+   const modes=schema?["json_schema","json_object","prompt_only"]:["json_object","prompt_only"];
+   for(let i=0;i<modes.length;i++){
+    const mode=modes[i];
+    const r=await postJson(fetchImpl,config.baseUrl+"/api/chat",headers,buildOllamaBody({model,messages,maxTokens,schema,mode,numCtx:config.numCtx,think}),config.timeoutMs);
+    if(r.networkError){attempts.push({model,mode,status:r.status});return {ok:false,status:r.status,reason:r.reason,attempts}}
+    const errText=JSON.stringify(r.data||"");
+    if(r.httpStatus===400&&think!==null&&/think/i.test(errText)){attempts.push({model,mode,status:"think_unsupported"});think=null;i--;continue}
+    if(r.httpStatus===400&&/format|schema|json/i.test(errText)&&i<modes.length-1){attempts.push({model,mode,status:"unsupported_parameter"});continue}
+    if(!r.ok){attempts.push({model,mode,status:"http_error"});return {ok:false,status:"http_error",reason:"Ollama returned HTTP "+r.httpStatus+": "+errText.slice(0,160),attempts}}
+    if(r.parseError){attempts.push({model,mode,status:"malformed_response"});return {ok:false,status:"malformed_response",reason:"Ollama response is not JSON.",attempts}}
+    const v=interpretOllama(r.data);
+    attempts.push({model,mode,status:v.status,latencyMs:r.latencyMs});
+    if(!v.ok)return {...v,attempts,requestedModel:model,structuredMode:mode};
+    return {...v,model:v.model??model,requestedModel:model,structuredMode:mode,latencyMs:r.latencyMs,costVerified:true,costVerification:"local_no_cost",attempts,
+     parameters:{think,numCtx:config.numCtx,numPredict:maxTokens}};
+   }
+   return {ok:false,status:"unsupported_parameter",reason:"Ollama rejected every structured-output mode.",attempts};
+  }};
+}
+
 /** Local provider: loopback runtime with model discovery when no model is configured. */
 export async function createLocalProvider(config,{fetchImpl=globalThis.fetch,apiKey}={}){
  if(config?.provider!=="local"||!config.available)return {provider:createDisabledProvider(config?.reasonDisabled||"Local provider not configured."),discovery:null};
@@ -207,7 +262,10 @@ export async function createLocalProvider(config,{fetchImpl=globalThis.fetch,api
  if(model&&!discovery.models.includes(model))return {provider:createDisabledProvider("Configured model '"+model+"' is not served by the local runtime. Available: "+discovery.models.slice(0,10).join(", ")),discovery};
  if(!model)model=discovery.models[0]||null;
  if(!model)return {provider:createDisabledProvider("The local runtime serves no models."),discovery};
- return {provider:createOpenAiCompatibleProvider(config,{fetchImpl,apiKey,model}),discovery,model};
+ const provider=config.runtime==="ollama"&&config.localApi!=="openai"
+  ?createOllamaNativeProvider(config,{fetchImpl,apiKey,model})
+  :createOpenAiCompatibleProvider(config,{fetchImpl,apiKey,model});
+ return {provider,discovery,model};
 }
 
 /**
