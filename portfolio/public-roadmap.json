@@ -2286,7 +2286,7 @@
       "id": "HPI-SCALE",
       "kind": "platform",
       "summary": "Move HPI from isolated local case studies to a mechanism-based, reusable open research platform with four connected pillars, without claiming adoption, partnerships or measured human benefit.",
-      "gate": "Strategy, theory of change, ADR-0004 and the four pillars are implemented technically. The charter addendum is a candidate registered as open under F0-01; independent review, legal structure, safeguarding, data controller, human accessibility testing and fieldwork approval remain open (#103). Initial HPI-SCALE HubOS production registration completed and verified on 16 November 2026 (store v235→236; HubOS #152). The separate HPI-AI v0.2 status delta remains pending operator execution under HubOS #153; it is not the initial registration.",
+      "gate": "Strategy, theory of change, ADR-0004 and the four pillars are implemented technically. The charter addendum is a candidate registered as open under F0-01; independent review, legal structure, safeguarding, data controller, human accessibility testing and fieldwork approval remain open (#103). Initial HPI-SCALE HubOS production registration completed and verified on 16 November 2026 (store v235→236; HubOS #152). The separate HPI-AI v0.2 status delta was also executed and independently verified on 16 November 2026 (store v236→237; HubOS #153). Neither tracking update constitutes human, ethical or scientific approval.",
       "deliverables": [
         {
           "label": "Platform hub",
@@ -2744,7 +2744,7 @@
       "id": "HPI-AI",
       "kind": "platform",
       "summary": "A tested AI research-assistance layer with local and verified-free cloud providers, grounding, citation and numeric verification, injection defence, data-routing policy and mandatory human review; no paid inference and no AI on the public website.",
-      "gate": "Internal research mode is operational with verified free OpenRouter models and a published held-out evaluation (automated agreement with HPI's own curated reference, not independent review). Local inference is live-tested on the founder's Mac (Ollama, qwen3.5:4b): bounded classification and extraction runs produced validated review-queue items; no broad local evaluation yet. Hosted public inference is not deployed: it needs a durable quota store, authentication and privacy/legal approval (#103). No AI output is published as evidence.",
+      "gate": "Internal research mode is operational with verified free OpenRouter models and a published held-out evaluation (automated agreement with HPI's own curated reference, not independent review). Local inference is live-tested on the founder's Mac (Ollama, qwen3.5:4b): bounded classification and extraction runs produced validated review-queue items; no broad local evaluation yet. Hosted public inference is not deployed: it needs a durable quota store, authentication and privacy/legal approval (#103). No AI output is published as evidence. The HPI-AI HubOS v0.2 tracking update was executed and independently verified on 16 November 2026, store v236→237 (HubOS #153); this did not activate public inference or approve research.",
       "deliverables": [
         {
           "label": "AI status, evaluation and safeguards",
