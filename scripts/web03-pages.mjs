@@ -40,7 +40,13 @@ export async function publishWeb03Pages({publish,shell}){
    ["02 · SYNTHETIC ONLY","Outcome Lab","/research/outcome-lab","Explore hypothetical scenarios and uncertainty without presenting simulated changes as measured impact.","No personal data or real interventions"],
    ["03 · REPRODUCIBILITY","Research Pipeline","/research/reproducibility","Inspect versioned commands, SHA-256 provenance, artefact manifests and an optional notebook.","Open methods; source rights still matter"],
    ["04 · TRUST & SAFETY","Responsible Tools","/research/responsible-tools","Understand privacy-by-default, licences, independent review and research authorisation boundaries.","External approval remains pending"]
-  ])+`<p class="status-note">RT-02 will improve usability and individual tools separately. This WEB-03 hub is a discoverability layer, not a scientific certification.</p></div>`
+  ])+`<p class="status-note">RT-02 will improve usability and individual tools separately. This WEB-03 hub is a discoverability layer, not a scientific certification.</p><h2>Platform tools</h2>`+
+  featureGrid([
+   ["05 · INTELLIGENCE","Knowledge explorer","/intelligence","Filter problems, mechanisms, interventions and contexts; follow every claim to its source.","Desk research · No rankings"],
+   ["06 · COMPARISON","Context comparability check","/intelligence/compare","See outcome stages side by side and check whether two published figures can be compared.","Explains incompatibility"],
+   ["07 · SYSTEMS LAB","Household resilience model","/systems-lab","Run an illustrative, deterministic model of wages, hours, transfers and essential costs.","Synthetic inputs · Not a forecast"],
+   ["08 · ADOPTION","Readiness self-check and templates","/adopt","Assess adaptation readiness locally and download evaluation templates.","Nothing leaves your browser"]
+  ])+`</div>`
  }));
  await publish("/updates",shell({
   title:"Editorial updates & corrections",section:"Publication transparency",route:"/updates",
