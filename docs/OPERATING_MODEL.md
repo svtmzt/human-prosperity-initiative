@@ -36,6 +36,10 @@ SolOS includes a read-only HPI project profile; its roadmap statuses are an expl
 
 **F0-02** remains the research priority, with F0-01 charter review and F0-03 measurement as enabling work. SolOS should not reuse business-market validation scores to claim scientific efficacy for poverty interventions.
 
+## Global Prosperity Platform extension (16 November 2026, candidate)
+
+The hierarchy above is unchanged. HPI-SCALE adds seven logical workstreams — HPI-SCALE, GPI, SEE, GAN, ESL, HPI-AI and HPI-QA — tracked as initiatives in [`portfolio/project.json`](../portfolio/project.json) and GitHub issues #96–#103. They are not separate organisations, repositories or databases. HubOS registration of these workstreams is recorded as a **pending, unexecuted** additive manifest in [`portfolio/hubos-sync/hpi-scale-registration-v0.1.json`](https://github.com/svtmzt/human-prosperity-initiative/blob/main/portfolio/hubos-sync/hpi-scale-registration-v0.1.json); no duplicate HPI company record is proposed. See the [strategic operating model V0.1](platform/strategic-operating-model-v0.1.md).
+
 ## Cross-system implementation tracking
 
 - [HubOS #125 — register HPI as a distinct public-interest programme](https://github.com/saver1991/the-hub-os/issues/125). **Production database registered:** one public-interest programme, eight initiatives, five epics, eleven tasks, with an additive CAS update, backup and full old-record preservation. Authenticated browser/UI acceptance remains open.

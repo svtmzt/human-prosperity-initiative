@@ -13,6 +13,10 @@
 
 **Current stage (November 2026):** Foundational research and community building. We have **not** run a field trial, proved an intervention, raised funds on behalf of a foundation, or established a legal charity. Any proposed timelines are targets, not promises.
 
+## Global Prosperity Platform (November 2026)
+
+HPI is becoming an open research and technology platform built around **recurring mechanisms** rather than one-off local projects: [Platform](https://human-prosperity-initiative.vercel.app/platform) · [Intelligence](https://human-prosperity-initiative.vercel.app/intelligence) · [Solutions](https://human-prosperity-initiative.vercel.app/solutions) · [Adopt](https://human-prosperity-initiative.vercel.app/adopt) · [Systems Lab](https://human-prosperity-initiative.vercel.app/systems-lab). It is desk research, open methods and software: no adopters, partners, field interventions or measured human benefit exist yet. Developers: the knowledge base lives in `research/platform/*.json` and is validated by `npm run research:platform:verify`; see the [data contract](docs/platform/knowledge-architecture-and-data-contracts-v1.md) and [ADR-0004](docs/decisions/0004-global-prosperity-platform-architecture.md).
+
 ## Two connected horizons
 
 1. **Near-term (priority, ~0–5 years):** Identify practical poverty-related barriers, evaluate promising interventions with qualified partners, measure outcomes, and share what works *and what fails*.

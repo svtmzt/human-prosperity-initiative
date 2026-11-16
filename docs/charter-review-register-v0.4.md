@@ -15,6 +15,7 @@
 | Legal identity | Working name, individual GitHub owner and non-incorporated status are explicit | Ready for organisational review |
 | Translations | English V0.4 candidate expands the V0.3 English summary and is **not** an adopted full English/Italian equivalence version | Translation/editorial review remains open |
 | Conflict handling | No claims of appointed reviewers/board or founder-independent scientific sign-off | Governance review remains open |
+| Global platform operating model (added 16 Nov 2026) | [Candidate addendum](platform/strategic-operating-model-v0.1.md#charter-implications): mechanism-based, reusable methods across four pillars; mission, values, two horizons and safeguards unchanged | **Open** — founder decision and open review required before any charter text changes; not ratified |
 
 ## Review questions for contributors
 
