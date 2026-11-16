@@ -32,7 +32,7 @@ V1 refused `openrouter.ai` as a known paid host unless `HPI_AI_PAID_USE_APPROVAL
 6. **Selection policy.** `research/ai/model-selection-policy.json` lists tested defaults per task, permitted free fallbacks and exclusions with evidence. Fallback is client-side, only within that list, and only on model-level unavailability.
 7. **Budget.** The account's own state is read from `GET /api/v1/key` (free-request counter, spend). Evaluation records spend before and after.
 
-**Account finding (16 Nov 2026):** the configured key belongs to an account that has purchased credits at some time (`is_free_tier:false`, 1,000 free requests/day) and the key has a **$5 credit limit with $5 remaining**, so the key itself *could* pay for paid models. HPI's protections above do not depend on the key limit, but the founder should **set this key's credit limit to the minimum OpenRouter allows (or use a dedicated HPI key on an unfunded account)** so that a bug elsewhere cannot spend money.
+**Account finding (16 Nov 2026):** the configured key belongs to an account that has purchased credits at some time (`is_free_tier:false`, 1,000 free requests/day) and the key has a **$5 credit limit with $5 remaining**, so the key itself *could* pay for paid models. HPI's protections above do not depend on the key limit. **Founder decision (16 Nov 2026): the $5 limit is kept deliberately**, to allow future tests with stronger paid models. Such tests are not authorised by this release: they need an explicit approval and budget recorded in #103 and a separate, capped paid mode that does not exist yet. The free-only provider has no paid path.
 
 ## Data routing and privacy
 
@@ -100,6 +100,6 @@ Then add `api/ai-research.js` wrapping `createResearchGateway`, set a function d
 
 | Resource | Owner | Linked | Created | Cost / quota | Review | Cleanup / rollback |
 |---|---|---|---|---|---|---|
-| OpenRouter API key stored as a network secret on the founder's personal cloud environment "HPI portfolio (HPI + HubOS)" for `openrouter.ai` | Founder | #101 | 2026-11-16 | $0 spent; free-request quota only; key credit limit $5 (recommend lowering) | 2026-11-23 | Remove the secret in the environment settings or revoke the key in OpenRouter; no code depends on it |
+| OpenRouter API key stored as a network secret on the founder's personal cloud environment "HPI portfolio (HPI + HubOS)" for `openrouter.ai` | Founder | #101 | 2026-11-16 | $0 spent; free-request quota only; key credit limit $5 kept by founder decision for possible future approved paid tests | 2026-11-23 | Remove the secret in the environment settings or revoke the key in OpenRouter; no code depends on it |
 
 No database, Vercel project, deployment, CircleCI job or subscription was created.
