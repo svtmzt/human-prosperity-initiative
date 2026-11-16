@@ -77,7 +77,9 @@ test("WEB-03.6 identifies conditional legal and support content but never publis
 test("canonical HPI model registers bounded completed WEB-03.1 / RT-02.1 and future policy changes as planned",async()=>{
  const p=new Map(project.initiatives.map(x=>[x.id,x]));
  const r=new Map(publicRoadmap.initiatives.map(x=>[x.id,x]));
- assert.equal(p.size,14);
+ // The 14 initiatives registered up to RT-02 must all persist; later programmes (HPI-SCALE, 2026-11-16) are additive.
+ for(const id of ["F0-01","F0-02","F0-03","F0-03.1","F0-04","WEB-01","WEB-02","WEB-03","F0-05","F1","F2","F3","RT-01","RT-02"])assert.ok(p.has(id),id);
+ assert.ok(p.size>=14);
  assert.equal(p.get("WEB-03").issue,85);
  assert.equal(p.get("RT-02").issue,86);
  for(const [parent,first,doc,issue] of [
@@ -123,7 +125,7 @@ test("canonical HPI model registers bounded completed WEB-03.1 / RT-02.1 and fut
  assert.equal(project.legalEntityStatus,"not_incorporated");
  assert.match(r.get("WEB-03").gate,/Projects\/Tools public navigation implemented/i);
  assert.match(r.get("RT-02").gate,/SYNTHETIC ONLY/);
- assert.equal(publicRoadmap.reviewedAt,"2026-11-12");
+ assert.ok(/^\d{4}-\d\d-\d\d$/.test(publicRoadmap.reviewedAt)&&publicRoadmap.reviewedAt>="2026-11-12");
  assert.match(await read("docs/roadmap.md"),/public experience and usable tools roadmap/);
 });
 
