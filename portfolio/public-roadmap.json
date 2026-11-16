@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "sourceKind": "versioned_public_editorial_snapshot",
-  "reviewedAt": "2026-11-12",
+  "reviewedAt": "2026-11-16",
   "statusAuthority": "Public GitHub issue states are authoritative; this snapshot is not a live issue-state sync.",
   "scienceBoundary": "Project delivery is not evidence of improved prosperity, independent study approval or validated causal impact.",
   "legalStatus": "not_incorporated",
@@ -2277,6 +2277,595 @@
               "status": "complete",
               "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/86",
               "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/95"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "HPI-SCALE",
+      "kind": "platform",
+      "summary": "Move HPI from isolated local case studies to a mechanism-based, reusable open research platform with four connected pillars, without claiming adoption, partnerships or measured human benefit.",
+      "gate": "Strategy, theory of change, ADR-0004 and the four pillars are implemented technically. The charter addendum is a candidate registered as open under F0-01; independent review, legal structure, safeguarding, data controller, human accessibility testing and fieldwork approval remain open (#103). HubOS production synchronisation is a pending manifest, not executed.",
+      "deliverables": [
+        {
+          "label": "Platform hub",
+          "url": "/platform"
+        },
+        {
+          "label": "Theory of change V0.1",
+          "url": "/library/docs/platform/theory-of-change-v0-1"
+        },
+        {
+          "label": "Strategic operating model V0.1",
+          "url": "/library/docs/platform/strategic-operating-model-v0-1"
+        },
+        {
+          "label": "ADR-0004 platform architecture",
+          "url": "/library/docs/decisions/0004-global-prosperity-platform-architecture"
+        },
+        {
+          "label": "Current-state audit 16 Nov 2026",
+          "url": "/library/docs/platform/current-state-audit-2026-11-16"
+        }
+      ],
+      "epics": [
+        {
+          "id": "HPI-SCALE.1",
+          "title": "Evidence-backed current-state audit",
+          "status": "complete",
+          "issue": 96,
+          "tasks": [
+            {
+              "id": "HPI-SCALE.1-T01",
+              "title": "Audit repository, CI, deployment provenance, research assets and cross-system state",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/96",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "HPI-SCALE.2",
+          "title": "Theory of change, operating model, ADR and charter addendum candidate",
+          "status": "in_progress",
+          "issue": 96,
+          "tasks": [
+            {
+              "id": "HPI-SCALE.2-T01",
+              "title": "Publish theory of change, operating model and ADR-0004",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/96",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "HPI-SCALE.2-T02",
+              "title": "Register charter addendum candidate as open under F0-01",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/96",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "HPI-SCALE.2-T03",
+              "title": "Founder decision and open review of the charter addendum",
+              "status": "planned",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/103",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            }
+          ]
+        },
+        {
+          "id": "HPI-SCALE.3",
+          "title": "Roadmap, issues and HubOS tracking",
+          "status": "in_progress",
+          "issue": 96,
+          "tasks": [
+            {
+              "id": "HPI-SCALE.3-T01",
+              "title": "Create structured GitHub issues and public roadmap entries",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/96",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "HPI-SCALE.3-T02",
+              "title": "Publish HubOS pending synchronisation manifest",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/96",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "HPI-SCALE.3-T03",
+              "title": "Execute CAS-guarded HubOS production registration by an authorised operator",
+              "status": "blocked",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/103",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GPI",
+      "kind": "platform",
+      "summary": "A small, reproducible, source-traceable knowledge base connecting problems, mechanisms, interventions, evidence and contexts, with provenance, comparability checks and declared gaps.",
+      "gate": "Citation-and-provenance knowledge base implemented and build-validated. RT-02.6 NO-GO on dataset ingestion remains in force. Independent methodological review, full-text extraction, retraction checks and qualified licence review are outstanding.",
+      "deliverables": [
+        {
+          "label": "Intelligence overview and explorer",
+          "url": "/intelligence"
+        },
+        {
+          "label": "Compare contexts",
+          "url": "/intelligence/compare"
+        },
+        {
+          "label": "Evidence trail",
+          "url": "/intelligence/evidence"
+        },
+        {
+          "label": "Methods and opportunity assessment",
+          "url": "/intelligence/methods"
+        },
+        {
+          "label": "Data and reproduction",
+          "url": "/intelligence/data"
+        },
+        {
+          "label": "Data contract documentation",
+          "url": "/library/docs/platform/knowledge-architecture-and-data-contracts-v1"
+        }
+      ],
+      "epics": [
+        {
+          "id": "GPI.1",
+          "title": "Versioned data contract and build-failing validator",
+          "status": "complete",
+          "issue": 97,
+          "tasks": [
+            {
+              "id": "GPI.1-T01",
+              "title": "Define schema 1.0 entities and provenance contract with explicit missingness",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/97",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "GPI.1-T02",
+              "title": "Enforce referential integrity, honest labelling, no scores and no synthesised denominators",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/97",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "GPI.2",
+          "title": "Initial multi-context research corpus",
+          "status": "complete",
+          "issue": 97,
+          "tasks": [
+            {
+              "id": "GPI.2-T01",
+              "title": "Link 42 abstract-level claims from the evidence ledger to mechanisms and interventions",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/97",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "GPI.2-T02",
+              "title": "Record Newham, Recife, Naples and global figures with provenance and 13 declared gaps",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/97",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "GPI.3",
+          "title": "Intelligence experience and exports",
+          "status": "complete",
+          "issue": 97,
+          "tasks": [
+            {
+              "id": "GPI.3-T01",
+              "title": "Publish explorer, problem, mechanism, intervention, context and fact pages",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/97",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "GPI.3-T02",
+              "title": "Publish comparison, evidence trail, methods and deterministic exports",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/97",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "GPI.4",
+          "title": "Transparent opportunity assessment",
+          "status": "in_progress",
+          "issue": 97,
+          "tasks": [
+            {
+              "id": "GPI.4-T01",
+              "title": "Preserve F0-02.5 rubric with vetoes and no score without independent scoring",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/97",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "GPI.4-T02",
+              "title": "Independent or community scoring of candidates",
+              "status": "planned",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/103",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SEE",
+      "kind": "research",
+      "summary": "Reusable, testable intervention and evaluation designs, starting with a verified-receipt package for administrative barriers to benefit access in Newham, Recife and Naples.",
+      "gate": "Benefit-access package at maturity level 3 (prototype). Level 4 requires an approved protocol, lawful outcome data, independent methods review (G-05) and ethics approval (G-04). No intervention is implemented or recommended.",
+      "deliverables": [
+        {
+          "label": "Solutions catalogue",
+          "url": "/solutions"
+        },
+        {
+          "label": "Benefit-access vertical slice",
+          "url": "/solutions/benefit-access"
+        },
+        {
+          "label": "Energy affordability template",
+          "url": "/solutions/energy-affordability"
+        },
+        {
+          "label": "Livelihoods template",
+          "url": "/solutions/livelihoods"
+        },
+        {
+          "label": "Solutions and evaluation methodology",
+          "url": "/library/docs/platform/solutions-and-evaluation-methodology-v1"
+        }
+      ],
+      "epics": [
+        {
+          "id": "SEE.1",
+          "title": "Solution specification and evidence-gated maturity",
+          "status": "complete",
+          "issue": 98,
+          "tasks": [
+            {
+              "id": "SEE.1-T01",
+              "title": "Define solution contract, outcome stages and maturity gating",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/98",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "SEE.2",
+          "title": "Benefit-access vertical slice",
+          "status": "in_progress",
+          "issue": 98,
+          "tasks": [
+            {
+              "id": "SEE.2-T01",
+              "title": "Adapt package to three contexts with every stage measured or declared as a gap",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/98",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "SEE.2-T02",
+              "title": "Publish synthetic applications-versus-receipt comparison and sample-size planner",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/98",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "SEE.2-T03",
+              "title": "Independent methods review before maturity level 4",
+              "status": "planned",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/103",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            }
+          ]
+        },
+        {
+          "id": "SEE.3",
+          "title": "Energy and livelihoods templates",
+          "status": "complete",
+          "issue": 98,
+          "tasks": [
+            {
+              "id": "SEE.3-T01",
+              "title": "Publish evidence-linked research templates at maturity level 2",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/98",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "GAN",
+      "kind": "platform",
+      "summary": "A public self-service toolkit to discover, scrutinise and adapt HPI resources, with licences, maturity, readiness checks and contribution pathways. No adopters or partners exist.",
+      "gate": "Toolkit implemented. Adoption and partnership registers are empty by design and accept only independently verified public evidence. No confidential intake exists (#26).",
+      "deliverables": [
+        {
+          "label": "Adopt and adapt toolkit",
+          "url": "/adopt"
+        },
+        {
+          "label": "Adoption and replication framework",
+          "url": "/library/docs/platform/adoption-and-replication-framework-v1"
+        }
+      ],
+      "epics": [
+        {
+          "id": "GAN.1",
+          "title": "Resource catalogue and downloads",
+          "status": "complete",
+          "issue": 99,
+          "tasks": [
+            {
+              "id": "GAN.1-T01",
+              "title": "Publish licensed resources with maturity and prerequisites",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/99",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "GAN.2",
+          "title": "Readiness matrix and self-check",
+          "status": "complete",
+          "issue": 99,
+          "tasks": [
+            {
+              "id": "GAN.2-T01",
+              "title": "Publish nine-dimension readiness self-check running only in the browser",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/99",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "GAN.3",
+          "title": "Contribution and correction pathways",
+          "status": "complete",
+          "issue": 99,
+          "tasks": [
+            {
+              "id": "GAN.3-T01",
+              "title": "Add correction and context-proposal issue templates and governance limits",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/99",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ESL",
+      "kind": "research",
+      "summary": "Open research on how growth, productivity, wages, employment and essential costs translate into household security, with a reproducible illustrative model.",
+      "gate": "Research agenda and MODEL-HHR-01 implemented with synthetic inputs. Not a forecast; not calibrated; independent review (G-05) required before any empirical use.",
+      "deliverables": [
+        {
+          "label": "Economic Systems Lab",
+          "url": "/systems-lab"
+        },
+        {
+          "label": "Model documentation",
+          "url": "/library/docs/platform/economic-systems-lab-model-v1"
+        }
+      ],
+      "epics": [
+        {
+          "id": "ESL.1",
+          "title": "Research agenda and model registry",
+          "status": "complete",
+          "issue": 100,
+          "tasks": [
+            {
+              "id": "ESL.1-T01",
+              "title": "Publish research questions, competing explanations and evidence gaps",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/100",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "ESL.2",
+          "title": "Deterministic household resilience model",
+          "status": "in_progress",
+          "issue": 100,
+          "tasks": [
+            {
+              "id": "ESL.2-T01",
+              "title": "Implement model, scenarios, sensitivity and interactive demonstrator",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/100",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            },
+            {
+              "id": "ESL.2-T02",
+              "title": "Independent review of model assumptions",
+              "status": "planned",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/103",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "HPI-AI",
+      "kind": "platform",
+      "summary": "A tested, disabled-by-default AI research-assistance layer with grounding, citation verification, injection defence and human review; no paid inference.",
+      "gate": "Adapter and safeguards implemented and tested against simulated transports. No inference provider is connected in production and no AI-generated content is published. Live evaluation requires an available local or explicitly approved provider.",
+      "deliverables": [
+        {
+          "label": "AI status and safeguards",
+          "url": "/intelligence/ai-assistance"
+        },
+        {
+          "label": "AI architecture documentation",
+          "url": "/library/docs/platform/ai-research-assistance-v1"
+        }
+      ],
+      "epics": [
+        {
+          "id": "HPI-AI.1",
+          "title": "Configuration and provider adapter",
+          "status": "complete",
+          "issue": 101,
+          "tasks": [
+            {
+              "id": "HPI-AI.1-T01",
+              "title": "Implement disabled default, local OpenAI-compatible adapter, budgets and paid-host refusal",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "HPI-AI.2",
+          "title": "Safeguards and deterministic baseline",
+          "status": "complete",
+          "issue": 101,
+          "tasks": [
+            {
+              "id": "HPI-AI.2-T01",
+              "title": "Implement grounding, injection quarantine, validation and review queue",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "HPI-AI.3",
+          "title": "Live provider evaluation",
+          "status": "blocked",
+          "issue": 101,
+          "tasks": [
+            {
+              "id": "HPI-AI.3-T01",
+              "title": "Measure extraction accuracy with a real local or approved provider",
+              "status": "blocked",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "HPI-QA",
+      "kind": "platform",
+      "summary": "Meaningful automated tests and release verification for the platform while preserving every existing CircleCI and Vercel gate.",
+      "gate": "Local tests and browser QA are required before push; CircleCI and Vercel must pass on the exact SHA before merge. Real assistive-technology testing (G-06) remains open.",
+      "deliverables": [
+        {
+          "label": "Testing, release and cost",
+          "url": "/library/docs/platform/testing-release-and-cost-v1"
+        }
+      ],
+      "epics": [
+        {
+          "id": "HPI-QA.1",
+          "title": "Unit and integration tests",
+          "status": "complete",
+          "issue": 102,
+          "tasks": [
+            {
+              "id": "HPI-QA.1-T01",
+              "title": "Add behavioural tests for data, intelligence, solutions, adoption, model and AI",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/102",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "HPI-QA.2",
+          "title": "Browser and accessibility QA",
+          "status": "complete",
+          "issue": 102,
+          "tasks": [
+            {
+              "id": "HPI-QA.2-T01",
+              "title": "Extend Chromium and axe QA to every new route and interaction",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/102",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/104"
+            }
+          ]
+        },
+        {
+          "id": "HPI-QA.3",
+          "title": "Release verification",
+          "status": "in_progress",
+          "issue": 102,
+          "tasks": [
+            {
+              "id": "HPI-QA.3-T01",
+              "title": "Verify CircleCI, Vercel and production revision on the exact SHA",
+              "status": "in_progress",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/102"
+            },
+            {
+              "id": "HPI-QA.3-T02",
+              "title": "Real assistive-technology testing of new pages",
+              "status": "planned",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/103",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
             }
           ]
         }
