@@ -629,7 +629,7 @@
     "noSharedDatabaseAcrossProducts": true
   },
   "sync": {
-    "hubos": "existing HPI programme; RT-01 and business-options portfolio mapping pending verified HubOS issue; HPI-SCALE workstreams recorded in portfolio/hubos-sync/hpi-scale-registration-v0.1.json as a pending, unexecuted additive manifest",
+    "hubos": "Existing HPI programme in HubOS. HPI-SCALE initial production registration verified on 2026-11-16, store v235→236 (HubOS #152); separate HPI-AI v0.2 tracking delta verified on 2026-11-16, store v236→237 (HubOS #153), with immutable backups and post-write audits. Versioned manifests record historical pre-execution proposals; no approval of fieldwork, science or legal status. Any other RT-01 or business-options portfolio mapping requires separate evidence.",
     "solos": "HPI read-only projection of RT-01 and F0-04.8 subject to independent SolOS approval and release",
     "githubIssues": "authoritative_for_public_tasks"
   },
@@ -639,6 +639,6 @@
     "publicStatus": "editorial_snapshot",
     "liveGitHubIssueStateAuthoritative": true,
     "taskStatusSyncEnabled": false,
-    "reviewedAt": "2026-11-06"
+    "reviewedAt": "2026-11-16"
   }
 }
