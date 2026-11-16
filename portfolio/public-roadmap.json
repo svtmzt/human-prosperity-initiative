@@ -2286,7 +2286,7 @@
       "id": "HPI-SCALE",
       "kind": "platform",
       "summary": "Move HPI from isolated local case studies to a mechanism-based, reusable open research platform with four connected pillars, without claiming adoption, partnerships or measured human benefit.",
-      "gate": "Strategy, theory of change, ADR-0004 and the four pillars are implemented technically. The charter addendum is a candidate registered as open under F0-01; independent review, legal structure, safeguarding, data controller, human accessibility testing and fieldwork approval remain open (#103). HubOS production synchronisation is a pending manifest, not executed.",
+      "gate": "Strategy, theory of change, ADR-0004 and the four pillars are implemented technically. The charter addendum is a candidate registered as open under F0-01; independent review, legal structure, safeguarding, data controller, human accessibility testing and fieldwork approval remain open (#103). Initial HPI-SCALE HubOS production registration completed and verified on 16 November 2026 (store v235→236; HubOS #152). The separate HPI-AI v0.2 status delta remains pending operator execution under HubOS #153; it is not the initial registration.",
       "deliverables": [
         {
           "label": "Platform hub",
@@ -2362,7 +2362,7 @@
         {
           "id": "HPI-SCALE.3",
           "title": "Roadmap, issues and HubOS tracking",
-          "status": "in_progress",
+          "status": "complete",
           "issue": 96,
           "tasks": [
             {
@@ -2382,14 +2382,15 @@
             {
               "id": "HPI-SCALE.3-T03",
               "title": "Execute CAS-guarded HubOS production registration by an authorised operator",
-              "status": "blocked",
-              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/103",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/the-hub-os/issues/152",
               "assurance": {
                 "independentReview": "not_verified",
                 "ratified": false,
                 "operational": false,
                 "fieldAuthorised": false
-              }
+              },
+              "evidence": "https://github.com/svtmzt/the-hub-os/issues/152"
             }
           ]
         }
