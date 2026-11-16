@@ -49,6 +49,17 @@ test("roadmap read-only source and safe outage states are linked from the live w
  assert.ok(policy.includes("not_in_recent_feed"));
  assert.doesNotMatch(module,/innerHTML|document\.write|localStorage|method:"POST"/);
 });
+test("CI runs only on the self-hosted Mac runner with the same required job names, exact SHA and fork refusal",async()=>{
+ const ci=await readFile(".circleci/config.yml","utf8");
+ assert.match(ci,/resource_class: svtmzt\/m4-pro-mac/);
+ assert.doesNotMatch(ci,/docker:|image:|cimg\/|mcr\.microsoft\.com|resource_class: (small|medium|large)/,"no CircleCI-hosted compute fallback");
+ for(const job of ["website-quality","browser-accessibility","public-operations-watch"])assert.match(ci,new RegExp("\\n  "+job+":\\n    executor: mac-runner"));
+ assert.match(ci,/test "\$\(git rev-parse HEAD\)" = "\$CIRCLE_SHA1"/);
+ assert.match(ci,/CIRCLE_PR_USERNAME/);
+ assert.match(ci,/requires:\n\s+- website-quality/);
+ assert.doesNotMatch(ci,/persist_to_workspace|attach_workspace/,"no billed workspace transfer");
+ assert.doesNotMatch(ci,/OPENROUTER|HPI_AI_API_KEY|context:/,"no secrets or contexts reach the personal runner");
+});
 test("the existing CircleCI release gate and independent operational watch remain intact",async()=>{
  const ci=await readFile(".circleci/config.yml","utf8");
  const cfg=JSON.parse(await readFile("vercel.json","utf8"));

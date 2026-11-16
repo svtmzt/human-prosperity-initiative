@@ -1,38 +1,82 @@
 version: 2.1
+# HPI CI — executes on the founder's self-hosted Apple Silicon machine runner
+# (resource class svtmzt/m4-pro-mac, shared with other portfolio projects).
+# CircleCI still orchestrates the workflow and reports the required GitHub
+# statuses `ci/circleci: website-quality` and `ci/circleci: browser-accessibility`.
+# There is NO hosted-compute fallback: if the Mac is offline, jobs wait in the
+# CircleCI queue and the PR stays unmerged. Operations: docs/ci-self-hosted-mac-runner.md
 parameters:
   ops_watch:
     type: boolean
     default: false
-jobs:
-  website-quality:
-    docker:
-      - image: cimg/node:22.11
-    resource_class: small
+commands:
+  exact-checkout:
+    description: Fetch exactly CIRCLE_SHA1 from the canonical public repository over HTTPS (no SSH keys, no credentials)
     steps:
       - run:
-          name: Fetch exact public GitHub commit over HTTPS
+          name: Refuse untrusted fork builds on the personal runner (defence in depth; the project setting is the primary control)
+          command: |
+            set -euo pipefail
+            if [ -n "${CIRCLE_PR_USERNAME:-}" ] || [ -n "${CIRCLE_PR_REPONAME:-}" ]; then
+              echo "Forked pull requests are not executed on the self-hosted runner."; exit 1
+            fi
+      - run:
+          name: Fetch exact public GitHub commit over HTTPS into a clean workspace
           command: |
             set -euo pipefail
             test -n "$CIRCLE_SHA1"
+            case "$PWD" in ""|/|"$HOME"|"$HOME/") echo "Unsafe working directory: $PWD"; exit 1;; esac
+            rm -rf ./* ./.[!.]* 2>/dev/null || true
             git init -q
             git remote add origin https://github.com/svtmzt/human-prosperity-initiative.git
             git fetch -q --depth=1 origin "$CIRCLE_SHA1"
             git checkout -q --detach FETCH_HEAD
             test "$(git rev-parse HEAD)" = "$CIRCLE_SHA1"
+  mac-node:
+    description: Use the runner account's isolated Node.js 22 (no system or personal toolchain)
+    steps:
+      - run:
+          name: Use isolated Node.js 22.16.0 and verify platform
+          command: |
+            set -euo pipefail
+            NODE22_DIR="$HOME/.local/share/nodejs/node-v22.16.0-darwin-arm64/bin"
+            test -x "$NODE22_DIR/node"
+            echo "export PATH=\"$NODE22_DIR:/usr/bin:/bin:/usr/sbin:/sbin\"" >> "$BASH_ENV"
+            echo "export npm_config_cache=\"$HOME/.cache/hpi-ci-npm\"" >> "$BASH_ENV"
+            echo "export PLAYWRIGHT_BROWSERS_PATH=\"$HOME/.cache/hpi-ci-playwright\"" >> "$BASH_ENV"
+      - run:
+          name: Record runner platform and identity (no secrets)
+          command: |
+            set -euo pipefail
+            test "$(uname -s)" = "Darwin"; test "$(uname -m)" = "arm64"
+            node -v | grep -q '^v22\.'
+            echo "os=$(sw_vers -productVersion) arch=$(uname -m) node=$(node -v) npm=$(npm -v) user=$(id -un)"
+            if id -Gn | tr ' ' '\n' | grep -qx admin; then echo "WARNING: runner account is in the admin group (see runner security notes)"; fi
+            df -h "$PWD" | tail -1
+executors:
+  mac-runner:
+    machine: true
+    resource_class: svtmzt/m4-pro-mac
+jobs:
+  website-quality:
+    executor: mac-runner
+    steps:
+      - exact-checkout
+      - mac-node
       - run:
           name: Build and test HPI website
           command: |
             set -euo pipefail
             mkdir -p test-results
             set +e
-            npm run check > /tmp/hpi-web03-check.log 2>&1
+            npm run check > hpi-check.log 2>&1
             code=$?
             set -e
-            tail -n 90 /tmp/hpi-web03-check.log
+            tail -n 90 hpi-check.log
             node -e '
               const fs=require("node:fs");
               const result=Number(process.argv[1]);
-              const log=fs.readFileSync("/tmp/hpi-web03-check.log","utf8");
+              const log=fs.readFileSync("hpi-check.log","utf8");
               const esc=s=>s.replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");
               const xml="<testsuite tests=\"1\" failures=\""+(result?1:0)+"\"><testcase name=\"npm run check\">"+(result?"<failure>"+esc(log.slice(-10000))+"</failure>":"")+"</testcase></testsuite>";
               fs.writeFileSync("test-results/web03-check.xml",xml);
@@ -47,55 +91,32 @@ jobs:
           path: qa-artifacts/research-pipeline
           destination: open-research-reproducibility
           when: always
-      - persist_to_workspace:
-          root: .
-          paths:
-            - dist
-      - store_artifacts:
-          path: dist
-          destination: public-site
   browser-accessibility:
-    docker:
-      - image: mcr.microsoft.com/playwright:v1.64.1-noble
-    resource_class: medium
+    executor: mac-runner
     steps:
+      - exact-checkout
+      - mac-node
       - run:
-          name: Fetch exact public GitHub commit over HTTPS
+          name: Rebuild the site for this exact commit (no workspace transfer)
+          command: npm run build
+      - run:
+          name: Install pinned open-source browser QA tools and Chromium (cached in the runner account)
           command: |
             set -euo pipefail
-            test -n "$CIRCLE_SHA1"
-            git init -q
-            git remote add origin https://github.com/svtmzt/human-prosperity-initiative.git
-            git fetch -q --depth=1 origin "$CIRCLE_SHA1"
-            git checkout -q --detach FETCH_HEAD
-            test "$(git rev-parse HEAD)" = "$CIRCLE_SHA1"
-      - attach_workspace:
-          at: .
-      - run:
-          name: Install pinned open-source browser QA tools (no persistent production dependencies)
-          command: npm install --no-save --no-package-lock --ignore-scripts playwright@1.64.1 @axe-core/playwright@4.14.0
+            npm install --no-save --no-package-lock --ignore-scripts --no-audit --no-fund playwright@1.64.1 @axe-core/playwright@4.14.0
+            npx playwright install chromium
       - run:
           name: Real Chromium responsive, WCAG accessibility and keyboard checks
           command: node scripts/browser-qa.mjs
       - store_artifacts:
-          path: qa-artifacts
-          destination: public-browser-quality
+          path: qa-artifacts/browser-report.json
+          destination: public-browser-quality/browser-report.json
           when: always
   public-operations-watch:
-    docker:
-      - image: cimg/node:22.11
-    resource_class: small
+    executor: mac-runner
     steps:
-      - run:
-          name: Fetch scheduled GitHub commit over HTTPS
-          command: |
-            set -euo pipefail
-            test -n "$CIRCLE_SHA1"
-            git init -q
-            git remote add origin https://github.com/svtmzt/human-prosperity-initiative.git
-            git fetch -q --depth=1 origin "$CIRCLE_SHA1"
-            git checkout -q --detach FETCH_HEAD
-            test "$(git rev-parse HEAD)" = "$CIRCLE_SHA1"
+      - exact-checkout
+      - mac-node
       - run:
           name: Read-only public production and release status check
           command: node scripts/ops-watch.mjs
@@ -115,8 +136,8 @@ workflows:
       - browser-accessibility:
           requires:
             - website-quality
-# CircleCI only. Scheduled operations run with ops_watch=true and do not run browser build.
-# Open-science report verification and archiving reuse website-quality; no external data or paid jobs.
-# CircleCI failure status is a monitoring signal; recipient email/push alerts are provider-account settings.
+# CircleCI only; no GitHub Actions. All jobs run on the self-hosted runner (0 compute credits);
+# artifact storage is kept minimal (test results, research attestations, browser report JSON).
+# Scheduled operations run with ops_watch=true. If the Mac is offline the scheduled job waits;
+# see docs/ci-self-hosted-mac-runner.md for the monitoring trade-off.
 # Vercel Git integration deploys independently with npm run check.
-# The browser test container and tools are version-pinned; no GitHub Actions.
