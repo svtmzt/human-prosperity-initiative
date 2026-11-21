@@ -92,7 +92,13 @@ jobs:
 
   public-operations-watch:
     name: public-operations-watch
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || github.event_name == 'pull_request'
+    # Built-in ephemeral Actions token, scoped for read-only status/check queries.
+    # No third-party token, subscription or repository secret is needed.
+    permissions:
+      contents: read
+      checks: read
+      statuses: read
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -103,6 +109,8 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Read-only public production and release status check
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/ops-watch.mjs
       - name: Upload operations watch report
         if: always()

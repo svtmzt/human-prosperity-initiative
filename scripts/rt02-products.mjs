@@ -63,7 +63,7 @@ export async function enhanceRt02Products({publish,shell,sourceCatalog,revision,
   '<p>No real subjects, causal impact or validated indicator is represented in this chart.</p>'+
   '<div class="rt02-meter"><label for="synthetic-ref-meter">Reference group: <strong data-synthetic-rate>0%</strong></label><meter id="synthetic-ref-meter" min="0" max="100" value="0">0%</meter></div>'+
   '<div class="rt02-meter"><label for="synthetic-cmp-meter">Comparison group: <strong data-synthetic-rate>0%</strong></label><meter id="synthetic-cmp-meter" min="0" max="100" value="0">0%</meter></div>'+
-  '<div class="doc-table-wrap"><table><caption>Accessible text alternative: fictional denominator details</caption>'+
+  '<div class="doc-table-wrap" role="region" tabindex="0" aria-label="Scrollable fictional denominator table"><table><caption>Accessible text alternative: fictional denominator details</caption>'+
   '<thead><tr><th scope="col">Fictional group</th><th scope="col">Eligible</th><th scope="col">Missing</th><th scope="col">Observed denominator</th></tr></thead>'+
   '<tbody><tr><th scope="row">Reference</th><td data-synthetic-table></td><td data-synthetic-table></td><td data-synthetic-table></td></tr>'+
   '<tr><th scope="row">Comparison</th><td data-synthetic-table></td><td data-synthetic-table></td><td data-synthetic-table></td></tr></tbody></table></div>'+

@@ -29,6 +29,10 @@ export function latestCheckRunStates(runs){
  const newest=new Map();
  for(const run of runs){
   if(run?.app?.slug!==ACTIONS_APP)continue;
+  // Scheduled monitoring emits skipped checks on the same main SHA.
+  // A skipped check did not execute the release gate and must not supersede
+  // the last real build/test outcome. Missing is still reported if no real run.
+  if(run.conclusion==="skipped"||run.conclusion==="neutral")continue;
   const prior=newest.get(run.name);
   if(!prior||Number(run.id)>Number(prior.id))newest.set(run.name,run);
  }

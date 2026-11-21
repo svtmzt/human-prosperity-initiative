@@ -1,10 +1,14 @@
 # Cookies & device storage — current public information
 
-**Last updated: 12 November 2026. Status: source-checked disclosure with hosting runtime inventory and privacy review still pending.** This is **not** a statement that no cookies exist.
+**Last updated: 21 November 2026. Status: source-checked disclosure with a bounded live Chromium observation; provider-wide storage inventory and independent privacy review remain pending.** This is **not** a statement that no cookies exist.
 
 ## What we have checked
 
 HPI's versioned public browser code (`site/*.js`, the homepage and build configuration) currently does **not deliberately set cookies, localStorage, sessionStorage, advertising tags, analytics beacons or fingerprinting scripts**. The Source Catalogue and Synthetic Outcome Lab are designed to process public metadata or fictional inputs within the browser. Activity and Status call only HPI's own read-only endpoints.
+
+## Bounded live-browser observation (21 November 2026)
+
+In a **fresh, unauthenticated Chromium context**, seven public pages (home, Privacy, Cookies, Outcome Lab, Tools, Help and Contact) returned HTTP 200 and exposed no cookies, localStorage/sessionStorage items, response Set-Cookie headers or third-party requests in their normal page loads. This is an observed result for **one browser, one configuration and one date only** — not a provider-wide or international cookie audit. Read the [source-linked technical report](/library/docs/web-03-6-production-browser-storage-audit-2026-11-21) for exact scope and limitations.
 
 ## What is not yet established
 

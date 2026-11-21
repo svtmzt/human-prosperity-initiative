@@ -1,5 +1,5 @@
 /**
- * HPI public production watch: no credentials, customer records, paid APIs or changes.
+ * HPI public production watch: uses only an ephemeral read-only GitHub Actions token for GitHub metadata; no personal credentials, paid APIs, customer records or writes.
  * GitHub Actions scheduled workflow only. Failure becomes a CI failure, not a guarantee
  * that email/SMS/webhook notifications are configured for the maintainer.
  */
@@ -12,11 +12,12 @@ export const REPO="https://api.github.com/repos/svtmzt/human-prosperity-initiati
 const SHA=/^[0-9a-f]{40}$/;
 const ROUTES=["/","/mission","/research","/library","/roadmap","/initiatives/web-02","/initiatives/f0-03-1","/status","/publication.json"];
 
-async function request(url,fetchImpl){
+async function request(url,fetchImpl,githubToken=""){ 
  const response=await fetchImpl(url,{
   method:"GET",
   headers:{"Accept":url.startsWith(REPO)?"application/vnd.github+json":"*/*",
-   "User-Agent":"HPI-public-readonly-operations-watch"},
+   "User-Agent":"HPI-public-readonly-operations-watch",
+   ...(url.startsWith(REPO+"/")&&githubToken?{"Authorization":"Bearer "+githubToken}: {})},
   signal:AbortSignal.timeout(12000),
   redirect:"error"
  });
@@ -26,7 +27,7 @@ async function request(url,fetchImpl){
 
 export const latestStates=latestStatusStates;
 
-export async function inspect({fetchImpl=fetch,now=new Date()}={}){
+export async function inspect({fetchImpl=fetch,now=new Date(),githubToken=process.env.GITHUB_TOKEN||""}={}){
  const report={
   kind:"public-readonly-web01-watch",checkedAt:now.toISOString(),
   source:"public-site-plus-public-GitHub",
@@ -38,7 +39,7 @@ export async function inspect({fetchImpl=fetch,now=new Date()}={}){
  };
  for(const route of ROUTES){
   try{
-   const response=await request(BASE+route,fetchImpl);
+   const response=await request(BASE+route,fetchImpl,githubToken);
    const text=await response.text();
    report.routes.push({path:route,status:200});
    if(route==="/publication.json"){
@@ -51,7 +52,7 @@ export async function inspect({fetchImpl=fetch,now=new Date()}={}){
  let mainSha=null;
  let mainAgeMs=NaN;
  try{
-  const latest=await (await request(REPO+"/commits/main",fetchImpl)).json();
+  const latest=await (await request(REPO+"/commits/main",fetchImpl,githubToken)).json();
   if(!SHA.test(String(latest.sha)))throw Error("Unexpected main SHA");
   mainSha=latest.sha;
   report.publication.githubMainSha=mainSha;
@@ -67,8 +68,8 @@ export async function inspect({fetchImpl=fetch,now=new Date()}={}){
  }catch(error){report.issues.push("GitHub main verification: "+error.message);}
  if(mainSha){
   try{
-   const data=await (await request(REPO+"/commits/"+mainSha+"/status",fetchImpl)).json();
-   const runs=await (await request(REPO+"/commits/"+mainSha+"/check-runs?per_page=100",fetchImpl)).json();
+   const data=await (await request(REPO+"/commits/"+mainSha+"/status",fetchImpl,githubToken)).json();
+   const runs=await (await request(REPO+"/commits/"+mainSha+"/check-runs?per_page=100",fetchImpl,githubToken)).json();
    const states=requiredStates({
     statuses:Array.isArray(data.statuses)?data.statuses:[],
     checkRuns:Array.isArray(runs.check_runs)?runs.check_runs:[]});
@@ -86,7 +87,7 @@ export async function inspect({fetchImpl=fetch,now=new Date()}={}){
   try{
    const since=new Date(now.getTime()-7*86400000).toISOString();
    const url=REPO+"/commits?sha=main&since="+encodeURIComponent(since)+"&per_page=100";
-   const commits=await (await request(url,fetchImpl)).json();
+   const commits=await (await request(url,fetchImpl,githubToken)).json();
    if(!Array.isArray(commits))throw Error("Unexpected commit list");
    report.resourceSignals.publicMainCommitsLast7Days=commits.length;
    if(commits.length===100)report.warnings.push("At least 100 commits in last 7 days; review build usage in provider billing console");

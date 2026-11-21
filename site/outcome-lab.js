@@ -39,8 +39,27 @@ const value=id=>{
   throw Error("Use nonnegative whole numbers in the allowed range");
  return num;
 };
+const syntheticFields=()=>[...form.querySelectorAll('input[type="number"]')];
+function markInvalidCounts(){
+ if(!form)return;
+ for(const el of syntheticFields()){
+  const n=Number(el.value);
+  const bad=el.value.trim()===""||!Number.isSafeInteger(n)||n<Number(el.min||0)||n>Number(el.max||50000);
+  if(bad)el.setAttribute("aria-invalid","true");else el.removeAttribute("aria-invalid");
+ }
+ for(const prefix of ["ref","comp"]){
+  const eligible=Number(document.getElementById(prefix+"-eligible").value);
+  const missing=Number(document.getElementById(prefix+"-missing").value);
+  const received=Number(document.getElementById(prefix+"-received").value);
+  if(Number.isFinite(eligible)&&Number.isFinite(missing)&&missing>=eligible)
+   document.getElementById(prefix+"-missing").setAttribute("aria-invalid","true");
+  if(Number.isFinite(eligible)&&Number.isFinite(missing)&&Number.isFinite(received)&&received>eligible-missing)
+   document.getElementById(prefix+"-received").setAttribute("aria-invalid","true");
+ }
+}
 function evaluate(){
  try{
+  syntheticFields().forEach(el=>el.removeAttribute("aria-invalid"));
   const scenario={
    scenarioId:"HPI_BROWSER_SYNTHETIC",sourceType:"synthetic",
    indicatorId:"HPI-B-01",timeframe:"Illustrative nine-month follow-up",
@@ -73,14 +92,34 @@ function evaluate(){
    pct(r.missingnessSensitivity.differencePercentagePoints.lower)+", "+
    pct(r.missingnessSensitivity.differencePercentagePoints.upper)+
    "]. No causal effectiveness or scientific validation is established.";
+  status.setAttribute("role","status");
   renderComparison(r);
  }catch(error){
+  markInvalidCounts();
+  status.setAttribute("role","alert");
   if(visual)visual.hidden=true;
   csv=null;if(exportButton)exportButton.disabled=true;
   if(method)method.textContent="Cannot show a calculation breakdown for invalid synthetic counts.";
   status.textContent="Cannot evaluate synthetic example: "+error.message+
    ". No data were sent to a server.";
  }
+}
+const PRESETS=Object.freeze({
+ positive:{name:"Possible increase",counts:[100,6,0,100,11,0]},
+ negative:{name:"Possible decrease",counts:[100,12,0,100,8,0]},
+ missing:{name:"Missing follow-up",counts:[100,9,25,100,11,40]},
+ zero:{name:"No observed receipts",counts:[100,0,20,100,0,0]}
+});
+const presetStatus=document.querySelector("#synthetic-preset-status");
+for(const button of document.querySelectorAll("[data-synthetic-preset]")){
+ button.addEventListener("click",()=>{
+  if(!form)return;
+  const preset=PRESETS[button.dataset.syntheticPreset];
+  if(!preset)return;
+  syntheticFields().forEach((field,i)=>{field.value=String(preset.counts[i]);field.removeAttribute("aria-invalid")});
+  if(presetStatus)presetStatus.textContent=preset.name+" — fictional counts loaded; comparison recalculated below.";
+  evaluate();
+ });
 }
 if(form&&status){form.addEventListener("submit",event=>{event.preventDefault();evaluate()});evaluate()}
 const simulationButton=document.querySelector("#run-synthetic-simulation");
