@@ -246,7 +246,15 @@ await publish("/research/outcome-lab",shell({
   '<p>The example uses draft indicator <strong>'+safe(outcomeIndicator.id)+
   '</strong> (verified receipt; status: <strong>'+safe(outcomeIndicator.status)+
   '</strong>). This lab runs in the browser only; submitted counts are not transmitted or retained.</p>'+
-  '<form id="outcome-demo" aria-label="Synthetic outcome comparison">'+
+  '<div class="rt02-guide" aria-label="Guided synthetic examples"><h2>Start with a fictional example</h2><p>Choose a preset, then adjust the numbers below. All counts are invented; none describes a real group or measures policy impact.</p>'+ 
+  '<div class="rt02-presets" role="group" aria-label="Load a fictional scenario">'+
+  '<button type="button" data-synthetic-preset="positive">Possible increase (+5 pp)</button>'+
+  '<button type="button" data-synthetic-preset="negative">Possible decrease (−4 pp)</button>'+
+  '<button type="button" data-synthetic-preset="missing">Missing follow-up</button>'+
+  '<button type="button" data-synthetic-preset="zero">No observed receipts</button></div>'+
+  '<p id="synthetic-preset-status" class="rt02-preset-status" role="status" aria-live="polite">Default fictional example loaded: 100 per group, 6 versus 11 receipts.</p></div>'+
+  '<form id="outcome-demo" aria-label="Synthetic outcome comparison" aria-describedby="synthetic-input-guidance" novalidate>'+
+  '<p id="synthetic-input-guidance">Enter only fictional whole-number counts. For each group, eligible must be greater than zero; missing follow-up must be smaller than eligible; received cannot exceed the observed count (eligible minus missing). No values are uploaded.</p>'+
   '<fieldset><legend>Fictional reference group</legend>'+
   '<p><label for="ref-eligible">Eligible (synthetic)</label> <input id="ref-eligible" type="number" min="1" max="50000" value="100" required></p>'+
   '<p><label for="ref-received">Observed receipts</label> <input id="ref-received" type="number" min="0" max="50000" value="6" required></p>'+
