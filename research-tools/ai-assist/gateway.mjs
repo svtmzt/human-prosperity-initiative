@@ -105,7 +105,7 @@ export function createResearchGateway({env=process.env,quotaStore=null,catalog=n
     message:scope==="shared_daily"?"The shared free AI capacity for today is used up. It resets at 00:00 UTC. No paid capacity is used as a fallback.":"Your request allowance is used up for this period."});
   }
   const config={...ready.config,maxRequests:ids.length,maxRetries:Math.min(ready.config.maxRetries,1)};
-  const models=selectModels(body.task,{catalog,policy:selectionPolicy,config:{...config,model:null,fallbackModels:[]}});
+  const models=selectModels(body.task,{catalog,policy:selectionPolicy,config:{...config,model:null,fallbackModels:[]},now:t});
   if(!models.ok)return send(res,503,{status:"model_temporarily_unavailable",message:"No verified free model is currently available for this task. Try again later."});
   const provider=createOpenRouterProvider(config,{fetchImpl,apiKey:readApiKey(config,env),models:models.entries,breaker:new CircuitBreaker(),
    quota:new QuotaLedger({store:quotaStore,dailyCeiling:limits.globalDaily*2,scope:"gw:attempts",now}),sleep});
