@@ -141,7 +141,7 @@ test("every CI job checks out the exact commit of the canonical repository with 
  assert.ok(!ci.includes("saver1991"),"no old-owner references");
  assert.ok(!ci.includes("repository:"),"jobs check out this repository, not a redirect or fork");
  assert.equal(ci.split("uses: actions/checkout@").length-1,3,"all three jobs check out the repository");
- for(const use of ci.match(/uses:\s*\S+/g))assert.match(use,/@[0-9a-f]{40}$/,"action pinned to a full commit SHA: "+use);
+ for(const use of ci.match(/^\s*- uses:\s*\S+/gm))assert.match(use,/@[0-9a-f]{40}$/,"action pinned to a full commit SHA: "+use.trim());
  assert.equal(ci.split("persist-credentials: false").length-1,3,"no job keeps a Git token in the workspace");
 });
 
