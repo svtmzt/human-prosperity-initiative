@@ -115,6 +115,31 @@ try{
     await page.locator('#outcome-demo button[type="submit"]').click();
     record(viewport.name+" synthetic lab restores reproducible +5pp observed difference",
      (await page.locator("#outcome-demo-result").textContent()).includes("+5.00%"));
+    // RT-02.4/02.7: actual browser controls must work at each responsive width.
+    await page.locator('[data-synthetic-preset="negative"]').click();
+    record(viewport.name+" preset exposes fictional adverse outcomes",
+     (await page.locator("#outcome-demo-result").textContent()).includes("-4.00%")&&
+     (await page.locator("#synthetic-preset-status").textContent()).includes("fictional"));
+    await page.locator('[data-synthetic-preset="missing"]').click();
+    record(viewport.name+" missing follow-up preset retains denominator and uncertainty caveats",
+     (await page.locator("#outcome-demo-result").textContent()).includes("Worst/best missingness")&&
+     (await page.locator("#outcome-method-detail").textContent()).includes("75")&&
+     (await page.locator("#outcome-method-detail").textContent()).includes("60"));
+    await page.locator('[data-synthetic-preset="zero"]').click();
+    record(viewport.name+" zero outcomes are valid fictional inputs",
+     (await page.locator("#outcome-demo-result").textContent()).includes("0.00%")&&
+     await page.locator("#export-synthetic-csv").isEnabled());
+    await page.locator("#comp-received").fill("9000");
+    await page.locator('#outcome-demo button[type="submit"]').click();
+    record(viewport.name+" invalid synthetic counts show accessible error and stop export",
+     (await page.locator("#outcome-demo-result").getAttribute("role"))==="alert"&&
+     (await page.locator("#comp-received").getAttribute("aria-invalid"))==="true"&&
+     await page.locator("#export-synthetic-csv").isDisabled());
+    await page.locator('[data-synthetic-preset="positive"]').click();
+    record(viewport.name+" valid preset recovers correctly after invalid input",
+     (await page.locator("#outcome-demo-result").getAttribute("role"))==="status"&&
+     (await page.locator("#outcome-demo-result").textContent()).includes("+5.00%")&&
+     await page.locator("#export-synthetic-csv").isEnabled());
     await page.locator("#run-synthetic-simulation").click();
     record(viewport.name+" seeded synthetic simulation is explicitly not a real-world CI",
      (await page.locator("#simulation-result").textContent()).includes("NOT a confidence interval"));
