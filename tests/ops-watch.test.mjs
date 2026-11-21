@@ -107,3 +107,38 @@ test("without token public operation watch remains read-only but cannot invent m
  assert.equal(r.result,"failed");
  assert.ok(r.issues.some(x=>x.includes("website-quality: missing")));
 });
+
+test("daily scheduled skips never overwrite last successful release checks on same main SHA",async()=>{
+ const original=fixture();
+ const calls=[];
+ const fetchImpl=async(url,opts)=>{
+  const path=new URL(url).pathname;
+  if(path.endsWith("/check-runs"))
+   return new Response(JSON.stringify({check_runs:[
+    {id:54,name:"website-quality",app:{slug:"github-actions"},status:"completed",conclusion:"skipped"},
+    {id:55,name:"browser-accessibility",app:{slug:"github-actions"},status:"completed",conclusion:"skipped"},
+    {id:44,name:"website-quality",app:{slug:"github-actions"},status:"completed",conclusion:"success"},
+    {id:45,name:"browser-accessibility",app:{slug:"github-actions"},status:"completed",conclusion:"success"}
+   ]}),{status:200});
+  return original(url,opts);
+ };
+ const report=await inspect({fetchImpl,now:NOW,githubToken:"synthetic-readonly-token"});
+ assert.equal(report.result,"passed");
+ assert.equal(report.ci["website-quality"],"success");
+ assert.equal(report.ci["browser-accessibility"],"success");
+});
+test("actual failure after a successful release still fails the watch",async()=>{
+ const original=fixture();
+ const fetchImpl=async(url,opts)=>{
+  if(new URL(url).pathname.endsWith("/check-runs"))
+   return new Response(JSON.stringify({check_runs:[
+    {id:90,name:"website-quality",app:{slug:"github-actions"},status:"completed",conclusion:"failure"},
+    {id:89,name:"website-quality",app:{slug:"github-actions"},status:"completed",conclusion:"success"},
+    {id:91,name:"browser-accessibility",app:{slug:"github-actions"},status:"completed",conclusion:"success"}
+   ]}),{status:200});
+  return original(url,opts);
+ };
+ const report=await inspect({fetchImpl,now:NOW});
+ assert.equal(report.result,"failed");
+ assert.equal(report.ci["website-quality"],"failure");
+});
