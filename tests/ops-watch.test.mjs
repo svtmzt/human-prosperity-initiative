@@ -83,3 +83,27 @@ test("recent GitHub change permits temporary publication lag even if published b
  assert.equal(report.result,"passed");
  assert.ok(report.warnings.some(x=>x.includes("deploy propagation")));
 });
+
+test("ephemeral GitHub token is sent only to GitHub API and never to the public site",async()=>{
+ const calls=[];
+ const original=fixture();
+ const fetchImpl=async(url,opts)=>{
+  calls.push({url,auth:opts?.headers?.Authorization??null});
+  return original(url,opts);
+ };
+ const r=await inspect({fetchImpl,now:NOW,githubToken:"synthetic-test-token"});
+ assert.equal(r.result,"passed");
+ assert.ok(calls.some(c=>c.url.startsWith(REPO+"/")&&c.auth==="Bearer synthetic-test-token"));
+ assert.ok(calls.filter(c=>c.url.startsWith(BASE)).every(c=>c.auth===null),"token never sent to website");
+});
+test("without token public operation watch remains read-only but cannot invent missing checks",async()=>{
+ const original=fixture();
+ const fetchImpl=async(url,opts)=>{
+  const path=new URL(url).pathname;
+  if(path.endsWith("/check-runs"))return new Response(JSON.stringify({total_count:0,check_runs:[]}),{status:200});
+  return original(url,opts);
+ };
+ const r=await inspect({fetchImpl,now:NOW,githubToken:""});
+ assert.equal(r.result,"failed");
+ assert.ok(r.issues.some(x=>x.includes("website-quality: missing")));
+});
