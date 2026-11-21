@@ -235,13 +235,13 @@ if(route==="/research/source-catalog"){
     record(viewport.name+" "+route+" accessible page title, description and internal navigation",
      Boolean(seo.title&&seo.description&&seo.linkCount>=4),JSON.stringify(seo));
    }
-   if(["mobile","desktop"].includes(viewport.name)&&["/","/projects","/projects/newham","/tools","/research","/roadmap","/activity","/initiatives/web-02"].includes(route)){
+   if(["mobile","desktop"].includes(viewport.name)&&["/","/projects","/projects/newham","/tools","/research","/research/outcome-lab","/roadmap","/activity","/privacy","/accessibility","/help","/initiatives/web-02"].includes(route)){
     const screenshot=viewport.name+"-"+(route==="/"? "home":route.slice(1).replaceAll("/","-"))+".png";
     await page.screenshot({path:resolve(output,screenshot),fullPage:true});
     report.screenshots.push(screenshot);
    }
    if((viewport.name==="desktop"||viewport.name==="mobile")&&
-      (["/","/mission","/projects","/projects/newham","/tools","/updates","/research","/roadmap","/research/evidence-ledger","/library","/activity","/status"].includes(route)||
+      (["/","/mission","/projects","/projects/newham","/tools","/updates","/research","/roadmap","/research/evidence-ledger","/research/outcome-lab","/library","/activity","/status","/privacy","/cookies","/terms","/legal","/copyright","/accessibility","/help","/contact"].includes(route)||
       initiativeRoutes.includes(route)||platformCore.includes(route))){
     const result=await new AxeBuilder({page}).withTags(["wcag2a","wcag2aa","wcag21aa","wcag22aa"]).analyze();
     const serious=result.violations;
@@ -468,6 +468,16 @@ if(route==="/research/source-catalog"){
   formula.includes("eligible − missing follow-up")&&formula.includes("17 / 100")&&formula.includes("No causal inference"));
  await networkPage.locator("#run-synthetic-simulation").click();
  record("synthetic calculation sends no network requests",requests.length===initialRequestCount);
+ const firstPartyStorage=await networkPage.evaluate(()=>({
+  cookie:document.cookie,
+  localKeys:Object.keys(localStorage),
+  sessionKeys:Object.keys(sessionStorage),
+  thirdPartyScriptCount:[...document.scripts].filter(s=>s.src&&new URL(s.src).origin!==location.origin).length
+ }));
+ record("local research tools do not deliberately store visitor data or load third-party scripts",
+  firstPartyStorage.cookie===""&&firstPartyStorage.localKeys.length===0&&
+  firstPartyStorage.sessionKeys.length===0&&firstPartyStorage.thirdPartyScriptCount===0,
+  JSON.stringify(firstPartyStorage)+" (local fixture only; hosting/regions still require separate production review)");
  const matrix=await networkPage.goto(base+"/initiatives/f0-04",{waitUntil:"networkidle"});
  const governanceText=(await networkPage.locator("main").textContent())||"";
  record("F0-04 documentary status distinct from independent authority",
