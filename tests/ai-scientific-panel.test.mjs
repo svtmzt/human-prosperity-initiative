@@ -8,7 +8,7 @@ import {
 import {
  estimateInferenceCost,buildCostLadder,planAccuracyFirstEscalation
 } from "../research-tools/ai-assist/model-costs.mjs";
-import {makePublicCostPlan,planningFromExistingBenchmarks} from "../scripts/ai-scientific-panel.mjs";
+import {makePublicCostPlan,planningFromExistingBenchmarks,parsePanelModelSpec} from "../scripts/ai-scientific-panel.mjs";
 import {buildSyntheticChallenges,inspectChallengeSafety} from "../research-tools/ai-assist/scientific-challenges.mjs";
 
 const claim={sourceId:"S-1",
@@ -226,4 +226,21 @@ test("scientific qualification requires external audit receipt AND Wilson confid
  assert.ok(wilsonLowerBound(120,120)>0.95);
  assert.ok(wilsonLowerBound(70,120)<0.85);
  assert.throws(()=>wilsonLowerBound(101,100),/Invalid/);
+});
+
+test("mixed local and strict-free cloud identities are explicit and cannot silently become paid",()=>{
+ assert.deepEqual(parsePanelModelSpec("local::qwen3.5:4b-q4_K_M","disabled"),{
+  kind:"local",id:"qwen3.5:4b-q4_K_M",family:"qwen"
+ });
+ assert.deepEqual(parsePanelModelSpec("openrouter::baidu/ernie-5.5-flash-preview:free","local"),{
+  kind:"openrouter",id:"baidu/ernie-5.5-flash-preview:free",family:"baidu"
+ });
+ assert.equal(parsePanelModelSpec("qwen3.5:9b","local").kind,"local");
+ for(const label of [
+  "openrouter::anthropic/claude-opus-5.5",
+  "openrouter::openai/gpt-6.2-astra",
+  "openai_compatible::openai/gpt-6.2-astra",
+  "invalid::model",
+  "local::"
+ ])assert.throws(()=>parsePanelModelSpec(label,"local"),/Paid models|Only local|Invalid model/);
 });
