@@ -94,6 +94,12 @@ test("material disagreements, provider failures, quarantines, and correlated fam
  assert.equal(disagreement.outcomes[0].interpretation,"material_model_disagreement");
  assert.equal(disagreement.unresolved,1);
  assert.equal(disagreement.outcomes[0].externalModelEscalationSuggested,true);
+ // Identical direction/endpoint does not imply agreement on what happened:
+ const divergentText=reconcileScientificPanel({task:"claim-extraction",items,
+  reports:[result("m1","a"),result("m2","b",[{
+   ...row(),acceptedItems:[{...claim,statement:"This was only an administrative observation."}]
+  }])]});
+ assert.equal(divergentText.outcomes[0].interpretation,"material_model_disagreement");
  const sameFamily=reconcileScientificPanel({task:"claim-extraction",items,
   reports:[result("qwen-4b","qwen"),result("qwen-9b","qwen")]});
  assert.equal(sameFamily.independentModelFamilies,1);
