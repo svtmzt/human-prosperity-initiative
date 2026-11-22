@@ -16,7 +16,7 @@ export function validateCandidateUrl(raw){
   if(url.protocol!=="https:"||url.username||url.password||url.search||url.hash||
      (url.pathname!=="/"&&url.pathname!=="")||
      !(url.hostname==="human-prosperity-initiative.vercel.app"||
-       PROJECT_HOST.test(url.hostname))))
+       PROJECT_HOST.test(url.hostname)))
     throw new Error("Candidate must be an HTTPS Vercel deployment origin");
   return url.origin;
 }
