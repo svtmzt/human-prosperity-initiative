@@ -2852,6 +2852,97 @@
               "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/103"
             }
           ]
+        },
+        {
+          "id": "HPI-AI.6",
+          "title": "HPI-AI.6 — Accuracy-first multi-model scientific validation and staged cost ladder",
+          "status": "in_progress",
+          "issue": 111,
+          "tasks": [
+            {
+              "id": "HPI-AI.6-T01",
+              "title": "Private independent multi-model scientific panel, discrepancies and provenance",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/112"
+            },
+            {
+              "id": "HPI-AI.6-T02",
+              "title": "Accuracy thresholds, externally attributable audited metrics and Wilson intervals",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/112"
+            },
+            {
+              "id": "HPI-AI.6-T03",
+              "title": "Fail-closed publication gate for AI-origin research claims",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/112"
+            },
+            {
+              "id": "HPI-AI.6-T04",
+              "title": "140 distinctly labelled synthetic engineering challenges and real Qwen panel smoke",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/112"
+            },
+            {
+              "id": "HPI-AI.6-T05",
+              "title": "Dated free-to-frontier cost comparison from public OpenRouter model metadata",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/112"
+            },
+            {
+              "id": "HPI-AI.6-T06",
+              "title": "Real free cloud-panel comparison under current ZDR/data policy and available HPI key",
+              "status": "blocked",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            },
+            {
+              "id": "HPI-AI.6-T07",
+              "title": "Two qualified independent reviewers and at least 100 adjudicated cases per task",
+              "status": "blocked",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            },
+            {
+              "id": "HPI-AI.6-T08",
+              "title": "Optional explicitly budget-approved economy-to-frontier paid benchmark",
+              "status": "blocked",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            },
+            {
+              "id": "HPI-AI.6-T09",
+              "title": "Independent publication eligibility, privacy and scientific-governance approval",
+              "status": "blocked",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+              "assurance": {
+                "independentReview": "not_verified",
+                "ratified": false,
+                "operational": false,
+                "fieldAuthorised": false
+              }
+            }
+          ]
         }
       ]
     },
