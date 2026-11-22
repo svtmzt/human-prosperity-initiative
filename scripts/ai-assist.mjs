@@ -11,6 +11,7 @@
  *                                              | evidence-gap-detection (--contexts UK-NEWHAM) | contradiction-detection (--pairs E29:E30)
  *   npm run ai:eval:set [-- --check]           write or drift-check research/ai/evaluation-set-v1.json
  *   npm run ai:evaluate -- --models a:free,b:free [--tasks ...] [--publish]
+ *   npm run ai:evaluate -- --item-ids claim:E08,classify:E08 [--no-repeat]  (bounded local benchmark)
  *   npm run ai:review -- list | decide --id AIQ-... --decision reject --reviewer "Name"
  *
  * Configuration: docs/platform/ai-research-assistance-v2.md. Outputs go to
@@ -105,6 +106,13 @@ async function evaluate(rest,config){
  const {kb}=await loadVerifiedPlatform();
  const vocab=await vocabulary(kb);
  const tasks=csvArg(rest,"--tasks").length?csvArg(rest,"--tasks"):TASK_IDS;
+ const selectedIds=csvArg(rest,"--item-ids");
+ const validIds=new Set(set.items.map(i=>i.id));
+ if(selectedIds.length!==new Set(selectedIds).size)throw new Error("Duplicate evaluation item ids");
+ for(const id of selectedIds)if(!validIds.has(id))throw new Error("Unknown evaluation item: "+id);
+ const itemsToEvaluate=set.items.filter(i=>tasks.includes(i.task)&&(!selectedIds.length||selectedIds.includes(i.id)));
+ if(!itemsToEvaluate.length)throw new Error("No evaluation items match --tasks and --item-ids");
+ if(selectedIds.length&&itemsToEvaluate.length!==selectedIds.length)throw new Error("An evaluation item was excluded by --tasks");
  const models=config.kind==="openrouter"?csvArg(rest,"--models"):[config.model||"local-default"];
  if(!models.length)throw new Error("Pass --models with one or more ':free' model ids to compare.");
  const rescoreDir=arg(rest,"--rescore");
@@ -113,7 +121,8 @@ async function evaluate(rest,config){
   const raw=JSON.parse(await readFile(rescoreDir+"/raw-private.json","utf8"));
   const prev=JSON.parse(await readFile(rescoreDir+"/aggregate.json","utf8"));
   if(raw.set.sha256!==set.sha256)throw new Error("Saved run used a different evaluation set");
-  for(const m of raw.out)m.score=scoreEvaluation(set.items.filter(i=>tasks.includes(i.task)),new Map(Object.entries(m.raw)));
+  const referenceIds=new Set(prev.evaluationSet?.selectedItemIds||itemsToEvaluate.map(i=>i.id));
+  for(const m of raw.out)m.score=scoreEvaluation(set.items.filter(i=>referenceIds.has(i.id)),new Map(Object.entries(m.raw)));
   const aggregate={...prev,rescoredAt:new Date().toISOString(),rescoreNote:"Metrics recomputed from the saved run with the current scorer; no model was queried again.",
    models:raw.out.map(m=>({...prev.models.find(x=>x.model===m.model),metrics:m.score.metrics,operations:m.score.operations}))};
   await writeFile(rescoreDir+"/aggregate.json",JSON.stringify(aggregate,null,2)+"\n");
@@ -129,7 +138,7 @@ async function evaluate(rest,config){
   const results=new Map(),reports=[];
   let stop=null;
   for(const task of tasks){
-   const items=set.items.filter(i=>i.task===task);
+   const items=itemsToEvaluate.filter(i=>i.task===task);
    if(!items.length)continue;
    if(accountStop||stop){for(const i of items)results.set(i.id,{status:"not_run",reason:accountStop||stop});continue}
    const built=await buildProvider(runConfig,{task,models:config.kind==="openrouter"?[model]:null,allowFallback:false,providerOptions:EVAL_PROVIDER_OPTIONS});
@@ -148,14 +157,14 @@ async function evaluate(rest,config){
   // repeat a small subset to measure run-to-run consistency
   const repeats=[];
   if(!stop&&!accountStop&&tasks.includes("claim-extraction")&&!rest.includes("--no-repeat")){
-   const items=set.items.filter(i=>set.repeatItems.includes(i.id)).map(i=>({...i,id:i.id+"#repeat"}));
+   const items=itemsToEvaluate.filter(i=>set.repeatItems.includes(i.id)).map(i=>({...i,id:i.id+"#repeat"}));
    const built=await buildProvider(runConfig,{task:"claim-extraction",models:config.kind==="openrouter"?[model]:null,allowFallback:false,providerOptions:EVAL_PROVIDER_OPTIONS});
    if(built.provider.available){
     const report=await runResearchTask({task:"claim-extraction",items,provider:built.provider,config:runConfig,vocab});
     for(const r of report.results)repeats.push({itemId:r.itemId.replace("#repeat",""),agreement:consistencyBetweenRuns(results.get(r.itemId.replace("#repeat","")),r),status:r.status});
    }
   }
-  const score=scoreEvaluation(set.items.filter(i=>tasks.includes(i.task)),results);
+  const score=scoreEvaluation(itemsToEvaluate,results);
   const answered=repeats.filter(r=>!["not_run"].includes(r.status));
   out.push({model,status:stop?"stopped: "+stop:"completed",score,repeats:{items:repeats.length,meanAgreement:answered.length?Math.round(answered.reduce((n,r)=>n+r.agreement,0)/answered.length*1000)/1000:null},
    reports,raw:Object.fromEntries(results)});
@@ -165,7 +174,8 @@ async function evaluate(rest,config){
  await mkdir(dir,{recursive:true});
  await writeFile(dir+"/raw-private.json",JSON.stringify({note:"PRIVATE: unreviewed model output. Never publish.",set:{version:set.version,sha256:set.sha256},out},null,2)+"\n");
  const aggregate={schemaVersion:"1.0",kind:"hpi_ai_evaluation_results",evaluatedAt:new Date().toISOString(),
-  evaluationSet:{path:EVAL_SET_PATH,version:set.version,sha256:set.sha256,items:set.items.length},
+  evaluationSet:{path:EVAL_SET_PATH,version:set.version,sha256:set.sha256,items:itemsToEvaluate.length,
+   totalReferenceItems:set.items.length,selectedItemIds:itemsToEvaluate.map(i=>i.id)},
   providerKind:config.kind,dataPolicy:config.dataPolicy??null,
   prompts:TASK_IDS.map(promptFingerprint),
   parameters:{temperature:0,maxOutputTokens:config.maxOutputTokens,maxRetries:config.maxRetries,minIntervalMs:config.minIntervalMs,fallback:"disabled during evaluation (each model measured alone)"},
