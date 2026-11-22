@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
 import {
  assessModelReadiness,reconcileScientificPanel,runScientificPanel,
- scientificPublicationGate
+ scientificPublicationGate,wilsonLowerBound
 } from "../research-tools/ai-assist/scientific-validation.mjs";
 import {
  estimateInferenceCost,buildCostLadder,planAccuracyFirstEscalation
@@ -29,6 +29,15 @@ const result=(model,family,rows=[row()])=>({
 });
 const metrics={referenceConsistentPrecision:1,referenceRecall:1,
  providerFailureRate:0,nullAdverseUpgradedToSupports:0,injectionFollowed:0};
+const externalAudit={
+ referenceSha256:"a".repeat(64),reviewers:2,conflictsAdjudicated:true,
+ independentlyAdjudicatedItems:120,
+ reviewIssue:"https://github.com/svtmzt/human-prosperity-initiative/issues/19",
+ auditedCounts:{
+  referenceConsistentPrecision:{successes:120,trials:120},
+  referenceRecall:{successes:120,trials:120}
+ }
+};
 
 test("accuracy gates reject historical tiny internally labelled benchmarks even at perfect agreement",async()=>{
  const benchmark=JSON.parse(await readFile("research/ai/local-ollama-comparison-2026-11-22.json","utf8"));
@@ -47,7 +56,7 @@ test("accuracy gates reject historical tiny internally labelled benchmarks even 
 
 test("expert audited sample is necessary but does not grant automatic scientific publication",()=>{
  const r=assessModelReadiness({model:"mock-accurate",task:"claim-extraction",metrics,
-  independentlyAdjudicatedItems:120,independentReference:true,criticalSafetyFindings:0});
+  independentlyAdjudicatedItems:120,independentReference:true,criticalSafetyFindings:0,externalAudit});
  assert.equal(r.qualifiedForConsideration,true);
  assert.equal(r.independentScientificValidation,false);
  assert.equal(r.publication,"never_auto_publish_model_conclusions");
@@ -60,7 +69,8 @@ test("expert audited sample is necessary but does not grant automatic scientific
   {metrics:{...metrics,providerFailureRate:0.1}}
  ]){
   assert.equal(assessModelReadiness({model:"mock",task:"claim-extraction",metrics,
-   independentReference:true,independentlyAdjudicatedItems:120,criticalSafetyFindings:0,...overrides}).qualifiedForConsideration,false);
+   independentReference:true,independentlyAdjudicatedItems:120,criticalSafetyFindings:0,
+   externalAudit,...overrides}).qualifiedForConsideration,false);
  }
 });
 
@@ -196,4 +206,24 @@ test("140 synthetic engineering challenges remain separate from the independent 
  assert.equal(report.byCategory.instruction_injection.sourceQuarantined,20);
  assert.equal(report.warnings.length,0);
  assert.equal(report.publicationAuthorised,false);
+});
+
+test("scientific qualification requires external audit receipt AND Wilson confidence denominator",()=>{
+ const base={model:"mock",task:"claim-extraction",metrics,independentReference:true,
+  independentlyAdjudicatedItems:120,criticalSafetyFindings:0};
+ const noReceipt=assessModelReadiness(base);
+ assert.equal(noReceipt.qualifiedForConsideration,false);
+ assert.ok(noReceipt.reasons.includes("attributable_independent_audit_receipt_missing"));
+ const fake={...externalAudit,reviewers:1};
+ assert.equal(assessModelReadiness({...base,externalAudit:fake}).qualifiedForConsideration,false);
+ const lowCount={...externalAudit,auditedCounts:{
+  ...externalAudit.auditedCounts,referenceRecall:{successes:70,trials:120}}};
+ const r=assessModelReadiness({...base,externalAudit:lowCount});
+ assert.equal(r.qualifiedForConsideration,false);
+ assert.ok(r.reasons.includes("confidence_bound_below_threshold:referenceRecall"));
+ const noNumbers={...externalAudit,auditedCounts:{}};
+ assert.equal(assessModelReadiness({...base,externalAudit:noNumbers}).qualifiedForConsideration,false);
+ assert.ok(wilsonLowerBound(120,120)>0.95);
+ assert.ok(wilsonLowerBound(70,120)<0.85);
+ assert.throws(()=>wilsonLowerBound(101,100),/Invalid/);
 });
