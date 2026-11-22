@@ -112,3 +112,21 @@ test("scientific CLI refuses explicit downgrade from ZDR to weaker privacy polic
   itemIds:["claim:E08"],modelIds:["openrouter::"+ling,"openrouter::"+gemma],
   config:readAiConfig(env),env}),/data-policy downgrade is forbidden/);
 });
+
+test("ZDR eligibility of a PAID base model never transfers to its free variant",async()=>{
+ const gemmaFree=model(gemma);
+ const fetchImpl=async(url,opts={})=>{
+  assert.equal(opts.method??"GET","GET");
+  const ok=data=>({ok:true,status:200,json:async()=>({data})});
+  if(url.endsWith("/models"))return ok([gemmaFree]);
+  if(url.endsWith("/endpoints/zdr"))return ok([{
+   model_id:"google/gemma-4-31b-it",pricing:{prompt:"0.00000034",completion:"0.0000001"}
+  }]);
+  throw Error("Must not fetch candidate endpoints for a free variant without an exact free ZDR match");
+ };
+ const audit=await inspectFreeCloudModels({fetchImpl,models:[gemma],
+  now:()=>new Date("2026-11-22T12:45:00Z")});
+ assert.equal(audit.candidates[0].metadataEligible,false);
+ assert.equal(audit.candidates[0].zdrListed,false);
+ assert.equal(audit.requestsSentToModels,0);
+});
