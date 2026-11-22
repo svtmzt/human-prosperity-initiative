@@ -92,6 +92,12 @@ export async function runPanelWithProvider({task,itemIds,modelIds,config,load=re
    envForProvider.HPI_AI_OPENROUTER_DATA_POLICY="zdr";
   const cfg=readAiConfig(envForProvider);
   if(!cfg.available)throw new Error("Research model not configured: "+kind+"::"+id+"; "+cfg.reasonDisabled);
+  // "local" is only trusted when it is the actual native Ollama loopback.
+  // A generic local OpenAI-compatible proxy (e.g. LiteLLM) can silently
+  // forward to billable cloud models; this research-only CLI must not do so.
+  if(kind==="local"&&(cfg.runtime!=="ollama"||cfg.localApi!=="native"||
+     !["http://127.0.0.1:11434","http://localhost:11434"].includes(cfg.baseUrl)))
+   throw new Error("Scientific local inference requires verified native Ollama on the default local port; proxies are not cost-safe");
   const conf={...cfg,model:id,fallbackModels:[],maxRequests:15};
   const selected=await buildProvider(conf,{task,env:envForProvider,
    models:kind==="openrouter"?[id]:null,allowFallback:false});
