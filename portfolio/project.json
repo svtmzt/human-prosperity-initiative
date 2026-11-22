@@ -591,9 +591,14 @@
           "id": "HPI-AI.5",
           "name": "Hosted public research gateway",
           "issue": 101
+        },
+        {
+          "id": "HPI-AI.6",
+          "name": "Accuracy-first multi-model scientific validation and staged cost ladder",
+          "issue": 111
         }
       ],
-      "plannedTasks": 7
+      "plannedTasks": 16
     },
     {
       "id": "HPI-QA",
