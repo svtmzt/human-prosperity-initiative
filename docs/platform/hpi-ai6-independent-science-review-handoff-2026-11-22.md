@@ -61,7 +61,7 @@ Human-only decision fields (leave empty until evidence is produced): scientificL
 
 - npm run check — repository engineering regression, NOT an external scientific accreditation.
 - npm run ai:science -- plan — old internal diagnostic scores, not independent ground truth.
-- npm run ai:cloud:preflight — two **public, anonymous GET** requests for current OpenRouter catalogue and ZDR model-list metadata; no API key, inference, spend, guarantee of provider compliance or scientific validity.
+- npm run ai:science -- cloud-preflight — unauthenticated **public GET** checks of current catalogue and exact free ZDR endpoint metadata; no API key, inference, spend, guarantee of provider compliance or scientific validity.
 - npm run ai:science -- run --allow-inference ... — only inside an HPI-authorised runtime with a real scoped API key and live verified free endpoint, on licensed public-only sources, with private model output and human review.
 
 **These documents and automated checks do not close T06–T09. Closing requires genuine external evidence, budget approval where relevant, and human accountability.**
