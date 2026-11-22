@@ -125,3 +125,7 @@ Private model replies are written to `qa-artifacts/ai-scientific-panel/` (gitign
 - **Public inference:** stays disabled, no auto-published AI claims. Do not call this a scientific release or fieldwork approval.
 
 Tracking: [HPI-AI #101](https://github.com/svtmzt/human-prosperity-initiative/issues/101), [scientific independent review #19](https://github.com/svtmzt/human-prosperity-initiative/issues/19), [HPI-SCALE human gate #103](https://github.com/svtmzt/human-prosperity-initiative/issues/103).
+
+## 22 November follow-up: operational review handoff and metadata preflight
+
+The independent-review protocol, reviewer evidence requirements and explicit human-only sign-off checklist are in [HPI-AI.6 independent science review handoff](./hpi-ai6-independent-science-review-handoff-2026-11-22.md). Run `npm run ai:science -- cloud-preflight` for the existing strict OpenRouter *public model and exact free ZDR endpoint* registry checks (from PR #114). This makes only unauthenticated public GET requests and does not independently guarantee real provider privacy, use any API key, call a model, spend money or close T06–T09.
