@@ -1,4 +1,5 @@
 import test from "node:test";
+import {readFile} from "node:fs/promises";
 import assert from "node:assert/strict";
 import {readAiConfig,describeAiConfig} from "../research-tools/ai-assist/config.mjs";
 import {createDisabledProvider,createOpenAiCompatibleProvider,RequestBudget} from "../research-tools/ai-assist/providers.mjs";
@@ -166,4 +167,24 @@ test("AI.3 regression: subtle imperative source cannot enter the prompt or becom
  assert.equal(direct.accepted.length,0);
  assert.equal(direct.status,"all_items_rejected");
  assert.ok(direct.rejected[0].reasons.some(x=>/instruction-like text/i.test(x)));
+});
+
+test("AI.3 only publishes the immutable aggregate local Ollama comparison, never private model proposals",async()=>{
+ const source=JSON.parse(await readFile("research/ai/local-ollama-comparison-2026-11-22.json","utf8"));
+ const published=JSON.parse(await readFile("dist/platform-ai-local-evaluation.json","utf8"));
+ assert.deepEqual(published,source);
+ assert.equal(published.kind,"hpi_ai_local_held_out_comparison");
+ assert.equal(published.heldOutReference.items,46);
+ assert.deepEqual(published.runs.map(r=>r.model),["qwen3.5:4b-q4_K_M","qwen3.5:9b"]);
+ assert.ok(published.runs.every(r=>r.status==="completed"&&r.metrics&&r.operations));
+ assert.equal(published.audit.humanIndependentReview,"not_performed");
+ for(const run of published.runs)assert.ok(!["raw","responses","acceptedItems","outputs","out"].some(k=>Object.hasOwn(run,k)));
+ assert.equal(Object.hasOwn(published,"raw"),false);
+ const benchmarkHtml=await readFile("dist/library/docs/platform/ai-local-benchmark-2026-11-22.html","utf8");
+ assert.match(benchmarkHtml,/href="\\/platform-ai-local-evaluation\\.json"/);
+ assert.doesNotMatch(benchmarkHtml,/href="#"[^>]*>local-ollama-comparison-2026-11-22\\.json/);
+ const aiStatus=JSON.parse(await readFile("dist/platform-ai-status.json","utf8"));
+ assert.equal(aiStatus.productionInference,false);
+ assert.equal(aiStatus.publicHostedInference,"disabled");
+ assert.equal(aiStatus.publishedAiGeneratedContent,0);
 });
