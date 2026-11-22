@@ -15,6 +15,8 @@ export const SCIENTIFIC_TASKS=Object.freeze([
 
 const REVIEW_ONLY=Object.freeze({
  publication:"never_auto_publish_model_conclusions",
+ publishable:false,
+ modelGeneratedScienceAutoPublish:false,
  independentScientificValidation:false,
  humanReviewRequired:true
 });
