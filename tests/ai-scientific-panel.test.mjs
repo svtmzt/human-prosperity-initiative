@@ -9,6 +9,7 @@ import {
  estimateInferenceCost,buildCostLadder,planAccuracyFirstEscalation
 } from "../research-tools/ai-assist/model-costs.mjs";
 import {makePublicCostPlan,planningFromExistingBenchmarks} from "../scripts/ai-scientific-panel.mjs";
+import {buildSyntheticChallenges,inspectChallengeSafety} from "../research-tools/ai-assist/scientific-challenges.mjs";
 
 const claim={sourceId:"S-1",
  statement:"Receipt increased by 8.31 percentage points under compliance help.",
@@ -180,4 +181,19 @@ test("cost metadata retrieval is GET-only and has no inference or credentials",a
  assert.equal(opus.privacyEndpointEligible,null);
  assert.equal(opus.execution,"blocked_until_explicit_authorisation");
  assert.throws(()=>planAccuracyFirstEscalation({paidApprovalRef:"not allowed"}),/never authorized/);
+});
+
+test("140 synthetic engineering challenges remain separate from the independent science benchmark",()=>{
+ const a=buildSyntheticChallenges(),b=buildSyntheticChallenges();
+ assert.equal(a.casesCount,140);
+ assert.equal(a.sha256,b.sha256);
+ assert.equal(a.countedTowardIndependentScientificBenchmark,false);
+ assert.equal(new Set(a.cases.map(x=>x.id)).size,140);
+ assert.ok(a.cases.every(x=>x.synthetic&&x.expertScientificLabel===false&&x.publicationAllowed===false));
+ const report=inspectChallengeSafety(a);
+ assert.equal(report.casesCount,140);
+ assert.equal(Object.keys(report.byCategory).length,7);
+ assert.equal(report.byCategory.instruction_injection.sourceQuarantined,20);
+ assert.equal(report.warnings.length,0);
+ assert.equal(report.publicationAuthorised,false);
 });
