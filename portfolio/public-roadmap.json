@@ -2798,10 +2798,10 @@
           "tasks": [
             {
               "id": "HPI-AI.3-T01",
-              "title": "Benchmark local Qwen 4B and 9B on the versioned HPI evaluation set with limitations",
-              "status": "complete",
+              "title": "Measure extraction accuracy with a real local or approved provider",
+              "status": "in_progress",
               "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/101",
-              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/109"
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/105"
             },
             {
               "id": "HPI-AI.3-T02",
