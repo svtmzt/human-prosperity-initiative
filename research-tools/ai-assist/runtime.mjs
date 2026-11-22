@@ -58,6 +58,16 @@ export async function buildProvider(config,{env=process.env,task,fetchImpl=globa
   ?selectModels(task,{catalog:cat.catalog,policy,config:{...config,model:explicitModels[0],fallbackModels:explicitModels.slice(1)},now:now()})
   :selectModels(task,{catalog:cat.catalog,policy,config,now:now()});
  if(!selection.ok)return {provider:createDisabledProvider("No permitted free model: "+selection.reasons.join("; ")),notes,selection,catalogInfo};
+ // A ZDR request must not rely on a cached or missing model-only privacy flag.
+ // Check the live endpoint-derived registry *before* any inference request.
+ // The outgoing request ALSO enforces provider.zdr=true+data_collection=deny.
+ if(config.dataPolicy==="zdr"){
+  if(!cat.catalog?.zdrListChecked)
+   return {provider:createDisabledProvider("Current OpenRouter endpoint-level ZDR registry unavailable; refusing cloud inference."),notes,selection,catalogInfo};
+  const ineligible=selection.entries.filter(e=>e.zdrListed!==true).map(e=>e.id);
+  if(ineligible.length)
+   return {provider:createDisabledProvider("Requested free models have no verified zero-priced ZDR endpoint: "+ineligible.join(", ")),notes,selection,catalogInfo};
+ }
  for(const r of selection.reasons)notes.push("Selection note: "+r);
  const endpointChecks=[];
  for(const e of selection.entries){
