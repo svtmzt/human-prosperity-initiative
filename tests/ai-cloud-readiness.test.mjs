@@ -66,7 +66,7 @@ test("preflight fails closed on missing ZDR registry, nonzero endpoint price and
   excluded:[{id:ling,reason:"legacy excluded"}],endpointPricingVerified:true,endpointCount:1});
  assert.ok(excluded.blockers.includes("historically_excluded_by_hpi_policy_requires_reassessment"));
  assert.equal(PILOT_FREE_MODELS.length,4);
- assert.throws(()=>inspectFreeCloudModels({models:["openai/gpt-6.2-astra"]}),/literal :free/);
+ await assert.rejects(()=>inspectFreeCloudModels({models:["openai/gpt-6.2-astra"]}),/literal :free/);
 });
 
 test("actual ZDR provider builder rejects non-ZDR model before any POST",async()=>{
@@ -77,7 +77,8 @@ test("actual ZDR provider builder rejects non-ZDR model before any POST",async()
  const result=await buildProvider(conf,{env,task:"claim-extraction",fetchImpl,refreshCatalog:true,
   now:()=>new Date("2026-11-22T12:41:00Z")});
  assert.equal(result.provider.available,false);
- assert.match(result.provider.reason,/no verified zero-priced ZDR endpoint/);
+ const denial=await result.provider.complete([]);
+ assert.match(denial.reason,/no verified zero-priced ZDR endpoint/);
  assert.ok(called.every(c=>c.method==="GET"&&!c.hasAuth));
  assert.ok(called.every(c=>!c.url.includes("chat/completions")));
 });
