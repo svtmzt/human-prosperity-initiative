@@ -8,7 +8,7 @@ import {
 import {
  estimateInferenceCost,buildCostLadder,planAccuracyFirstEscalation
 } from "../research-tools/ai-assist/model-costs.mjs";
-import {makePublicCostPlan,planningFromExistingBenchmarks,parsePanelModelSpec} from "../scripts/ai-scientific-panel.mjs";
+import {makePublicCostPlan,planningFromExistingBenchmarks,parsePanelModelSpec,runPanelWithProvider} from "../scripts/ai-scientific-panel.mjs";
 import {buildSyntheticChallenges,inspectChallengeSafety} from "../research-tools/ai-assist/scientific-challenges.mjs";
 
 const claim={sourceId:"S-1",
@@ -249,4 +249,13 @@ test("mixed local and strict-free cloud identities are explicit and cannot silen
   "invalid::model",
   "local::"
  ])assert.throws(()=>parsePanelModelSpec(label,"local"),/Paid models|Only local|Invalid model/);
+});
+
+test("local LiteLLM/proxy cannot be used as a presumed free local Ollama route",async()=>{
+ const cfg={kind:"local",available:true};
+ await assert.rejects(runPanelWithProvider({
+  task:"claim-extraction",itemIds:["claim:E08"],
+  modelIds:["local::qwen3.5:4b-q4_K_M","local::qwen3.5:9b"],
+  config:cfg,env:{HPI_AI_LOCAL_RUNTIME:"litellm"}
+ }),/Scientific local inference requires verified native Ollama/);
 });
