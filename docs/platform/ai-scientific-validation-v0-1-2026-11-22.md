@@ -72,7 +72,7 @@ A task may require stricter thresholds based on real expert risk analysis. A mod
 
 Test `baidu/ernie-5.5-flash-preview:free` and `inclusionai/ling-3.2-flash:free` on *the same precommitted references* using the panel runner and privacy/cost fail-closed policy; compare against local baselines and disclose uncertainty. **Actual OpenRouter cloud-panel inference not run during this task**: the authorised HPI shell did not expose an OpenRouter key. Do not extract credentials from other apps or claim success for a non-existent run.
 
-Default cloud data policy should be **ZDR when a verified ZDR endpoint exists**, otherwise no cloud request for sensitive material. The current existing free-only adapter uses a strict `data_collection=deny` policy; note this prevents collection/training under OpenRouter's declarations but is **not equivalent to ZDR**, and does not by itself certify every endpoint. No router `openrouter/free` (random model and reproducibility loss), no provider fallback to paid.
+The **new scientific panel CLI defaults to `zdr` plus `data_collection=deny` for its OpenRouter leg**, and fails closed if no current endpoint satisfies both. The existing older free-only research CLI still defaults to `data_collection=deny`: this limits provider collection/training under OpenRouter's declarations but is **not equivalent to ZDR**. A live **public metadata-only** `GET /api/v1/models?zdr=true` on 22 November listed Ling 3.2 Flash (`:free`) but did **not** list ERNIE 5.5 Flash (`:free`). The model list does not verify the current inference endpoint's additional no-training policy, so actual call-time checks remain mandatory. If no second independently sourced ZDR+deny model qualifies, the panel can pair **local Qwen + verified ZDR cloud Ling**, or fail closed; it must never silently relax privacy. No router `openrouter/free` (random model and reproducibility loss), no provider fallback to paid.
 
 **State:** infrastructure and real offline/local smoke PASS. Cloud-panel test PENDING key/runtime + current endpoint permissions, not blocked by a request to buy service.
 
@@ -106,9 +106,12 @@ HPI_AI_PROVIDER=local npm run ai:science -- run --allow-inference \
 
 # Free-only cloud experiment, only when a legitimate HPI OpenRouter secret and
 # *currently qualifying* endpoints are actually available:
-HPI_AI_PROVIDER=openrouter npm run ai:science -- run --allow-inference \
+HPI_AI_PROVIDER=local npm run ai:science -- run --allow-inference \
   --task claim-extraction --item-ids claim:E08,claim:E13 \
-  --models baidu/ernie-5.5-flash-preview:free,inclusionai/ling-3.2-flash:free
+  --models local::qwen3.5:4b-q4_K_M,openrouter::inclusionai/ling-3.2-flash:free
+
+# The OpenRouter leg requires OPENROUTER_API_KEY in the authorised HPI shell.
+# If current ZDR or deny-collection requirements fail, NO cloud request is made.
 ```
 
 Private model replies are written to `qa-artifacts/ai-scientific-panel/` (gitignored) with file mode `0600`; do not copy them into the public repository or a document. CLI `costs` is a public model-metadata GET and does not accept a token or issue inference requests. The new code does not modify the existing 46-item evaluation set, historical benchmarks, public AI gateway or any financial configuration.
