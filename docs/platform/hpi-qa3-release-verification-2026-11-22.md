@@ -50,6 +50,6 @@ For local public checks without a GitHub token, GitHub API may return 403 (rate 
 - **Project provider-billed costs/quotas and actual notifications:** outside this technical release verification and **NOT CERTIFIED**; public GitHub activity is not a spend figure.
 - **Scientific, ethical, rights and fieldwork authorisation:** all unchanged and OPEN.
 
-See [WEB-01 acceptance matrix](../WEB-01-final-acceptance.md), [current release runbook](../WEB-01-release-and-operations.md), [CI migration decision](../decisions/0005-ci-github-actions.md), [AI gate #101](https://github.com/svtmzt/human-prosperity-initiative/issues/101) and [HPI-QA umbrella #102](https://github.com/svtmzt/human-prosperity-initiative/issues/102).
+See [WEB-01 acceptance matrix](/library/docs/web-01-final-acceptance), [current release runbook](/library/docs/web-01-release-and-operations), [CI migration decision](/library/docs/decisions/0005-ci-github-actions), [AI gate #101](https://github.com/svtmzt/human-prosperity-initiative/issues/101) and [HPI-QA umbrella #102](https://github.com/svtmzt/human-prosperity-initiative/issues/102).
 
 **Publication rule:** when this document is part of a PR, its exact release-check test claims apply to **prior** verified production only; the new version must itself pass the required jobs on PR head and be verified post-merge before it can be called publicly released.
