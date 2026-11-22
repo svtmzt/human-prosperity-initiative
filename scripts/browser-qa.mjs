@@ -289,8 +289,13 @@ if(route==="/research/source-catalog"){
    await page.goto(base+"/roadmap",{waitUntil:"networkidle"});
    await page.locator('.rp-shortcuts a[href="#next"]').focus();
    await page.keyboard.press("Enter");
-   record("keyboard roadmap horizon navigation",
-    new URL(page.url()).hash==="#next");
+   // A same-page anchor navigation may finish just after Playwright's
+   // keyboard event resolves. Assert the ACTUAL resulting URL with a bounded
+   // wait; do not convert a genuine broken keyboard link into a green check.
+   await page.waitForURL(url=>url.hash==="#next",{timeout:5000}).catch(()=>null);
+   const roadmapHash=new URL(page.url()).hash;
+   record("keyboard roadmap horizon navigation",roadmapHash==="#next",
+    "actual hash: "+(roadmapHash||"(empty)"));
    await page.goto(base+"/roadmap",{waitUntil:"networkidle"});
    await page.locator(".rp-card-action").first().click();
    record("roadmap card opens canonical first-party initiative",
