@@ -35,6 +35,18 @@ export async function buildPlatform({publish,shell,root="dist",env=process.env})
  const optionalJson=async p=>{try{return JSON.parse(await readFile(p,"utf8"))}catch(e){if(e.code==="ENOENT")return null;throw e}};
  const aiExtras={snapshot:await optionalJson("research/ai/openrouter-free-models-snapshot.json"),policy:await optionalJson("research/ai/model-selection-policy.json"),
   evaluation:await optionalJson("research/ai/evaluation-results-v1.json")};
+ // Public only the reviewed *aggregate* historical local comparison committed
+ // in this repository. Never copy any gitignored raw-private.json or queues.
+ const localComparison=await optionalJson("research/ai/local-ollama-comparison-2026-11-22.json");
+ if(localComparison&&(
+   localComparison.kind!=="hpi_ai_local_held_out_comparison"||
+   localComparison.heldOutReference?.items!==46||
+   !Array.isArray(localComparison.runs)||localComparison.runs.length!==2||
+   localComparison.runs.some(r=>!["qwen3.5:4b-q4_K_M","qwen3.5:9b"].includes(r.model))||
+   localComparison.runs.some(r=>r.status!=="completed"||!r.metrics||!r.operations)||
+   Object.keys(localComparison).some(k=>["raw","out","response","private"].includes(k))||
+   localComparison.audit?.rawModelOutputs!=="stored_only_in_gitignored_local_qa_artifacts_not_published"
+ ))throw Error("Local benchmark source is not a safe, matching aggregate-only artifact");
  const aiStatus=buildAiStatus(readAiConfig(env),aiExtras);
  const lab=kb.parsed.systemsLab;
  const labResults=systemsLabResults(lab);
@@ -51,6 +63,7 @@ export async function buildPlatform({publish,shell,root="dist",env=process.env})
   ["/platform-ai-status.json",canonicalJson(aiStatus),"AI research-assistance runtime status"],
   ...(aiExtras.snapshot?[["/platform-ai-models.json",canonicalJson({policy:aiExtras.policy,catalogueSnapshot:aiExtras.snapshot}),"Verified free model catalogue snapshot and HPI selection policy (metadata only)"]]:[]),
   ...(aiExtras.evaluation?[["/platform-ai-evaluation.json",canonicalJson(aiExtras.evaluation),"Aggregate AI evaluation metrics (no model output)"]]:[]),
+  ...(localComparison?[["/platform-ai-local-evaluation.json",canonicalJson(localComparison),"Aggregate-only local Ollama comparison (unreviewed internal references, no raw model replies)"]]:[]),
   ["/systems-lab-data.json",canonicalJson({schemaVersion:"1.0",label:"SYNTHETIC INPUTS",model:lab.models[0],parameterBounds:lab.parameterBounds,archetypes:lab.archetypes,scenarios:lab.scenarios}),"Systems Lab model inputs (synthetic)"],
   ["/systems-lab-results.json",canonicalJson(labResults),"Systems Lab scenario and sensitivity results (illustrative)"],
   ["/downloads/benefit-access-evaluation-package.json",canonicalJson(benefitAccessPackage(kb)),"Benefit-access evaluation package"],

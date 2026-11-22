@@ -17,6 +17,11 @@ export const INJECTION_PATTERNS=Object.freeze([
  /<\s*\/?\s*(?:script|iframe|system|instructions)\b/i,/\bexfiltrat/i,
  /(?:send|post|upload)\s+(?:it|this|the\s+\w+)\s+to\s+https?:/i,
  /\bmark\s+(?:this|the)\s+(?:study|source|evidence)\s+as\s+(?:validated|approved|verified)/i,
+ // A model can be redirected by imperative output demands hidden inside
+ // otherwise plausible research prose (e.g. "Any summary ... must state ...").
+ // Quarantine these before prompting; this is intentionally conservative.
+ /\b(?:any|every|each|all|the|your)\s+(?:summary|report|analysis|response|answer)\b[^.!?\n]{0,110}\b(?:must|should|shall|need(?:s)?\s+to)\s+(?:state|say|include|claim|conclude|report)\b/i,
+ /\b(?:you|the\s+(?:assistant|model|researcher))\s+(?:must|should|shall|need(?:s)?\s+to)\s+(?:state|say|include|claim|conclude)\b/i,
  /<<\s*(?:END\s+)?SOURCE\b/i,/\bassistant\s*:\s*\{/i,/\brespond\s+only\s+with\b/i
 ]);
 export const RECOMMENDATION_PATTERNS=Object.freeze([
@@ -195,6 +200,10 @@ export function validateClaimExtraction(output,sources,{allowedMechanismIds=[],e
   if(!item||typeof item!=="object"){result.rejected.push({item,reasons:["Claim must be an object"]});continue}
   const src=byId.get(item.sourceId);
   if(!src)reasons.push("Cites a source that was not provided");
+  // Defence in depth: even a direct validator call may not promote claims
+  // quoted from instruction-like source text, regardless of verbatim match.
+  if(src&&scanForInjection(src.text).length)
+   reasons.push("Cited source contains instruction-like text; quarantine for human review");
   if(typeof item.statement!=="string"||!item.statement.trim()||item.statement.length>400)reasons.push("statement must be a non-empty string of at most 400 characters");
   else reasons.push(...safeText("Statement",item.statement,{src}).filter(r=>!/non-empty/.test(r)));
   if(typeof item.quote!=="string"||!item.quote.trim()||item.quote.length>400)reasons.push("quote must be a non-empty string of at most 400 characters");

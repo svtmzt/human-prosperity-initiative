@@ -1,6 +1,6 @@
 # AI research assistance V2 — local and verified-free cloud inference
 
-**Status, 16 November 2026.** Internal research mode is operational with verified free OpenRouter models and has a published held-out evaluation ([report](ai-evaluation-2026-11-16.md)). Local inference is implemented and tested against a real loopback HTTP server, but **no live local model has been tested** (no local runtime was reachable from the build environment). **The public website performs no inference and publishes no AI-generated content.** A hosted gateway is implemented as a library and **not deployed**. Supersedes the provider sections of [V1](ai-research-assistance-v1.md); V1 safeguards remain in force.
+**Updated 22 November 2026.** The internal research tool has both the verified-free OpenRouter held-out evaluation ([16 Nov report](ai-evaluation-2026-11-16.md)) **and real local Ollama 4B/9B held-out evaluation** ([22 Nov report](https://human-prosperity-initiative.vercel.app/library/docs/platform/ai-local-benchmark-2026-11-22)). The 46-case local run found a fabricated-effect prompt-injection candidate from 9B in the **private review queue**, prompting additional source quarantine and claim-validator hardening with regression tests. **None of these automated scores has been independently adjudicated or authorised as scientific evidence. The public website performs no inference and publishes no AI-generated content.** The hosted gateway library is **not deployed**; local Ollama is accessible only on the founder's machine, not to the public build environment. Supersedes the provider sections of [V1](ai-research-assistance-v1.md); V1 safeguards remain in force.
 
 Distinguish these achievements — they are different:
 
@@ -8,7 +8,7 @@ Distinguish these achievements — they are different:
 |---|---|
 | Adapter implemented (local, OpenRouter, generic) | Yes |
 | Provider connected | OpenRouter: yes (internal CLI, key in the session's secret store). Local: Ollama 0.40.16 on the founder's Mac (5 models discovered) |
-| Real inference tested | Yes: OpenRouter free models (46-item evaluation); local `qwen3.5:4b-q4_K_M` on two bounded tasks (founder-run, see below) |
+| Real inference tested | Yes: OpenRouter free models (46-item evaluation); local `qwen3.5:4b-q4_K_M` **and** `qwen3.5:9b` on the same 46-item HPI reference set, 22 Nov 2026 ([comparison](https://human-prosperity-initiative.vercel.app/library/docs/platform/ai-local-benchmark-2026-11-22)) |
 | Research quality evaluated | Automated agreement with HPI's own curated reference; **no independent or human expert review yet** |
 | Public inference securely enabled | No |
 | Production-scalable service | No |
@@ -36,7 +36,7 @@ For `HPI_AI_LOCAL_RUNTIME=ollama` the adapter therefore uses the **native `/api/
 - `ai:extract -- --ids E04` returned `completed_pending_human_review` with 2 validated candidate claims, in 4.3 s;
 - 0 failures and 0 blocked items; outputs stayed in private queues.
 
-This shows that local inference works on these bounded tasks. It does **not** show scientific validity or broad reliability. A held-out local evaluation and a comparison of at least two local models (for example `qwen3.5:9b`) are still to do. Embedding-only models (for example `qwen3-embedding:0.6b`) are not chat models; select a chat model with `HPI_AI_MODEL`. Sample run on the researcher's machine:
+The 16 Nov test demonstrated the adapter on two bounded tasks; the **22 Nov 46-case comparison of 4B and 9B has now been completed** and revealed both systematic performance limitations and one critical synthetic prompt-injection failure in 9B. Those results are documented with machine-readable aggregate metrics and an explicit post-run source quarantine fix in the [local benchmark report](https://human-prosperity-initiative.vercel.app/library/docs/platform/ai-local-benchmark-2026-11-22). **Independent human expert review remains pending and no model output is automatically publishable.** Embedding-only models (for example `qwen3-embedding:0.6b`) are not chat models; select a chat model with `HPI_AI_MODEL`. Sample run on the researcher's machine:
 
 ```
 ollama list
