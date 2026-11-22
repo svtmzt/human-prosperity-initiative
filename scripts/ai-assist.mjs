@@ -57,7 +57,7 @@ export function buildAiStatus(config,{snapshot=null,policy=null,evaluation=null}
   publishedAiGeneratedContent:0,
   statement:"The public website performs no AI inference and publishes no AI-generated analysis. Internal research mode (CLI) supports a local loopback runtime and verified free OpenRouter models; its output is a private human-review queue. Deterministic, rule-based checks are published and labelled as non-AI.",
   modes:[
-   {id:"internal_local",label:"Internal research — local model",status:"implemented; live test blocked (no local runtime reachable from the build/test environment)",boundary:"local"},
+   {id:"internal_local",label:"Internal research — local model",status:"implemented; real Qwen 3.5 4B/9B local Ollama benchmark completed on 22 November 2026; hosted website itself cannot access that runtime",boundary:"local"},
    {id:"internal_free_cloud",label:"Internal research — verified free OpenRouter models",status:evaluation?"implemented; live evaluation recorded":"implemented",boundary:"free_cloud"},
    {id:"public_limited_cloud",label:"Limited public cloud assistance",status:"implemented as a disabled gateway library; not deployed",boundary:"free_cloud",prerequisites:GATEWAY_PREREQUISITES.map(p=>p.description)},
    {id:"institutional",label:"Institutional or sponsored capacity",status:"interface only (organisational gateway via openai_compatible); nothing provisioned",boundary:"approved_remote"}
