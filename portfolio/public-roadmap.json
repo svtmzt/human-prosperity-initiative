@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0",
   "sourceKind": "versioned_public_editorial_snapshot",
-  "reviewedAt": "2026-11-16",
+  "reviewedAt": "2026-11-22",
   "statusAuthority": "Public GitHub issue states are authoritative; this snapshot is not a live issue-state sync.",
   "scienceBoundary": "Project delivery is not evidence of improved prosperity, independent study approval or validated causal impact.",
   "legalStatus": "not_incorporated",
@@ -2905,9 +2905,10 @@
           "tasks": [
             {
               "id": "HPI-QA.3-T01",
-              "title": "Verify CircleCI, Vercel and production revision on the exact SHA",
-              "status": "in_progress",
-              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/102"
+              "title": "Verify GitHub Actions, Vercel and public production SHA without bypassing release checks",
+              "status": "complete",
+              "sourceIssue": "https://github.com/svtmzt/human-prosperity-initiative/issues/102",
+              "evidence": "https://github.com/svtmzt/human-prosperity-initiative/pull/109"
             },
             {
               "id": "HPI-QA.3-T02",
