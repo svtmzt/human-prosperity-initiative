@@ -6,7 +6,7 @@
  * enables a public AI gateway or initiates paid API calls.
  */
 import {runResearchTask} from "./assistant.mjs";
-import {scanForInjection} from "./safeguards.mjs";
+import {scanForInjection,norm} from "./safeguards.mjs";
 
 export const SCIENTIFIC_TASKS=Object.freeze([
  "claim-extraction","source-classification","mechanism-tagging",
@@ -99,7 +99,7 @@ const supportedRunStatus=new Set([
  "valid_pending_review","partially_valid_pending_review","abstained","no_claims"
 ]);
 const claimSignature=(task,claim)=>{
- if(task==="claim-extraction")return [claim.sourceId,claim.endpointLevel,claim.direction].join("|");
+ if(task==="claim-extraction")return [claim.sourceId,claim.endpointLevel,claim.direction,norm(claim.quote),norm(claim.statement)].join("|");
  if(task==="source-classification")return [claim.sourceId,claim.design].join("|");
  if(task==="mechanism-tagging")return [claim.sourceId,claim.mechanismId].join("|");
  if(task==="evidence-gap-detection")return [claim.contextId,claim.stage,claim.status].join("|");
