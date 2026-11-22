@@ -17,6 +17,7 @@ import {buildProvider} from "../research-tools/ai-assist/runtime.mjs";
 import {loadVerifiedPlatform} from "./platform-verify.mjs";
 import {assessModelReadiness,runScientificPanel} from "../research-tools/ai-assist/scientific-validation.mjs";
 import {buildCostLadder,planAccuracyFirstEscalation} from "../research-tools/ai-assist/model-costs.mjs";
+import {buildSyntheticChallenges,inspectChallengeSafety} from "../research-tools/ai-assist/scientific-challenges.mjs";
 
 const field=(rest,name)=>{const idx=rest.indexOf(name);return idx<0?null:rest[idx+1]};
 const fields=(rest,name)=>String(field(rest,name)||"").split(",").map(x=>x.trim()).filter(Boolean);
@@ -87,6 +88,9 @@ export async function main(argv=process.argv.slice(2)){
   const result=await makePublicCostPlan();
   console.log(JSON.stringify(result,null,2));return;
  }
+ if(action==="challenges"){
+  console.log(JSON.stringify(inspectChallengeSafety(buildSyntheticChallenges()),null,2));return;
+ }
  if(action==="run"){
   if(!rest.includes("--allow-inference"))throw new Error("Requires --allow-inference; otherwise no model request will be sent");
   const task=field(rest,"--task"),itemIds=fields(rest,"--item-ids"),modelIds=fields(rest,"--models");
@@ -102,7 +106,7 @@ export async function main(argv=process.argv.slice(2)){
    caution:"Model agreement is not scientific validation. Do not publish these conclusions."},null,2));
   return;
  }
- console.log("Usage: npm run ai:science -- plan | costs | run --allow-inference --task TASK --item-ids x,y --models model1,model2");
+ console.log("Usage: npm run ai:science -- plan | costs | challenges | run --allow-inference --task TASK --item-ids x,y --models model1,model2");
 }
 
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)
