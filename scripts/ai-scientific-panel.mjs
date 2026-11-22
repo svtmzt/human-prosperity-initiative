@@ -18,6 +18,7 @@ import {loadVerifiedPlatform} from "./platform-verify.mjs";
 import {assessModelReadiness,runScientificPanel} from "../research-tools/ai-assist/scientific-validation.mjs";
 import {buildCostLadder,planAccuracyFirstEscalation} from "../research-tools/ai-assist/model-costs.mjs";
 import {buildSyntheticChallenges,inspectChallengeSafety} from "../research-tools/ai-assist/scientific-challenges.mjs";
+import {inspectFreeCloudModels} from "../research-tools/ai-assist/free-cloud-readiness.mjs";
 
 const field=(rest,name)=>{const idx=rest.indexOf(name);return idx<0?null:rest[idx+1]};
 const fields=(rest,name)=>String(field(rest,name)||"").split(",").map(x=>x.trim()).filter(Boolean);
@@ -88,8 +89,12 @@ export async function runPanelWithProvider({task,itemIds,modelIds,config,load=re
   const envForProvider={...env,HPI_AI_PROVIDER:kind,HPI_AI_MODEL:id};
   // Scientific cloud runs default to the stricter current ZDR route, unlike
   // the older free-only descriptive benchmark's deny_collection baseline.
-  if(kind==="openrouter"&&!envForProvider.HPI_AI_OPENROUTER_DATA_POLICY)
+  if(kind==="openrouter"){
+   if(envForProvider.HPI_AI_OPENROUTER_DATA_POLICY&&
+      envForProvider.HPI_AI_OPENROUTER_DATA_POLICY!=="zdr")
+    throw new Error("Scientific panel requires strict ZDR; data-policy downgrade is forbidden");
    envForProvider.HPI_AI_OPENROUTER_DATA_POLICY="zdr";
+  }
   const cfg=readAiConfig(envForProvider);
   if(!cfg.available)throw new Error("Research model not configured: "+kind+"::"+id+"; "+cfg.reasonDisabled);
   // "local" is only trusted when it is the actual native Ollama loopback.
@@ -118,6 +123,15 @@ export async function main(argv=process.argv.slice(2)){
   const result=await makePublicCostPlan();
   console.log(JSON.stringify(result,null,2));return;
  }
+ if(action==="cloud-preflight"){
+  const result=await inspectFreeCloudModels();
+  const keyPresent=Boolean(process.env.OPENROUTER_API_KEY||process.env.HPI_AI_API_KEY);
+  console.log(JSON.stringify({...result,credentialPresent:keyPresent,
+   readyForActualExperiment:keyPresent&&result.eligibleForCredentialedExperiment.length>=2,
+   nextAction:keyPresent?
+    "Run a bounded, explicitly selected :free panel on public-source-only cases with --allow-inference.":
+    "HPI OpenRouter key missing from authorised project environment; do not retrieve secrets from other applications."},null,2));return;
+ }
  if(action==="challenges"){
   console.log(JSON.stringify(inspectChallengeSafety(buildSyntheticChallenges()),null,2));return;
  }
@@ -136,7 +150,7 @@ export async function main(argv=process.argv.slice(2)){
    caution:"Model agreement is not scientific validation. Do not publish these conclusions."},null,2));
   return;
  }
- console.log("Usage: npm run ai:science -- plan | costs | challenges | run --allow-inference --task TASK --item-ids x,y --models model1,model2");
+ console.log("Usage: npm run ai:science -- plan | costs | cloud-preflight | challenges | run --allow-inference --task TASK --item-ids x,y --models model1,model2");
 }
 
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)
