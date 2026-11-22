@@ -2857,7 +2857,7 @@
           "id": "HPI-AI.6",
           "title": "HPI-AI.6 — Accuracy-first multi-model scientific validation and staged cost ladder",
           "status": "in_progress",
-          "issue": "https://github.com/svtmzt/human-prosperity-initiative/issues/111",
+          "issue": 111,
           "tasks": [
             {
               "id": "HPI-AI.6-T01",
