@@ -165,5 +165,5 @@ test("AI.3 regression: subtle imperative source cannot enter the prompt or becom
  const direct=validateClaimExtraction({claims:[proposed],abstain:false},[manipulative],opts);
  assert.equal(direct.accepted.length,0);
  assert.equal(direct.status,"all_items_rejected");
- assert.ok(direct.rejected[0].reasons.some(x=>/instruction-like source text/i.test(x)));
+ assert.ok(direct.rejected[0].reasons.some(x=>/instruction-like text/i.test(x)));
 });
