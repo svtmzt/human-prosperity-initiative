@@ -105,9 +105,16 @@ test("executed HubOS manifest is immutable; HPI-AI delta is current, non-collidi
  const project=JSON.parse(await read("portfolio/project.json")),roadmap=JSON.parse(await read("portfolio/public-roadmap.json"));
  const executedText=await read(MANIFEST_PATH);
  assert.equal(createHash("sha256").update(executedText).digest("hex"),EXECUTED_MANIFEST_SHA256,"executed registration (HubOS #152) must never be rewritten");
- const delta=JSON.stringify(buildHpiAiStatusDelta(project,roadmap,JSON.parse(executedText)),null,2)+"\n";
- assert.equal(await read(HPI_AI_DELTA_PATH),delta,"run node scripts/hubos-sync-manifest.mjs");
- const d=JSON.parse(delta);
+ // The historical v0.2 HubOS delta was already executed in November.
+ // A new HPI-AI.6 editorial roadmap must never silently rewrite it.
+ const archivedDeltaText=await read(HPI_AI_DELTA_PATH);
+ const d=JSON.parse(archivedDeltaText);
+ assert.equal(d.schemaVersion,"1.0");
+ assert.equal(d.executed,false,"historical manifest retains its original pre-execution status");
+ assert.deepEqual(d.counts,{updates:2,appendProjects:0,appendEpics:2,appendTasks:4,appendTaskResources:7,collisions:0});
+ assert.ok(!d.appends.epics.some(e=>e.id==="hpi-ai-6"),"new epic must have a separate audited production receipt");
+ assert.ok(roadmap.initiatives.find(i=>i.id==="HPI-AI").epics.some(e=>e.id==="HPI-AI.6"),
+  "new HPI-AI.6 must be tracked in the current public roadmap");
  assert.equal(d.executed,false);assert.equal(d.collisions.length,0);assert.equal(d.createsCompanyRecord,false);
  assert.ok([...d.updates.map(u=>u.id),...Object.values(d.appends).flat().map(r=>r.id)].every(id=>/^hpi-(ai|link-hpi-ai)/.test(id)),"delta touches HPI-AI only");
  assert.ok(d.appends.tasks.filter(t=>/HUMAN\/EXTERNAL GATE/.test(t.description)).every(t=>t.status!=="done"));
