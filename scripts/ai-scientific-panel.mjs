@@ -105,7 +105,10 @@ export async function runPanelWithProvider({task,itemIds,modelIds,config,load=re
    throw new Error("Scientific local inference requires verified native Ollama on the default local port; proxies are not cost-safe");
   const conf={...cfg,model:id,fallbackModels:[],maxRequests:15};
   const selected=await buildProvider(conf,{task,env:envForProvider,
-   models:kind==="openrouter"?[id]:null,allowFallback:false});
+   models:kind==="openrouter"?[id]:null,
+   // ZDR eligibility changed materially on 22 Nov 2026. Never rely on an
+   // up-to-24-hour-old endpoint registry for a NEW scientific cloud run.
+   refreshCatalog:kind==="openrouter",allowFallback:false});
   if(!selected.provider.available)
    throw new Error("Model is not usable within current free/privacy policy: "+id+"; "+selected.provider.reason);
   candidates.push({id,family,config:conf,provider:selected.provider});
