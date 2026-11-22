@@ -181,8 +181,8 @@ test("AI.3 only publishes the immutable aggregate local Ollama comparison, never
  for(const run of published.runs)assert.ok(!["raw","responses","acceptedItems","outputs","out"].some(k=>Object.hasOwn(run,k)));
  assert.equal(Object.hasOwn(published,"raw"),false);
  const benchmarkHtml=await readFile("dist/library/docs/platform/ai-local-benchmark-2026-11-22.html","utf8");
- assert.match(benchmarkHtml,/href="\\/platform-ai-local-evaluation\\.json"/);
- assert.doesNotMatch(benchmarkHtml,/href="#"[^>]*>local-ollama-comparison-2026-11-22\\.json/);
+ assert.ok(benchmarkHtml.includes('href="/platform-ai-local-evaluation.json"'));
+ assert.ok(!benchmarkHtml.includes('href="#">local-ollama-comparison-2026-11-22.json'));
  const aiStatus=JSON.parse(await readFile("dist/platform-ai-status.json","utf8"));
  assert.equal(aiStatus.productionInference,false);
  assert.equal(aiStatus.publicHostedInference,"disabled");
