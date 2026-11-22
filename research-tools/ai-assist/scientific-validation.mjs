@@ -21,6 +21,21 @@ const REVIEW_ONLY=Object.freeze({
  humanReviewRequired:true
 });
 const finiteRatio=x=>typeof x==="number"&&Number.isFinite(x)&&x>=0&&x<=1;
+/** Two-sided 95% Wilson score interval lower bound, never model confidence. */
+export function wilsonLowerBound(successes,trials){
+ if(!Number.isInteger(successes)||!Number.isInteger(trials)||
+    trials<=0||successes<0||successes>trials)throw new Error("Invalid audited binomial counts");
+ const p=successes/trials,z=1.96,z2=z*z,den=1+z2/trials;
+ return (p+z2/(2*trials)-z*Math.sqrt((p*(1-p)+z2/(4*trials))/trials))/den;
+}
+
+const minimumLowerBound=Object.freeze({
+ "claim-extraction":{referenceConsistentPrecision:0.90,referenceRecall:0.85},
+ "source-classification":{acceptableAccuracy:0.90},
+ "mechanism-tagging":{tagPrecision:0.90,tagRecall:0.85},
+ "evidence-gap-detection":{stageAccuracy:0.90,gapRecall:0.85},
+ "contradiction-detection":{relationAccuracy:0.90,conflictRecall:0.85}
+});
 const thresholds=Object.freeze({
  "claim-extraction":{referenceConsistentPrecision:0.98,referenceRecall:0.90},
  "source-classification":{acceptableAccuracy:0.98},
@@ -36,7 +51,7 @@ const thresholds=Object.freeze({
  * are hard gates; never substitute model size, confidence or majority voting.
  */
 export function assessModelReadiness({model,task,metrics,independentReference=false,
- independentlyAdjudicatedItems=0,criticalSafetyFindings=0}={}){
+ independentlyAdjudicatedItems=0,criticalSafetyFindings=0,externalAudit=null}={}){
  if(!SCIENTIFIC_TASKS.includes(task))throw new Error("Unknown scientific task");
  const reasons=[],required=thresholds[task];
  if(typeof model!=="string"||!model.trim())reasons.push("model_identity_missing");
@@ -49,6 +64,22 @@ export function assessModelReadiness({model,task,metrics,independentReference=fa
  // Items must be independently adjudicated, not HPI-curated agreement alone.
  if(!independentReference||independentlyAdjudicatedItems<100)
   reasons.push("independent_reference_or_sample_size_insufficient");
+ // An assertion of "independent" by an AI is insufficient. Require an
+ // externally attributable, signed-off audit receipt and reviewed denominators.
+ const auditOk=externalAudit&&/^[a-f0-9]{64}$/.test(externalAudit.referenceSha256||"")&&
+  Number.isInteger(externalAudit.reviewers)&&externalAudit.reviewers>=2&&
+  externalAudit.conflictsAdjudicated===true&&
+  externalAudit.independentlyAdjudicatedItems===independentlyAdjudicatedItems&&
+  /^https:\/\/github\.com\/svtmzt\/human-prosperity-initiative\/issues\/\d+$/.test(externalAudit.reviewIssue||"");
+ if(!auditOk)reasons.push("attributable_independent_audit_receipt_missing");
+ for(const [key,min] of Object.entries(minimumLowerBound[task])){
+  const n=externalAudit?.auditedCounts?.[key];
+  if(!n||!Number.isInteger(n.successes)||!Number.isInteger(n.trials)||n.trials<100||
+     n.successes<0||n.successes>n.trials){
+   reasons.push("independently_adjudicated_metric_counts_missing:"+key);continue;
+  }
+  if(wilsonLowerBound(n.successes,n.trials)<min)reasons.push("confidence_bound_below_threshold:"+key);
+ }
  if(!Number.isInteger(criticalSafetyFindings)||criticalSafetyFindings<0)
   reasons.push("safety_findings_not_auditable");
  else if(criticalSafetyFindings>0)reasons.push("critical_safety_failure");
@@ -60,6 +91,7 @@ export function assessModelReadiness({model,task,metrics,independentReference=fa
  }
  return {model,task,observedMetrics:metrics??null,independentlyAdjudicatedItems,
   researchCandidate:!!metrics,qualifiedForConsideration:reasons.length===0,
+  confidenceMethod:"Wilson two-sided 95% lower bound on externally audited counts",
   reasons,...REVIEW_ONLY};
 }
 
