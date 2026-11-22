@@ -50,9 +50,25 @@ export async function makePublicCostPlan({fetchImpl=globalThis.fetch,now=()=>new
  return buildCostLadder(data.data,{fetchedAt:now().toISOString()});
 }
 
-export async function runPanelWithProvider({task,itemIds,modelIds,config,load=readFile}){
- if(!["local","openrouter"].includes(config.kind)||!config.available)
-  throw new Error("Private panel requires a configured local or explicitly verified-free OpenRouter provider");
+/** Explicit mixed-route specs (local::model or openrouter::model:free).
+ * No paid provider type is accepted. Bare IDs inherit the configured default.
+ */
+export function parsePanelModelSpec(raw,defaultProvider){
+ const parts=String(raw||"").split("::");
+ if(parts.length>2||!parts[parts.length-1])throw new Error("Invalid model specification");
+ const kind=parts.length===2?parts[0]:defaultProvider;
+ const id=parts.length===2?parts[1]:parts[0];
+ if(!["local","openrouter"].includes(kind))
+  throw new Error("Only local or verified-free OpenRouter science routes are supported");
+ if(!/^[A-Za-z0-9._:@/-]{1,160}$/.test(id))
+  throw new Error("Invalid model identifier");
+ if(kind==="openrouter"&&!id.endsWith(":free"))
+  throw new Error("Paid models may be priced but cannot be called in a research panel");
+ return {kind,id,family:id.includes("qwen")?"qwen":id.split("/")[0]};
+}
+export async function runPanelWithProvider({task,itemIds,modelIds,config,load=readFile,env=process.env}){
+ if(!config||!["local","openrouter","disabled"].includes(config.kind))
+  throw new Error("Private panel requires a local or verified-free OpenRouter configuration");
  if(!Array.isArray(itemIds)||!itemIds.length||itemIds.length>15||new Set(itemIds).size!==itemIds.length)
   throw new Error("Use 1-15 distinct versioned evaluation item IDs");
  if(!Array.isArray(modelIds)||modelIds.length<2||modelIds.length>3||
@@ -64,16 +80,24 @@ export async function runPanelWithProvider({task,itemIds,modelIds,config,load=re
   throw new Error("Every selected item must be known and belong to the same task");
  const {kb}=await loadVerifiedPlatform();
  const vocab={mechanismIds:[...kb.mechanisms.keys()],endpointLevels:kb.parsed.claims.endpointLevels};
+ const specs=modelIds.map(m=>parsePanelModelSpec(m,config.kind));
+ if(new Set(specs.map(x=>x.kind+"::"+x.id)).size!==specs.length)
+  throw new Error("Duplicate candidate route");
  const candidates=[];
- for(const id of modelIds){
-  if(config.kind==="openrouter"&&!id.endsWith(":free"))
-   throw new Error("Paid and non-:free models are forbidden in this experimental runner");
-  const conf={...config,model:id,fallbackModels:[],maxRequests:15};
-  const selected=await buildProvider(conf,{task,models:config.kind==="openrouter"?[id]:null,allowFallback:false});
+ for(const {kind,id,family} of specs){
+  const envForProvider={...env,HPI_AI_PROVIDER:kind,HPI_AI_MODEL:id};
+  // Scientific cloud runs default to the stricter current ZDR route, unlike
+  // the older free-only descriptive benchmark's deny_collection baseline.
+  if(kind==="openrouter"&&!envForProvider.HPI_AI_OPENROUTER_DATA_POLICY)
+   envForProvider.HPI_AI_OPENROUTER_DATA_POLICY="zdr";
+  const cfg=readAiConfig(envForProvider);
+  if(!cfg.available)throw new Error("Research model not configured: "+kind+"::"+id+"; "+cfg.reasonDisabled);
+  const conf={...cfg,model:id,fallbackModels:[],maxRequests:15};
+  const selected=await buildProvider(conf,{task,env:envForProvider,
+   models:kind==="openrouter"?[id]:null,allowFallback:false});
   if(!selected.provider.available)
-   throw new Error("Model is not usable within free/privacy policy: "+id+"; "+selected.provider.reason);
-  candidates.push({id,family:id.includes("qwen")?"qwen":id.split("/")[0],
-   config:conf,provider:selected.provider});
+   throw new Error("Model is not usable within current free/privacy policy: "+id+"; "+selected.provider.reason);
+  candidates.push({id,family,config:conf,provider:selected.provider});
  }
  return runScientificPanel({task,items,candidates,vocab});
 }
@@ -94,7 +118,7 @@ export async function main(argv=process.argv.slice(2)){
  if(action==="run"){
   if(!rest.includes("--allow-inference"))throw new Error("Requires --allow-inference; otherwise no model request will be sent");
   const task=field(rest,"--task"),itemIds=fields(rest,"--item-ids"),modelIds=fields(rest,"--models");
-  const result=await runPanelWithProvider({task,itemIds,modelIds,config:readAiConfig(process.env)});
+  const result=await runPanelWithProvider({task,itemIds,modelIds,config:readAiConfig(process.env),env:process.env});
   const name=new Date().toISOString().replaceAll(":","-").replaceAll(".","-");
   const file=root+"/"+name+"-private.json";
   await privateFile(file,{classification:"PRIVATE_PENDING_HUMAN_REVIEW",reference:DATASET_PATH,
