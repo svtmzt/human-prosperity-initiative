@@ -8,6 +8,7 @@
  */
 import {createHash} from "node:crypto";
 import {screenPersonalData} from "./policy.mjs";
+import {auditPublisherDepositedAbstract} from "./original-abstract-audit.mjs";
 
 const sha=x=>createHash("sha256").update(x).digest("hex");
 const DOI_RE=/^10\.\d{4,9}\/[A-Za-z0-9._;()/:+-]{1,170}$/i;
@@ -207,6 +208,8 @@ export function adjudicateBibliographicIdentity({
    oaStatus:a.licenseSignal.oaStatus}:null,
   titleAgreementRatio:Number(similarity.toFixed(3)),
   abstractNumericalSignal:depositedAbstractPercentageSignal(summaryText,crossrefRaw?.abstract),
+  abstractClaimAudit:auditPublisherDepositedAbstract({doi,summaryText,
+   abstractXml:crossrefRaw?.abstract}),
   registries,flags,rights:metadataLicense({
    crossref:crossrefRaw,
    openalex:openalexRaw
