@@ -13,6 +13,8 @@ import {pathToFileURL} from "node:url";
 import {readAiConfig} from "../research-tools/ai-assist/config.mjs";
 import {buildProvider} from "../research-tools/ai-assist/runtime.mjs";
 import {runScientificPanel} from "../research-tools/ai-assist/scientific-validation.mjs";
+import {enforceAbstractIntegrityGate,
+ compareAgentClaimsWithOriginalAbstract} from "../research-tools/ai-assist/original-abstract-audit.mjs";
 import {verifyPrimaryRecords,assertPrimaryBibliographicGate,
  discoverRelatedDois} from "../research-tools/ai-assist/primary-provenance.mjs";
 import {loadVerifiedPlatform} from "./platform-verify.mjs";
@@ -64,6 +66,7 @@ async function run(){
   // The public registries validate DOI/title/rights signals only, never effects.
   const primary=await verifyPrimaryRecords({items:plan.items});
   assertPrimaryBibliographicGate(primary,plan.items);
+  enforceAbstractIntegrityGate(primary,plan.items);
   const {kb}=await loadVerifiedPlatform();
   const vocab={mechanismIds:[...kb.mechanisms.keys()],
    endpointLevels:kb.parsed.claims.endpointLevels};
@@ -100,7 +103,9 @@ async function run(){
      acceptedItems:[],rejected:[r.reason??"no_verifiable_response"]});
    }
   }
-  const outcome=mergeAutonomousRechecks({decision:preliminary,rechecks});
+  const afterLocalRechecks=mergeAutonomousRechecks({decision:preliminary,rechecks});
+  const outcome=compareAgentClaimsWithOriginalAbstract({record:primary,
+   decision:afterLocalRechecks});
   // Automatically search for NEW registered publications when a disagreement
   // persists. This is related-study discovery, not new verified claim evidence.
   const followUpSources=[];
@@ -137,7 +142,10 @@ async function run(){
    localModelCalls:count,maximumLocalCalls:plan.maxLocalCalls,
    paidCalls:0,cloudCalls:0,automaticRechecks:rechecks.length,
    verifiedBibliographicIdentities:primary.verifiedRecordCount,
-   verifiedOriginalStudyResults:0,registryReadOnlyCalls:externalRegistryCalls,
+   verifiedOriginalStudyResults:0,abstractAudits:primary.items.filter(x=>x.abstractClaimAudit?.available).length,
+   mathematicallyRecalculatedAbstractComparisons:primary.items.reduce((n,x)=>
+     n+(x.abstractClaimAudit?.derivedComparisons?.comparisons?.length??0),0),
+   registryReadOnlyCalls:externalRegistryCalls,
    candidateRelatedPublications:followUpSources.reduce((n,r)=>n+r.discovery.candidates?.length||0,0),
    distinctModelFamilies:1,
    sourceItems:outcome.outcomes.map(x=>({id:x.itemId,
