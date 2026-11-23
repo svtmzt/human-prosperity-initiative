@@ -13,6 +13,8 @@ import {pathToFileURL} from "node:url";
 import {readAiConfig} from "../research-tools/ai-assist/config.mjs";
 import {buildProvider} from "../research-tools/ai-assist/runtime.mjs";
 import {runScientificPanel} from "../research-tools/ai-assist/scientific-validation.mjs";
+import {verifyPrimaryRecords,assertPrimaryBibliographicGate,
+ discoverRelatedDois} from "../research-tools/ai-assist/primary-provenance.mjs";
 import {loadVerifiedPlatform} from "./platform-verify.mjs";
 import {outputSchemaFor} from "../research-tools/ai-assist/safeguards.mjs";
 import {needsAutonomousRecheck,buildRecheckMessages,validateRecheckReply,mergeAutonomousRechecks} from "../research-tools/ai-assist/autonomous-recheck.mjs";
@@ -58,6 +60,10 @@ async function run(){
  const lock=join(DIR,".single-flight");
  await mkdir(lock,{mode:0o700}); // atomic: bounded single run, no duplicate inference
  try{
+  // HPI's original summaries remain the only source TEXT supplied to models.
+  // The public registries validate DOI/title/rights signals only, never effects.
+  const primary=await verifyPrimaryRecords({items:plan.items});
+  assertPrimaryBibliographicGate(primary,plan.items);
   const {kb}=await loadVerifiedPlatform();
   const vocab={mechanismIds:[...kb.mechanisms.keys()],
    endpointLevels:kb.parsed.claims.endpointLevels};
@@ -95,6 +101,20 @@ async function run(){
    }
   }
   const outcome=mergeAutonomousRechecks({decision:preliminary,rechecks});
+  // Automatically search for NEW registered publications when a disagreement
+  // persists. This is related-study discovery, not new verified claim evidence.
+  const followUpSources=[];
+  for(const row of outcome.outcomes){
+   if(!["unresolved_after_autonomous_recheck","quarantined_for_automated_evidence_check",
+      "unresolved_no_recheck"].includes(row.status))continue;
+   const seed=primary.items.find(x=>x.itemId===row.itemId);
+   const discovery=await discoverRelatedDois({seed,maxCandidates:2});
+   followUpSources.push({itemId:row.itemId,discovery});
+  }
+  const externalRegistryCalls=primary.registryRequests+
+    followUpSources.reduce((n,r)=>n+r.discovery.registryRequests,0);
+  if(externalRegistryCalls>plan.items.length*5)
+   throw Error("Public metadata read ceiling exceeded");
   const observedFirstPass=panel.privateReports.reduce((n,x)=>n+x.report.totals.requests,0);
   const count=observedFirstPass+critiqueCallLog.length+rechecks.length;
   if(count>plan.maxLocalCalls)throw Error("Native inference exceeded hard planned ceiling");
@@ -103,7 +123,10 @@ async function run(){
     independentFirstPass:ALLOWED_MODELS,adversarialCritic:CRITIC_MODEL,
     distinctModelFamilies:1,warning:"Same family; independent prompts are NOT independent scientific evidence"},
    budget:{maximumLocalCalls:plan.maxLocalCalls,observedLocalCalls:count,
-    paidModelCalls:0,cloudModelCalls:0,automaticRechecks:rechecks.length},
+    paidModelCalls:0,cloudModelCalls:0,automaticRechecks:rechecks.length,
+    maximumExternalMetadataReads:plan.items.length*5,
+    observedExternalMetadataReads:externalRegistryCalls},
+   primaryMetadata:primary,relatedSourceDiscovery:followUpSources,
    findings:outcome,criticResponses:critiques,
    criticCallLog:critiqueCallLog,rechecks,modelReports:panel.privateReports,
    noAutomaticScientificPublication:true};
@@ -112,11 +135,16 @@ async function run(){
   console.log(JSON.stringify({status:"private_autonomous_cycle_executed",
    classification:outcome.classification,sourceDigestSha256:plan.sourceDigestSha256,
    localModelCalls:count,maximumLocalCalls:plan.maxLocalCalls,
-   paidCalls:0,cloudCalls:0,automaticRechecks:rechecks.length,distinctModelFamilies:1,
+   paidCalls:0,cloudCalls:0,automaticRechecks:rechecks.length,
+   verifiedBibliographicIdentities:primary.verifiedRecordCount,
+   verifiedOriginalStudyResults:0,registryReadOnlyCalls:externalRegistryCalls,
+   candidateRelatedPublications:followUpSources.reduce((n,r)=>n+r.discovery.candidates?.length||0,0),
+   distinctModelFamilies:1,
    sourceItems:outcome.outcomes.map(x=>({id:x.itemId,
     status:x.status,priority:x.nextAction,
     criticVerdict:x.critic.verdict,
-    coarseAgreement:x.coarseAgreement})),
+    coarseAgreement:x.coarseAgreement,
+    publisherSourceResultVerified:false})),
    privateArtifact:file,independentScientificValidation:false,
    publicationAuthorised:false},null,2));
  }finally{await rmdir(lock)}

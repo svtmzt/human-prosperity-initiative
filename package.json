@@ -31,6 +31,7 @@
     "ai:science": "node scripts/ai-scientific-panel.mjs",
     "ai:science:paid:pilot": "node scripts/ai-paid-science-pilot.mjs",
     "ai:science:reviewers": "node scripts/ai-independent-review-intake.mjs",
-    "ai:science:auto": "node scripts/ai-autonomous-science.mjs"
+    "ai:science:auto": "node scripts/ai-autonomous-science.mjs",
+    "ai:science:primary": "node scripts/ai-primary-provenance.mjs"
   }
 }
