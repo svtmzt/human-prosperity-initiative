@@ -111,6 +111,10 @@ export function computeBrazilPovertyAggregate({
   throw Error("Select 2–4 unique nonfuture years");
  const poverty=uniqueYears(povertyDoc,INDICATORS.poverty);
  const pop=uniqueYears(populationDoc,INDICATORS.population);
+ // Both series must be read from the same reported API release snapshot;
+ // this still cannot prove historical survey-method comparability.
+ if(poverty.updatedAt!==pop.updatedAt)
+  throw Error("World Bank indicators come from different API update dates");
  const rows=[];
  for(const year of [...years].sort()){
   const rate=poverty.values.get(year);
@@ -146,7 +150,8 @@ export function computeBrazilPovertyAggregate({
    microdataExperimentReplications:0,
    counterfactualOrCausalEffectsIdentified:0,
    uncertaintyIntervalsFromSource:null,
-   noCrossVintageComparisonGuaranteed:true
+   sameWdiApiUpdateDateChecked:true,
+   surveyMethodsFullyHarmonisedAcrossYears:false
   },
   warnings:[
    "Derived poor headcounts are independent arithmetic approximations, NOT official World Bank published poor-person counts.",

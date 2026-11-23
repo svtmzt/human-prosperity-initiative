@@ -123,3 +123,8 @@ test("full orchestrator makes exactly four official GETs and writes only digests
  assert.equal(JSON.stringify(out).includes("2026-11-11"),true);
  assert.equal(out.provenance.noOriginalResponseBodiesPersisted,true);
 });
+
+test("two official data series with different API update vintages cannot be silently mixed",()=>{
+ const x=fixture();x.populationDoc[0].lastupdated="2026-11-10";
+ assert.throws(()=>computeBrazilPovertyAggregate(x),/different API update dates/);
+});
