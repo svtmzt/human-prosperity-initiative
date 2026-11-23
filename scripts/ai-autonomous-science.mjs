@@ -13,6 +13,8 @@ import {pathToFileURL} from "node:url";
 import {readAiConfig} from "../research-tools/ai-assist/config.mjs";
 import {buildProvider} from "../research-tools/ai-assist/runtime.mjs";
 import {runScientificPanel} from "../research-tools/ai-assist/scientific-validation.mjs";
+import {reproduceOfficialAggregate} from "../research-tools/ai-assist/official-data-audit.mjs";
+import {auditHarvardSnapPackage} from "../research-tools/ai-assist/replication-package-audit.mjs";
 import {enforceAbstractIntegrityGate,
  compareAgentClaimsWithOriginalAbstract} from "../research-tools/ai-assist/original-abstract-audit.mjs";
 import {verifyPrimaryRecords,assertPrimaryBibliographicGate,
@@ -120,6 +122,23 @@ async function run(){
     followUpSources.reduce((n,r)=>n+r.discovery.registryRequests,0);
   if(externalRegistryCalls>plan.items.length*5)
    throw Error("Public metadata read ceiling exceeded");
+  // Optional, explicitly enabled complementary DATA-REPRODUCIBILITY lane.
+  // The Brazilian poverty series are separate country-level context, NEVER
+  // evidence proving or refuting causal SNAP/EITC intervention effects.
+  // E08 replication-package metadata assesses reproducibility feasibility,
+  // not scientific truth; Stata code and participant data are never fetched.
+  let independentPublicEvidence=null;
+  if(flag("--with-public-evidence")){
+   const [macro,packageAudit]=await Promise.all([
+    reproduceOfficialAggregate(),auditHarvardSnapPackage()
+   ]);
+   independentPublicEvidence={
+    classification:"INDEPENDENT_DESCRIPTIVE_CONTEXT_NOT_CAUSAL_VALIDATION",
+    worldBankAggregates:macro,snapAuthorReplicationPackage:packageAudit,
+    independentCausalStudyEffectsReproduced:0,
+    didNotInfluenceModelClaimsOrReviews:true,
+    cannotBeUsedAsGoldLabels:true,publicReadOnlyRequests:5};
+  }
   const observedFirstPass=panel.privateReports.reduce((n,x)=>n+x.report.totals.requests,0);
   const count=observedFirstPass+critiqueCallLog.length+rechecks.length;
   if(count>plan.maxLocalCalls)throw Error("Native inference exceeded hard planned ceiling");
@@ -130,8 +149,12 @@ async function run(){
    budget:{maximumLocalCalls:plan.maxLocalCalls,observedLocalCalls:count,
     paidModelCalls:0,cloudModelCalls:0,automaticRechecks:rechecks.length,
     maximumExternalMetadataReads:plan.items.length*5,
-    observedExternalMetadataReads:externalRegistryCalls},
+    observedExternalMetadataReads:externalRegistryCalls,
+    additionalPublicEvidenceReads:independentPublicEvidence?.publicReadOnlyRequests??0,
+    totalPublicApiRequests:externalRegistryCalls+
+     (independentPublicEvidence?.publicReadOnlyRequests??0)},
    primaryMetadata:primary,relatedSourceDiscovery:followUpSources,
+   supplementaryIndependentPublicEvidence:independentPublicEvidence,
    findings:outcome,criticResponses:critiques,
    criticCallLog:critiqueCallLog,rechecks,modelReports:panel.privateReports,
    noAutomaticScientificPublication:true};
@@ -146,6 +169,10 @@ async function run(){
    mathematicallyRecalculatedAbstractComparisons:primary.items.reduce((n,x)=>
      n+(x.abstractClaimAudit?.derivedComparisons?.comparisons?.length??0),0),
    registryReadOnlyCalls:externalRegistryCalls,
+   supplementaryPublicDataLaneExecuted:Boolean(independentPublicEvidence),
+   independentSNAPStudyEffectsReproduced:0,
+   separateWorldBankDescriptiveYears:independentPublicEvidence?.worldBankAggregates.rows.map(x=>x.year)??[],
+   officialDataAndPackageAdditionalPublicCalls:independentPublicEvidence?.publicReadOnlyRequests??0,
    candidateRelatedPublications:followUpSources.reduce((n,r)=>n+r.discovery.candidates?.length||0,0),
    distinctModelFamilies:1,
    sourceItems:outcome.outcomes.map(x=>({id:x.itemId,
@@ -167,6 +194,8 @@ async function main(){
    roles:{firstPass:ALLOWED_MODELS,critic:CRITIC_MODEL},
    maxLocalCalls:plan.maxLocalCalls,
    maxCloudCalls:0,maxPaidCalls:0,
+   supplementaryPublicDataReadsIfEnabled:flag("--with-public-evidence")?5:0,
+   supplementaryBrazilAggregatesCannotValidateSNAPOrEITCCausality:true,
    requiresHumanSignoffToResearch:false,
    independentScienceCertified:false,
    publicationAuthorised:false,
@@ -174,7 +203,7 @@ async function main(){
   return;
  }
  if(action==="run")return run();
- throw Error("Usage: npm run ai:science:auto -- plan | run --allow-local-inference [--item-ids claim:E08,claim:E13]");
+ throw Error("Usage: npm run ai:science:auto -- plan | run --allow-local-inference [--with-public-evidence] [--item-ids claim:E08,claim:E13]");
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)
  await main().catch(e=>{console.error("HPI autonomous science refused:",e.message);process.exitCode=2});
