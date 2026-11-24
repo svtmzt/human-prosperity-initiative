@@ -13,6 +13,7 @@ import {pathToFileURL} from "node:url";
 import {readAiConfig} from "../research-tools/ai-assist/config.mjs";
 import {buildProvider} from "../research-tools/ai-assist/runtime.mjs";
 import {runScientificPanel} from "../research-tools/ai-assist/scientific-validation.mjs";
+import {runTrialEvidenceLane} from "../research-tools/ai-assist/trial-evidence-lane.mjs";
 import {reproduceOfficialAggregate} from "../research-tools/ai-assist/official-data-audit.mjs";
 import {auditHarvardSnapPackage} from "../research-tools/ai-assist/replication-package-audit.mjs";
 import {enforceAbstractIntegrityGate,
@@ -139,6 +140,7 @@ async function run(){
     didNotInfluenceModelClaimsOrReviews:true,
     cannotBeUsedAsGoldLabels:true,publicReadOnlyRequests:5};
   }
+  const trialEvidence=flag("--with-trial-evidence")?await runTrialEvidenceLane():null;
   const observedFirstPass=panel.privateReports.reduce((n,x)=>n+x.report.totals.requests,0);
   const count=observedFirstPass+critiqueCallLog.length+rechecks.length;
   if(count>plan.maxLocalCalls)throw Error("Native inference exceeded hard planned ceiling");
@@ -151,10 +153,12 @@ async function run(){
     maximumExternalMetadataReads:plan.items.length*5,
     observedExternalMetadataReads:externalRegistryCalls,
     additionalPublicEvidenceReads:independentPublicEvidence?.publicReadOnlyRequests??0,
+    separateTrialEvidenceReads:trialEvidence?.publicReadOnlyRequests??0,
     totalPublicApiRequests:externalRegistryCalls+
-     (independentPublicEvidence?.publicReadOnlyRequests??0)},
+     (independentPublicEvidence?.publicReadOnlyRequests??0)+(trialEvidence?.publicReadOnlyRequests??0)},
    primaryMetadata:primary,relatedSourceDiscovery:followUpSources,
    supplementaryIndependentPublicEvidence:independentPublicEvidence,
+   supplementaryTrialEvidence:trialEvidence,
    findings:outcome,criticResponses:critiques,
    criticCallLog:critiqueCallLog,rechecks,modelReports:panel.privateReports,
    noAutomaticScientificPublication:true};
@@ -170,6 +174,9 @@ async function run(){
      n+(x.abstractClaimAudit?.derivedComparisons?.comparisons?.length??0),0),
    registryReadOnlyCalls:externalRegistryCalls,
    supplementaryPublicDataLaneExecuted:Boolean(independentPublicEvidence),
+   separateTrialBenchmarkExecuted:Boolean(trialEvidence),
+   separateTrialObservations:trialEvidence?.observations??0,
+   separateTrialEvidencePublicCalls:trialEvidence?.publicReadOnlyRequests??0,
    independentSNAPStudyEffectsReproduced:0,
    separateWorldBankDescriptiveYears:independentPublicEvidence?.worldBankAggregates.rows.map(x=>x.year)??[],
    officialDataAndPackageAdditionalPublicCalls:independentPublicEvidence?.publicReadOnlyRequests??0,
@@ -196,6 +203,8 @@ async function main(){
    maxCloudCalls:0,maxPaidCalls:0,
    supplementaryPublicDataReadsIfEnabled:flag("--with-public-evidence")?5:0,
    supplementaryBrazilAggregatesCannotValidateSNAPOrEITCCausality:true,
+   separateTrialEvidenceReadsIfEnabled:flag("--with-trial-evidence")?3:0,
+   separateTrialBenchmarkCannotOverrideClaimVerdicts:true,
    requiresHumanSignoffToResearch:false,
    independentScienceCertified:false,
    publicationAuthorised:false,
@@ -203,7 +212,7 @@ async function main(){
   return;
  }
  if(action==="run")return run();
- throw Error("Usage: npm run ai:science:auto -- plan | run --allow-local-inference [--with-public-evidence] [--item-ids claim:E08,claim:E13]");
+ throw Error("Usage: npm run ai:science:auto -- plan | run --allow-local-inference [--with-public-evidence] [--with-trial-evidence] [--item-ids claim:E08,claim:E13]");
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)
  await main().catch(e=>{console.error("HPI autonomous science refused:",e.message);process.exitCode=2});
