@@ -37,7 +37,7 @@ const json=(status,body,headers={})=>({ok:status>=200&&status<300,status,headers
 const completion=(content,{model="acme/good:free",cost=0,finish="stop",provider="AcmeHost"}={})=>json(200,{id:"gen-1",model,provider,choices:[{finish_reason:finish,message:{content}}],usage:{prompt_tokens:10,completion_tokens:20,cost}});
 const source={id:"E08",url:"https://doi.org/x",text:"SNAP enrolment after nine months: control 6%; information 11%; information plus application assistance 18%.",dataClass:"public_research_metadata"};
 const vocab={mechanismIds:["M-INFORMATION-FRICTIONS","M-COMPLIANCE-BURDEN"],endpointLevels:["receipt","application"]};
-const goodClaim={sourceId:"E08",statement:"Information plus application assistance raised enrolment to 18% versus 6% for control.",quote:"information plus application assistance 18%",endpointLevel:"receipt",direction:"supports",mechanismIds:["M-COMPLIANCE-BURDEN"],confidence:0.7};
+const goodClaim={sourceId:"E08",statement:"Information plus application assistance raised enrolment to 18% versus 6% for control.",quote:"control 6%; information 11%; information plus application assistance 18%",endpointLevel:"receipt",direction:"supports",mechanismIds:["M-COMPLIANCE-BURDEN"],confidence:0.7};
 const sleepNo=async()=>{};
 function provider(responder,{models=["acme/good:free"],calls=[],env={},opts={}}={}){
  const fetchImpl=async(url,init)=>{calls.push({url,init,body:init?.body?JSON.parse(init.body):null});return responder(calls.length,url,init)};
@@ -283,7 +283,7 @@ test("workflow provenance, human-review gating and private queue; AI output neve
  const q=r.queue[0];
  assert.equal(q.label,"ai_generated_hypothesis");assert.equal(q.reviewStatus,"pending_human_review");assert.equal(q.evidenceStatus,"not_evidence_until_human_verified");
  assert.equal(q.provenance.servedModel,"acme/good:free");assert.equal(q.provenance.upstreamProvider,"AcmeHost");assert.equal(q.provenance.costVerification,"provider_reported_zero_cost");
- assert.equal(q.provenance.promptId,"claim-extraction@1.1.0");assert.deepEqual(q.provenance.dataClasses,["public_research_metadata"]);
+ assert.equal(q.provenance.promptId,"claim-extraction@1.2.0");assert.deepEqual(q.provenance.dataClasses,["public_research_metadata"]);
  const dir=await mkdtemp(join(tmpdir(),"hpi-q-"));
  await writeReviewQueue(r,{dir,stamp:"t"});
  const items=await listQueue({dir});assert.equal(items.length,1);
