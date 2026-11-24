@@ -34,6 +34,8 @@
     "ai:science:auto": "node scripts/ai-autonomous-science.mjs",
     "ai:science:primary": "node scripts/ai-primary-provenance.mjs",
     "ai:science:original": "node scripts/ai-original-source.mjs",
-    "ai:science:replicate": "node scripts/ai-independent-replication.mjs"
+    "ai:science:replicate": "node scripts/ai-independent-replication.mjs",
+    "ai:science:trial": "python3 scripts/ai-trial-reproduction.py",
+    "ai:science:trial:test": "PYTHONDONTWRITEBYTECODE=1 python3 tests/ai-trial-reproduction-test.py"
   }
 }
