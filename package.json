@@ -36,6 +36,7 @@
     "ai:science:original": "node scripts/ai-original-source.mjs",
     "ai:science:replicate": "node scripts/ai-independent-replication.mjs",
     "ai:science:trial": "python3 scripts/ai-trial-reproduction.py",
-    "ai:science:trial:test": "PYTHONDONTWRITEBYTECODE=1 python3 tests/ai-trial-reproduction-test.py"
+    "ai:science:trial:test": "PYTHONDONTWRITEBYTECODE=1 python3 tests/ai-trial-reproduction-test.py",
+    "ai:science:kenya": "node scripts/ai-kenya-audit.mjs"
   }
 }
