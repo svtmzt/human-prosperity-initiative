@@ -1,0 +1,10 @@
+import {inspectCloudComparison} from "../research-tools/ai-assist/cloud-comparison-plan.mjs";
+import {mkdir,writeFile,lstat} from "node:fs/promises";
+if(process.argv.slice(2).join(" ")!=="plan")throw Error("Usage: plan (read-only metadata)");
+const result=await inspectCloudComparison();
+const dir="qa-artifacts/ai-cloud-comparison-plan";
+await mkdir(dir,{recursive:true,mode:0o700});
+if(((await lstat(dir)).mode&0o077)!==0)throw Error("Private folder required");
+const file=dir+"/"+new Date().toISOString().replace(/[:.]/g,"-")+".json";
+await writeFile(file,JSON.stringify(result,null,2)+"\n",{mode:0o600,flag:"wx"});
+console.log(JSON.stringify({privateReport:file,...result},null,2));
