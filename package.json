@@ -39,6 +39,8 @@
     "ai:science:trial:test": "PYTHONDONTWRITEBYTECODE=1 python3 tests/ai-trial-reproduction-test.py",
     "ai:science:kenya": "node scripts/ai-kenya-audit.mjs",
     "ai:science:five": "node scripts/ai-five-task-science.mjs",
-    "ai:science:five:recheck": "node scripts/ai-five-task-recheck.mjs"
+    "ai:science:five:recheck": "node scripts/ai-five-task-recheck.mjs",
+    "ai:science:benchmark:intake": "node scripts/ai-benchmark-candidate-intake.mjs",
+    "ai:science:cloud:plan": "node scripts/ai-cloud-comparison-plan.mjs"
   }
 }
